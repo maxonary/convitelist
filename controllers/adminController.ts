@@ -1,6 +1,7 @@
 import { Response } from 'express';
-import {AuthenticatedRequest } from '../types';
+import { AuthenticatedRequest } from '../types';
 import { PrismaClient } from '@prisma/client';
+import { createClient } from 'minecraft-protocol';
 import jwt from 'jsonwebtoken';
 
 const jwtSecret = process.env.JWT_SECRET || 'your-secret-key';
@@ -57,4 +58,30 @@ export async function rejectUser(req: AuthenticatedRequest, res: Response) {
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });
   }
+}
+
+async function sendRconCommand(command: string) {
+  const rconClient = createClient({
+    host: minecraftHost,
+    port: minecraftRconPort,
+    password: minecraftRconPassword,
+    type: 'rcon',
+  });
+
+  return new Promise<string>((resolve, reject) => {
+    rconClient.on('auth', async () => {
+      try {
+        const response = await rconClient.send(command);
+        resolve(response);
+      } catch (error) {
+        reject(error);
+      } finally {
+        rconClient.end();
+      }
+    });
+
+    rconClient.on('error', (error) => {
+      reject(error);
+    });
+  });
 }
