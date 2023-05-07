@@ -105,10 +105,10 @@
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true,                                 /* Skip type checking all .d.ts files. */
-    "typeRoots": ["./node_modules/@types", "./types"]    /* List of folders to include type definitions from. */
+    "typeRoots": ["./node_modules/@types", "src/types"]    /* List of folders to include type definitions from. */
   },
   "include": [
     "src/**/*",
-    "types/**/*"
-  ]
+    "src/types/**/*"
+, "types.ts", "routes", "controllers", "index.ts"  ]
 }
