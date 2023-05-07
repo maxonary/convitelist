@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { AuthenticatedRequest } from '../types';
+import { AuthenticatedRequest } from '../types/types';
 import { PrismaClient } from '@prisma/client';
 import { createClient } from 'minecraft-protocol';
 import jwt from 'jsonwebtoken';
@@ -35,7 +35,7 @@ export async function adminLogin(req: AuthenticatedRequest, res: Response) {
     const token = jwt.sign({ adminId: admin.id }, jwtSecret, { expiresIn: '1h' });
     res.status(200).json({ token });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: (error as Error).message });
   }
 }
 
@@ -58,7 +58,7 @@ export async function approveUser(req: AuthenticatedRequest, res: Response) {
 
     res.status(200).json(updatedUser);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: (error as Error).message });
   }
 }
 
@@ -81,7 +81,7 @@ export async function rejectUser(req: AuthenticatedRequest, res: Response) {
 
     res.status(200).json(updatedUser);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: (error as Error).message });
   }
 }
 

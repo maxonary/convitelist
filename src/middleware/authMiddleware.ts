@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express';
-import { AuthenticatedRequest, JwtCustomPayload } from '../types';
+import { AuthenticatedRequest, JwtCustomPayload } from '../types/types';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 const jwtSecret = process.env.JWT_SECRET || 'your-secret-key';
