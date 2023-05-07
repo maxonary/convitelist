@@ -10,6 +10,9 @@
     "dev": "concurrently \"npm:watch\" \"npm:start\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "prisma": {
+    "schema": "src/config/schema.prisma"
+  },
   "type": "commonjs",
   "author": "",
   "license": "ISC",
