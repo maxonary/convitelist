@@ -3,8 +3,13 @@ import { AuthenticatedRequest } from '../types';
 import { PrismaClient } from '@prisma/client';
 import { createClient } from 'minecraft-protocol';
 import jwt from 'jsonwebtoken';
+import Rcon from 'rcon';
 
-const jwtSecret = process.env.JWT_SECRET || 'your-secret-key';
+const jwtSecret = process.env.JWT_SECRET || 'your-jwt-secret';
+const minecraftHost = process.env.MINECRAFT_HOST || 'localhost';
+const minecraftRconPort = parseInt(process.env.MINECRAFT_RCON_PORT || '25575', 10);
+const minecraftRconPassword = process.env.MINECRAFT_RCON_PASSWORD || 'your-rcon-password';
+
 
 const prisma = new PrismaClient();
 
@@ -61,27 +66,28 @@ export async function rejectUser(req: AuthenticatedRequest, res: Response) {
 }
 
 async function sendRconCommand(command: string) {
-  const rconClient = createClient({
-    host: minecraftHost,
-    port: minecraftRconPort,
-    password: minecraftRconPassword,
-    type: 'rcon',
-  });
+  const rconClient = new Rcon(minecraftHost, minecraftRconPort, minecraftRconPassword || '');
 
   return new Promise<string>((resolve, reject) => {
     rconClient.on('auth', async () => {
       try {
         const response = await rconClient.send(command);
         resolve(response);
-      } catch (error) {
+      } catch (error : any) {
         reject(error);
       } finally {
-        rconClient.end();
+        rconClient.disconnect();
       }
     });
 
-    rconClient.on('error', (error) => {
+    rconClient.on('error', (error: any) => {
       reject(error);
     });
+
+    try {
+      rconClient.connect();
+    } catch (error : any) {
+      reject(error);
+    }
   });
 }
