@@ -1,6 +1,151 @@
-# Getting Started with Create React App
+# Convinient Whitelist Frontend
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+This frontend application allows users to register for a Minecraft server and provides an admin panel for administrators to approve or reject user registrations.
+
+## Technologies
+
+- React
+- Axios
+
+### Prerequisites
+
+- Node.js (version 12 or higher)
+- npm (version 6 or higher)
+
+### Installation
+
+1. Clone the repository:
+
+2. Change into the project directory:
+
+3. Install the required dependencies:
+   ```bash
+   npm install
+   ```
+
+4. Start the development server:
+    ```bash
+    npm start
+    ```
+The application should open in your default web browser at http://localhost:3000.
+
+## Configuration
+
+In `src/App.js`, update the `apiUrl` variable with the URL of your backend API:
+
+    ```javascript
+    const apiUrl = 'http://localhost:3001'; // Replace with your server URL
+    ```
+
+## Deployment
+
+To create an optimised build of the frontend application, run:
+
+```bash
+npm run build
+```
+
+This will create a `build` directory containing the static files for the frontend application. These files can be served by any web server.
+
+## Usage
+
+### User Registration
+
+Users can register for the Minecraft server by entering their Minecraft username and email address. The user's Minecraft UUID will be retrieved from the Mojang API and stored in the database along with the user's email address.
+
+### Admin Panel
+
+Administrators can view a list of all users who have registered for the Minecraft server. They can approve or reject user registrations. If a user is approved, their Minecraft UUID will be added to the server's whitelist.
+
+## API
+
+The frontend application communicates with the backend API using the following endpoints:
+
+### GET /users
+
+Returns a list of all users who have registered for the Minecraft server.
+
+#### Response
+
+```json
+[
+  {
+    "id": 1,
+    "username": "testuser",
+    "uuid": "00000000-0000-0000-0000-000000000000",
+    "email": "
+
+  }
+]
+```
+
+### POST /users
+
+Registers a new user for the Minecraft server.
+
+#### Request
+
+```json
+{
+  "username": "testuser",
+  "email": "
+
+}
+```
+
+#### Response
+
+```json
+{
+  "id": 1,
+  "username": "testuser",
+  "uuid": "00000000-0000-0000-0000-000000000000",
+  "email": "
+
+}
+```
+
+### PUT /users/:id
+
+Updates a user's registration status.
+
+#### Request
+
+```json
+{
+  "approved": true
+}
+```
+
+#### Response
+
+```json
+{
+  "id": 1,
+  "username": "testuser",
+  "uuid": "00000000-0000-0000-0000-000000000000",
+  "email": "
+
+}
+```
+
+### DELETE /users/:id
+
+Deletes a user's registration.
+
+#### Response
+
+```json
+{
+  "id": 1,
+  "username": "testuser",
+  "uuid": "00000000-0000-0000-0000-000000000000",
+  "email": "
+
+}
+```
 
 ## Available Scripts
 
@@ -61,9 +206,6 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/m
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
 ### `npm run build` fails to minify
 
