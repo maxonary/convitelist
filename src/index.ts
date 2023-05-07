@@ -10,6 +10,7 @@ dotenv.config();
 
 const app = express();
 const prisma = new PrismaClient();
+const port = 3001;
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -17,6 +18,6 @@ app.use(bodyParser.json());
 app.use('/users', userRoutes);
 app.use('/admins', adminRoutes);
 
-app.listen(3000, () => {
-  console.log("Server is running on http://localhost:3000");
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
 });
