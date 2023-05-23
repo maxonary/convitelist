@@ -15,6 +15,10 @@ const port = 3001;
 app.use(cors());
 app.use(bodyParser.json());
 
+app.get('/', (req, res) => {
+  res.status(200).json({ message: 'Welcome to the Minecraft Registration API!' });
+});
+
 app.use('/users', userRoutes);
 app.use('/admins', adminRoutes);
 
