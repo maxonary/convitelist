@@ -1,6 +1,6 @@
 # Sqlite3 Database
 
-userData.db
+database.db
 
 .DS_STORE
 node_modules

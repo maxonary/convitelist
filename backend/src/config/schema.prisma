@@ -1,27 +1,24 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  minecraftUsername String
-  email     String   @unique
-  approved  Boolean  @default(false)
-  admin     Admin?   @relation(fields: [adminId], references: [id])
-  adminId   Int?
+  id               Int      @id @default(autoincrement())
+  minecraftUsername String  @unique
+  email            String   @unique
+  approved         Boolean  @default(false)
+  admin            Admin    @relation("AdminToUser", fields: [adminId], references: [id])
+  adminId          Int
 }
 
 model Admin {
   id      Int      @id @default(autoincrement())
-  username String   @unique
+  username String  @unique
   password String
-  users   User[]
+  users   User[]   @relation("AdminToUser")
 }
