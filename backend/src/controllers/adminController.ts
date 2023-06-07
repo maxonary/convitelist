@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 import Rcon from 'rcon';
 
 const jwtSecret = process.env.JWT_SECRET || 'your-jwt-secret';
-const minecraftHost = process.env.MINECRAFT_HOST || 'localhost';
+const minecraftHost = process.env.MINECRAFT_HOST || '127.0.0.1';
 const minecraftRconPort = parseInt(process.env.MINECRAFT_RCON_PORT || '25575', 10);
 const minecraftRconPassword = process.env.MINECRAFT_RCON_PASSWORD || 'your-rcon-password';
 
