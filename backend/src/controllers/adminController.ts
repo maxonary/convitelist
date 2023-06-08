@@ -12,31 +12,9 @@ const minecraftRconPassword = process.env.MINECRAFT_RCON_PASSWORD || 'your-rcon-
 
 
 const prisma = new PrismaClient();
-
-export async function adminLogin(req: AuthenticatedRequest, res: Response) {
-  try {
-    const admin = await prisma.admin.findUnique({
-      where: { username: req.body.username },
-    });
-
-    if (!admin) {
-      res.status(401).json({ error: 'Invalid username or password' });
-      return;
-    }
-
-    // Replace this with your preferred password hashing and verification library
-    const passwordMatches = req.body.password === admin.password;
-
-    if (!passwordMatches) {
-      res.status(401).json({ error: 'Invalid username or password' });
-      return;
-    }
-
-    const token = jwt.sign({ adminId: admin.id }, jwtSecret, { expiresIn: '1h' });
-    res.status(200).json({ token });
-  } catch (error) {
-    res.status(500).json({ error: (error as Error).message });
-  }
+interface User {
+  minecraftUsername: string;
+  approved: boolean;
 }
 
 export async function approveUser(req: AuthenticatedRequest, res: Response) {

@@ -44,7 +44,7 @@ export const createAdminUser = async (req: Request, res: Response) => {
 };
 
 // Authenticate a user
-export const authenticateUser = (req: Request, res: Response) => {
+export const authenticateAdminUser = (req: Request, res: Response) => {
   passport.authenticate('local', (err: Error, user: any) => {
     if (err || !user) {
       res.status(401).json({ message: 'Invalid email or password' });

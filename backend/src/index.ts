@@ -1,26 +1,30 @@
 import express from "express";
 import cors from "cors";
-import bodyParser from "body-parser";
-import { PrismaClient } from "@prisma/client";
-import dotenv from 'dotenv';
-import userRoutes from './routes/userRoutes';
-import adminRoutes from './routes/adminRoutes';
 
-dotenv.config();
+import userRoutes from './routes/userRoutes';
+import authRoutes from './routes/authRoutes';
 
 const app = express();
-const prisma = new PrismaClient();
 const port = 3001;
 
-app.use(cors());
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+const corsOptions = {
+  origin: 'https://example.com',
+  methods: ['GET', 'POST', 'PUT'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'Welcome to the Minecraft Registration API!' });
 });
 
-app.use('/users', userRoutes);
-app.use('/admins', adminRoutes);
+app.use('/user', userRoutes);
+app.use('/admin', authRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
