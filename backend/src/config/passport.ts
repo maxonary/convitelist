@@ -7,35 +7,53 @@ const prisma = new PrismaClient();
 
 passport.use(
   new LocalStrategy(
-    { usernameField: "email", passwordField: "password" },
-    async (email: string, password: string, done: any) => {
+    { usernameField: "username", passwordField: "password" },
+    async (username: string, password: string, done: any) => {
       try {
-        const user = await prisma.admin.findUnique({ where: { email } });
+        const existingAdminUser = await prisma.admin.findUnique({ 
+          where: { username } 
+        });
 
-        if (!user) {
-          return done(null, false, { message: "Incorrect email." });
+        if (!existingAdminUser) {
+          return done(null, false, { message: "Incorrect username." });
         }
 
-        if (user.password === null) {
+        if (existingAdminUser.password === null) {
           return done(null, false, { message: "Password is null." });
         }
 
-        if (typeof user.password !== 'string') {
+        if (typeof existingAdminUser.password !== 'string') {
           return done(null, false, { message: "Password is not a string." });
         }
 
-        const validPassword = await bcrypt.compare(password, user.password);
+        const isValidPassword = await bcrypt.compare(
+          password, 
+          existingAdminUser.password
+        );
 
-        if (!validPassword) {
+        if (!isValidPassword) {
           return done(null, false, { message: "Incorrect password." });
         }
 
-        return done(null, user);
+        return done(null, existingAdminUser);
       } catch (err) {
         return done(err);
       }
     }
   )
 );
+
+passport.serializeUser((user: any, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id: any, done) => {
+  try {
+    const user = await prisma.admin.findUnique({ where: { id } });
+    done(null, user);
+  } catch (err) {
+    done(err);
+  }
+});
 
 export default passport;
