@@ -1,27 +1,49 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
+interface Admin {
+  username: string;
+  password: string;
+  email: string;
+}
 
-export async function registerUser(req: Request, res: Response) {
+export const createAdminUser = async (req: Request, res: Response) => {
   try {
-    const newUser = await prisma.user.create({
+    console.log(req.body); // logging the request body
+
+    const { username, password, email } = req.body as Admin;
+
+    const existingAdminUserByEmail = await prisma.admin.findUnique({
+      where: { email },
+    });
+
+    const existingAdminUserByUsername = await prisma.admin.findUnique({
+      where: { username },
+    });
+
+    if (existingAdminUserByEmail) {
+      return res.status(400).json({ message: 'Email already exists' });
+    }
+
+    if (existingAdminUserByUsername) {
+      return res.status(400).json({ message: 'Username already exists' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newAdminUser = await prisma.admin.create({
       data: {
-        minecraftUsername: req.body.minecraftUsername,
-        email: req.body.email,
+        username,
+        password: hashedPassword,
+        email,
       },
     });
-    res.status(201).json(newUser);
-  } catch (error) {
-    res.status(400).json({ error: (error as Error).message });
-  }
-}
 
-export async function getUsers(req: Request, res: Response) {
-  try {
-    const users = await prisma.user.findMany();
-    res.status(200).json(users);
+    res.status(201).json(newAdminUser);
   } catch (error) {
-    res.status(500).json({ error: (error as Error).message });
+    console.error(error);
+    res.status(500).json({ message: 'Error registering user' });
   }
-}
+};
