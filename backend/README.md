@@ -50,11 +50,15 @@ npm install
 cp .env.example .env
 ```
 
-4. Update the `.env` file with your PostgreSQL database URL, RCON credentials, and other configuration options.
+4. Update the `.env` file with your SQLite database URL, RCON credentials, and other configuration options.
 
 5. Run the database migrations:
 ```bash
 npx prisma migrate deploy
+```
+or
+```bash
+npx prisma migrate dev --name init    # for development to create a database
 ```
 
 6. Start the development server:
@@ -62,7 +66,7 @@ npx prisma migrate deploy
 npm run dev
 ```
 
-The application will be available at `http://localhost:3000`.
+The application will be available at `http://localhost:3001`.
 
 ## Deployment
 
