@@ -26,6 +26,7 @@
     "jsonwebtoken": "^9.0.0",
     "minecraft-protocol": "^1.41.2",
     "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
     "pg": "^8.10.0",
     "rcon": "^1.1.0"
   },
@@ -36,6 +37,7 @@
     "@types/express": "^4.17.17",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/passport": "^1.0.12",
+    "@types/passport-local": "^1.0.35",
     "concurrently": "^8.0.1",
     "esbuild": "^0.17.18",
     "prisma": "^4.14.1",

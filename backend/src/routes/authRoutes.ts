@@ -9,4 +9,4 @@ router.post('/register', createAdminUser);
 // Route to authenticate an admin user
 router.post('/login', authenticateAdminUser);
 
-export default router;
+export default router; 
