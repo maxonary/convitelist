@@ -1,9 +1,9 @@
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import bcrypt from 'bcrypt';
 import { PrismaClient } from '@prisma/client';
-import { Request } from 'express';
 
 const prisma = new PrismaClient();
+
 interface Admin {
   username: string;
   password: string;
@@ -58,7 +58,7 @@ export const getAllAdminUsers = async (req: Request, res: Response) => {
     console.error(error);
     res.status(500).json({ message: 'Error getting users' });
   }
-}
+};
 
 export const getAdminUserById = async (req: Request, res: Response) => {
   try {
@@ -74,7 +74,7 @@ export const getAdminUserById = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });
   }
-}
+};
 
 export const deleteAdminUserById = async (req: Request, res: Response) => {
   try {
@@ -85,7 +85,7 @@ export const deleteAdminUserById = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });
   }
-}
+};
 
 export const updateAdminUserById = async (req: Request, res: Response) => {
   try {
@@ -105,4 +105,4 @@ export const updateAdminUserById = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });
   }
-}
+};
