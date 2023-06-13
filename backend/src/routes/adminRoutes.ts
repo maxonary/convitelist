@@ -1,15 +1,16 @@
 import express from 'express';
-import { authMiddleware } from '../middleware/authMiddleware';
 import {
-  adminLogin,
-  approveUser,
-  rejectUser,
+  createAdminUser,
+  getAllAdminUsers,
+  getAdminUserById,
+  deleteAdminUserById,
 } from '../controllers/adminController';
 
 const router = express.Router();
 
-router.post('/login', adminLogin);
-router.patch('/:userId/approve', authMiddleware, approveUser);
-router.patch('/:userId/reject', authMiddleware, rejectUser);
+router.post('/', createAdminUser);
+router.get('/', getAllAdminUsers);
+router.get('/:adminId', getAdminUserById);
+router.delete('/:adminId', deleteAdminUserById);
 
 export default router;

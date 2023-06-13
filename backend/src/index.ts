@@ -2,8 +2,9 @@ import express from "express";
 import passport from "./config/passport";
 import { configureSession } from "./config/session";
 
-import userRoutes from './routes/userRoutes';
+import adminRoutes from './routes/adminRoutes';
 import authRoutes from './routes/authRoutes';
+import userRoutes from './routes/userRoutes';
 
 const app = express();
 const port = 3001;
@@ -23,8 +24,9 @@ app.get('/', (req, res) => {
   res.status(200).json({ message: 'Welcome to the Minecraft Registration API!' });
 });
 
-app.use('/user', userRoutes);
+app.use('/admin', adminRoutes);
 app.use('/auth', authRoutes);
+app.use('/user', userRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
