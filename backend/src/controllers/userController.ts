@@ -47,3 +47,33 @@ export const createAdminUser = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error registering user' });
   }
 };
+
+interface User {
+  minecraftUsername: string;
+  approved: boolean;
+}
+
+export const createUser = async (req: Request, res: Response) => {
+  try {
+    const { minecraftUsername } = req.body as User;
+
+    const existingUser = await prisma.user.findUnique({
+      where: { minecraftUsername },
+    });
+
+    if (existingUser) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+
+    const newUser = await prisma.user.create({
+      data: {
+        minecraftUsername,
+      },
+    });
+
+    res.status(201).json(newUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error creating user' });
+  }
+};

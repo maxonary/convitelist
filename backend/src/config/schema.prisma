@@ -11,8 +11,8 @@ model User {
   id               Int      @id @default(autoincrement())
   minecraftUsername String  @unique
   approved         Boolean  @default(false)
-  admin            Admin    @relation("AdminToUser", fields: [adminId], references: [id])
-  adminId          Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
 
 model Admin {
@@ -20,5 +20,6 @@ model Admin {
   username String  @unique
   password String
   email    String  @unique
-  users   User[]   @relation("AdminToUser")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
