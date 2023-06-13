@@ -1,91 +1,108 @@
 import { Response } from 'express';
-import { AuthenticatedRequest } from '../types/types';
+import bcrypt from 'bcrypt';
 import { PrismaClient } from '@prisma/client';
-import { createClient } from 'minecraft-protocol';
-import jwt from 'jsonwebtoken';
-import Rcon from 'rcon';
-
-const jwtSecret = process.env.JWT_SECRET || 'your-jwt-secret';
-const minecraftHost = process.env.MINECRAFT_HOST || '127.0.0.1';
-const minecraftRconPort = parseInt(process.env.MINECRAFT_RCON_PORT || '25575', 10);
-const minecraftRconPassword = process.env.MINECRAFT_RCON_PASSWORD || 'your-rcon-password';
-
+import { Request } from 'express';
 
 const prisma = new PrismaClient();
-interface User {
-  minecraftUsername: string;
-  approved: boolean;
+interface Admin {
+  username: string;
+  password: string;
+  email: string;
 }
 
-export async function approveUser(req: AuthenticatedRequest, res: Response) {
+export const createAdminUser = async (req: Request, res: Response) => {
   try {
-    const userId = parseInt(req.params.userId, 10);
-    const user = await prisma.user.findUnique({ where: { id: userId } });
+    console.log(req.body); // logging the request body
 
-    if (!user) {
+    const { username, password, email } = req.body as Admin;
+
+    const existingAdminUserByEmail = await prisma.admin.findUnique({
+      where: { email },
+    });
+
+    const existingAdminUserByUsername = await prisma.admin.findUnique({
+      where: { username },
+    });
+
+    if (existingAdminUserByEmail) {
+      return res.status(400).json({ message: 'Email already exists' });
+    }
+
+    if (existingAdminUserByUsername) {
+      return res.status(400).json({ message: 'Username already exists' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newAdminUser = await prisma.admin.create({
+      data: {
+        username,
+        password: hashedPassword,
+        email,
+      },
+    });
+
+    res.status(201).json(newAdminUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error registering user' });
+  }
+};
+
+export const getAllAdminUsers = async (req: Request, res: Response) => {
+  try {
+    const adminUsers = await prisma.admin.findMany();
+
+    res.status(200).json(adminUsers);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error getting users' });
+  }
+}
+
+export const getAdminUserById = async (req: Request, res: Response) => {
+  try {
+    const adminUserId = parseInt(req.params.adminUserId, 10);
+    const adminUser = await prisma.admin.findUnique({ where: { id: adminUserId } });
+
+    if (!adminUser) {
       res.status(404).json({ error: 'User not found' });
       return;
     }
 
-    await sendRconCommand(`whitelist add ${user.minecraftUsername}`);
-
-    const updatedUser = await prisma.user.update({
-      where: { id: userId },
-      data: { approved: true },
-    });
-
-    res.status(200).json(updatedUser);
+    res.status(200).json(adminUser);
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });
   }
 }
 
-export async function rejectUser(req: AuthenticatedRequest, res: Response) {
+export const deleteAdminUserById = async (req: Request, res: Response) => {
   try {
-    const userId = parseInt(req.params.userId, 10);
-    const user = await prisma.user.findUnique({ where: { id: userId } });
+    const adminUserId = parseInt(req.params.adminUserId, 10);
+    const deletedAdminUser = await prisma.admin.delete({ where: { id: adminUserId } });
 
-    if (!user) {
-      res.status(404).json({ error: 'User not found' });
-      return;
-    }
-
-    await sendRconCommand(`whitelist remove ${user.minecraftUsername}`);
-
-    const updatedUser = await prisma.user.update({
-      where: { id: userId },
-      data: { approved: false },
-    });
-
-    res.status(200).json(updatedUser);
+    res.status(200).json(deletedAdminUser);
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });
   }
 }
 
-async function sendRconCommand(command: string) {
-  const rconClient = new Rcon(minecraftHost, minecraftRconPort, minecraftRconPassword || '');
+export const updateAdminUserById = async (req: Request, res: Response) => {
+  try {
+    const adminUserId = parseInt(req.params.adminUserId, 10);
+    const { username, password, email } = req.body as Admin;
 
-  return new Promise<string>((resolve, reject) => {
-    rconClient.on('auth', async () => {
-      try {
-        const response = await rconClient.send(command);
-        resolve(response);
-      } catch (error : any) {
-        reject(error);
-      } finally {
-        rconClient.disconnect();
-      }
+    const updatedAdminUser = await prisma.admin.update({
+      where: { id: adminUserId },
+      data: {
+        username,
+        password,
+        email,
+      },
     });
 
-    rconClient.on('error', (error: any) => {
-      reject(error);
-    });
-
-    try {
-      rconClient.connect();
-    } catch (error : any) {
-      reject(error);
-    }
-  });
+    res.status(200).json(updatedAdminUser);
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
 }

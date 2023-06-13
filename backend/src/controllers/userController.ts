@@ -1,53 +1,9 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcrypt';
+import { AuthenticatedRequest } from '../types/types';
+import { sendRconCommand } from '../helpers/rconHelper';
 
 const prisma = new PrismaClient();
-interface Admin {
-  username: string;
-  password: string;
-  email: string;
-}
-
-export const createAdminUser = async (req: Request, res: Response) => {
-  try {
-    console.log(req.body); // logging the request body
-
-    const { username, password, email } = req.body as Admin;
-
-    const existingAdminUserByEmail = await prisma.admin.findUnique({
-      where: { email },
-    });
-
-    const existingAdminUserByUsername = await prisma.admin.findUnique({
-      where: { username },
-    });
-
-    if (existingAdminUserByEmail) {
-      return res.status(400).json({ message: 'Email already exists' });
-    }
-
-    if (existingAdminUserByUsername) {
-      return res.status(400).json({ message: 'Username already exists' });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newAdminUser = await prisma.admin.create({
-      data: {
-        username,
-        password: hashedPassword,
-        email,
-      },
-    });
-
-    res.status(201).json(newAdminUser);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error registering user' });
-  }
-};
-
 interface User {
   minecraftUsername: string;
   approved: boolean;
@@ -77,3 +33,96 @@ export const createUser = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error creating user' });
   }
 };
+
+export const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await prisma.user.findMany();
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error getting users' });
+  }
+}
+
+export const getUserById = async (req: Request, res: Response) => {
+  try {
+    const userId = parseInt(req.params.userId, 10);
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+}
+
+export const deleteUserById = async (req: Request, res: Response) => {
+  try {
+    const userId = parseInt(req.params.userId, 10);
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+
+    await prisma.user.delete({ where: { id: userId } });
+
+    res.status(200).json({ message: 'User deleted successfully' });
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+}
+
+// 
+
+export async function approveUser(req: AuthenticatedRequest, res: Response) {
+  try {
+    const userId = parseInt(req.params.userId, 10);
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+
+    await sendRconCommand(`whitelist add ${user.minecraftUsername}`);
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: { approved: true },
+    });
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+}
+
+export async function rejectUser(req: AuthenticatedRequest, res: Response) {
+  try {
+    const userId = parseInt(req.params.userId, 10);
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+
+    await sendRconCommand(`whitelist remove ${user.minecraftUsername}`);
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: { approved: false },
+    });
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+}
