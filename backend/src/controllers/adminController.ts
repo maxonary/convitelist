@@ -8,13 +8,26 @@ interface Admin {
   username: string;
   password: string;
   email: string;
+  invitationCode: string; // Add this
 }
 
 export const createAdminUser = async (req: Request, res: Response) => {
   try {
     console.log(req.body); // logging the request body
 
-    const { username, password, email } = req.body as Admin;
+    const { username, password, email, invitationCode } = req.body as Admin;
+
+    const existingInvitationCode = await prisma.invitationCode.findUnique({
+      where: { code: invitationCode },
+    });
+
+    if (!existingInvitationCode) {
+      return res.status(400).json({ message: 'Invalid invitation code' });
+    }
+
+    if (existingInvitationCode.used) {
+      return res.status(400).json({ message: 'Invitation code already used' });
+    }
 
     const existingAdminUserByEmail = await prisma.admin.findUnique({
       where: { email },
@@ -42,12 +55,19 @@ export const createAdminUser = async (req: Request, res: Response) => {
       },
     });
 
+    // Mark invitation code as used
+    await prisma.invitationCode.update({
+      where: { code: invitationCode },
+      data: { used: true },
+    });
+
     res.status(201).json(newAdminUser);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error registering user' });
   }
 };
+
 
 export const getAllAdminUsers = async (req: Request, res: Response) => {
   try {
@@ -62,7 +82,7 @@ export const getAllAdminUsers = async (req: Request, res: Response) => {
 
 export const getAdminUserById = async (req: Request, res: Response) => {
   try {
-    const adminUserId = parseInt(req.params.adminUserId);
+    const adminUserId = parseInt(req.params.adminUserId, 10);
     const adminUser = await prisma.admin.findUnique({ where: { id: adminUserId } });
 
     if (!adminUser) {
@@ -78,7 +98,7 @@ export const getAdminUserById = async (req: Request, res: Response) => {
 
 export const deleteAdminUserById = async (req: Request, res: Response) => {
   try {
-    const adminUserId = parseInt(req.params.adminUserId);
+    const adminUserId = parseInt(req.params.adminUserId, 10);
     const deletedAdminUser = await prisma.admin.delete({ where: { id: adminUserId } });
 
     res.status(200).json(deletedAdminUser);
@@ -89,7 +109,7 @@ export const deleteAdminUserById = async (req: Request, res: Response) => {
 
 export const updateAdminUserById = async (req: Request, res: Response) => {
   try {
-    const adminUserId = parseInt(req.params.adminUserId);
+    const adminUserId = parseInt(req.params.adminUserId, 10);
     const { username, password, email } = req.body as Admin;
 
     const updatedAdminUser = await prisma.admin.update({

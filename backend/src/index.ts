@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 
 import adminRoutes from './routes/adminRoutes';
 import authRoutes from './routes/authRoutes';
+import invitationRoutes from './routes/invitationRoutes';
 import userRoutes from './routes/userRoutes';
 
 dotenv.config();
@@ -29,6 +30,7 @@ app.get('/', (req, res) => {
 
 app.use('/admin', adminRoutes);
 app.use('/auth', authRoutes);
+app.use('/invitation', invitationRoutes);
 app.use('/user', userRoutes);
 
 app.listen(port, () => {
