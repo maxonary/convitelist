@@ -2,6 +2,7 @@ import express from "express";
 import passport from "./config/passport";
 import { configureSession } from "./config/session";
 import dotenv from "dotenv";
+import cors from "cors";
 
 import adminRoutes from './routes/adminRoutes';
 import authRoutes from './routes/authRoutes';
@@ -12,6 +13,8 @@ dotenv.config();
 
 const app = express();
 const port = 3001;
+
+app.use(cors());
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
