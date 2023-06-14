@@ -11,8 +11,8 @@ const router = express.Router();
 
 router.post('/', createAdminUser);
 router.get('/', getAllAdminUsers);
-router.get('/:adminId', getAdminUserById);
-router.put('/:adminId', updateAdminUserById);
-router.delete('/:adminId', deleteAdminUserById);
+router.get('/:adminUserId', getAdminUserById);
+router.put('/:adminUserId', updateAdminUserById);
+router.delete('/:adminUserId', deleteAdminUserById);
 
 export default router;
