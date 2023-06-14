@@ -26,17 +26,20 @@
 import axios from "axios";
 import { Button } from "baseui/button";
 import { HeadingXXLarge } from "baseui/typography";
-import { useSignOut } from "react-auth-kit";
+import { useIsAuthenticated, useSignOut } from "react-auth-kit";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container } from "./commons";
 
 function Home() {
   const singOut = useSignOut();
+  const isAuth = useIsAuthenticated();
   const navigate = useNavigate();
 
   const logout = () => {
-    singOut();
-    navigate("/login");
+    if(singOut()) {
+      navigate("/login");
+    }
   };
 
   const getPayment = async () => {
@@ -45,6 +48,13 @@ function Home() {
     });
     console.log("Response: ", response);
   };
+
+  // Listen for changes in authentication status
+  useEffect(() => {
+    if(!isAuth()) {
+      navigate("/login");
+    }
+  }, [isAuth, navigate]);
 
   return (
     <Container>
