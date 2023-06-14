@@ -1,0 +1,46 @@
+{
+	"info": {
+		"_postman_id": "3b33bad6-f1cf-4704-a946-fb6bf9b72b9c",
+		"name": "Authentication API",
+		"description": "API endpoints for user authentication",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26441197"
+	},
+	"item": [
+		{
+			"name": "Authenticate Admin User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"admin1\",\n  \"password\": \"password1\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				},
+				"description": "Authenticate an admin user and get an access token"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3001",
+			"type": "string"
+		}
+	]
+}

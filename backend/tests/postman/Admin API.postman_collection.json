@@ -1,0 +1,129 @@
+{
+	"info": {
+		"_postman_id": "000fa45a-700f-4362-a33b-f40586bfad8d",
+		"name": "Admin API",
+		"description": "API endpoints for managing admin users",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26441197"
+	},
+	"item": [
+		{
+			"name": "Create Admin User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"admin1\",\n  \"password\": \"password1\",\n  \"email\": \"admin1@example.com\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/admin",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"admin"
+					]
+				},
+				"description": "Create a new admin user"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Admin Users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/admin",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"admin"
+					]
+				},
+				"description": "Get all admin users"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Admin User By ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/admin/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"admin",
+						"1"
+					]
+				},
+				"description": "Get an admin user by ID"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Admin User By ID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/admin/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"admin",
+						"1"
+					]
+				},
+				"description": "Delete an admin user by ID"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Admin User By ID",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"admin2\",\n  \"password\": \"newpassword\",\n  \"email\": \"admin2@example.com\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/admin/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"admin",
+						"1"
+					]
+				},
+				"description": "Update an admin user by ID"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3001",
+			"type": "string"
+		}
+	]
+}

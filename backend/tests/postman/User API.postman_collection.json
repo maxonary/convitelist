@@ -1,0 +1,141 @@
+{
+	"info": {
+		"_postman_id": "f1670290-347f-4482-be23-b6ca84602aff",
+		"name": "User API",
+		"description": "API endpoints for managing users",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26441197"
+	},
+	"item": [
+		{
+			"name": "Create User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"minecraftUsername\": \"user1\",\n  \"approved\": true\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/user",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"user"
+					]
+				},
+				"description": "Create a new user"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/user",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"user"
+					]
+				},
+				"description": "Get all users"
+			},
+			"response": []
+		},
+		{
+			"name": "Get User By ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/user/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"user",
+						"1"
+					]
+				},
+				"description": "Get a user by ID"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User By ID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/user/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"user",
+						"1"
+					]
+				},
+				"description": "Delete a user by ID"
+			},
+			"response": []
+		},
+		{
+			"name": "Approve User",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/user/1/approve",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"user",
+						"1",
+						"approve"
+					]
+				},
+				"description": "Approve a user by ID"
+			},
+			"response": []
+		},
+		{
+			"name": "Reject User",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/user/1/reject",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"user",
+						"1",
+						"reject"
+					]
+				},
+				"description": "Reject a user by ID"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3001",
+			"type": "string"
+		}
+	]
+}

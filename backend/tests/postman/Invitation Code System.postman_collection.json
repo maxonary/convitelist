@@ -1,0 +1,73 @@
+{
+	"info": {
+		"_postman_id": "b3f475b0-33a1-4e9d-a7d5-60d38d7a7ebe",
+		"name": "Invitation Code System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26441197"
+	},
+	"item": [
+		{
+			"name": "Register a new admin with invitation code",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"admin3\",\n\t\"password\": \"password123\",\n\t\"email\": \"admin3@email.com\",\n\t\"invitationCode\": \"3a6d9bd9dd711404a981193d18b71342\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3001/admin/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"admin",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Generate a new invitation code",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3001/invitation/generate-invitation-code",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"invitation",
+						"generate-invitation-code"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
