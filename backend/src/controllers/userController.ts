@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { AuthenticatedRequest } from '../types/types';
-import { sendRconCommand } from '../helpers/rconHelper';
+import { connectRcon, disconnectRcon, sendRconCommand } from '../helpers/rconHelper';
 
 const prisma = new PrismaClient();
 interface User {
@@ -91,7 +91,10 @@ export async function approveUser(req: AuthenticatedRequest, res: Response) {
       return;
     }
 
+    await connectRcon();
     await sendRconCommand(`whitelist add ${user.minecraftUsername}`);
+    await sendRconCommand(`whitelist reload`);
+    await disconnectRcon();
 
     const updatedUser = await prisma.user.update({
       where: { id: userId },
@@ -113,8 +116,10 @@ export async function rejectUser(req: AuthenticatedRequest, res: Response) {
       res.status(404).json({ error: 'User not found' });
       return;
     }
-
+    await connectRcon();
     await sendRconCommand(`whitelist remove ${user.minecraftUsername}`);
+    await sendRconCommand(`whitelist reload`);
+    await disconnectRcon();
 
     const updatedUser = await prisma.user.update({
       where: { id: userId },

@@ -1,36 +1,54 @@
-import Rcon from 'rcon';
+import { Rcon } from 'rcon-client';
+import dotenv from 'dotenv';
 
-const minecraftHost = process.env.MINECRAFT_HOST || '127.0.0.1';
-const minecraftRconPort = parseInt(process.env.MINECRAFT_RCON_PORT || '25575', 10);
-const minecraftRconPassword = process.env.MINECRAFT_RCON_PASSWORD || 'your-rcon-password';
+dotenv.config();
+
+const host = process.env.MINECRAFT_RCON_HOST;
+const port = process.env.MINECRAFT_RCON_PORT ? parseInt(process.env.MINECRAFT_RCON_PORT) : undefined;
+const password = process.env.MINECRAFT_RCON_PASSWORD;
+
+if (!host || !port || !password) {
+  throw new Error('Environment variables MINECRAFT_RCON_HOST, MINECRAFT_RCON_PORT, or MINECRAFT_RCON_PASSWORD are not set');
+}
+
+let rcon: Rcon | null = null;
+
+export async function connectRcon() {
+  if (!host || !port || !password) {
+    throw new Error('RCON configuration not provided');
+  }
+
+  rcon = new Rcon({ host: host as string, port, password: password as string });
+
+  try {
+    await rcon.connect();
+    console.log(`Connected to RCON server at ${host}:${port}`);
+  } catch (error) {
+    console.error(`Error connecting to RCON server at ${host}:${port}`, error);
+    rcon = null;
+  }
+}
 
 export async function sendRconCommand(command: string) {
-  const rconClient = new Rcon(minecraftHost, minecraftRconPort, minecraftRconPassword || '');
+  if (!rcon) {
+    throw new Error('RCON is not connected');
+  }
 
-  return new Promise<string>((resolve, reject) => {
-    rconClient.on('auth', async () => {
-      try {
-        const response = await rconClient.send(command);
-        resolve(response);
-      } catch (error) {
-        reject(error);
-      } finally {
-        rconClient.disconnect();
-      }
-    });
+  try {
+    const response = await rcon.send(command);
+    console.log(`RCON command response: ${response}`);
+    return response;
+  } catch (error) {
+    console.error(`Error sending RCON command: ${command}`, error);
+    throw error;
+  }
+}
 
-    rconClient.on('response', (response: string) => {
-      resolve(response);
-    });
+export function disconnectRcon() {
+  if (rcon) {
+    rcon.end();
+    console.log('Disconnected from RCON server');
+  }
 
-    rconClient.on('error', (error: Error) => {
-      reject(error);
-    });
-
-    try {
-      rconClient.connect();
-    } catch (error : any) {
-      reject(error);
-    }
-  });
+  rcon = null;
 }

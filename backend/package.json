@@ -4,7 +4,7 @@
   "description": "This application allows admins and moderator to easily manage a whitelist for their Minecraft server. Users can be added and removed from the whitelist by simply clicking on a corresponding button in the admin panel.",
   "main": "index.js",
   "scripts": {
-    "build": "esbuild --bundle src/index.ts --outfile=dist/index.js --platform=node --target=node14 --format=cjs --external:mock-aws-s3 --external:aws-sdk --external:nock --external:bcrypt --minify",
+    "build": "esbuild --bundle src/index.ts --outfile=dist/index.js --platform=node --target=node14 --format=cjs --external:mock-aws-s3 --external:aws-sdk --external:nock --external:bcrypt",
     "start": "node dist/index.js",
     "watch": "esbuild --watch --bundle src/index.ts --outfile=dist/index.js --platform=node --target=node14 --format=cjs",
     "dev": "concurrently \"npm:watch\" \"npm:start\"",
@@ -29,7 +29,7 @@
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "pg": "^8.10.0",
-    "rcon": "^1.1.0"
+    "rcon-client": "^4.2.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

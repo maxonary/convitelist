@@ -1,10 +1,13 @@
 import express from "express";
 import passport from "./config/passport";
 import { configureSession } from "./config/session";
+import dotenv from "dotenv";
 
 import adminRoutes from './routes/adminRoutes';
 import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
+
+dotenv.config();
 
 const app = express();
 const port = 3001;

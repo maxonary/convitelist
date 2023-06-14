@@ -62,7 +62,7 @@ export const getAllAdminUsers = async (req: Request, res: Response) => {
 
 export const getAdminUserById = async (req: Request, res: Response) => {
   try {
-    const adminUserId = parseInt(req.params.adminUserId, 10);
+    const adminUserId = parseInt(req.params.adminUserId);
     const adminUser = await prisma.admin.findUnique({ where: { id: adminUserId } });
 
     if (!adminUser) {
@@ -78,7 +78,7 @@ export const getAdminUserById = async (req: Request, res: Response) => {
 
 export const deleteAdminUserById = async (req: Request, res: Response) => {
   try {
-    const adminUserId = parseInt(req.params.adminUserId, 10);
+    const adminUserId = parseInt(req.params.adminUserId);
     const deletedAdminUser = await prisma.admin.delete({ where: { id: adminUserId } });
 
     res.status(200).json(deletedAdminUser);
@@ -89,7 +89,7 @@ export const deleteAdminUserById = async (req: Request, res: Response) => {
 
 export const updateAdminUserById = async (req: Request, res: Response) => {
   try {
-    const adminUserId = parseInt(req.params.adminUserId, 10);
+    const adminUserId = parseInt(req.params.adminUserId);
     const { username, password, email } = req.body as Admin;
 
     const updatedAdminUser = await prisma.admin.update({
