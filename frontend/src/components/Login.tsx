@@ -20,13 +20,19 @@ import {
 
 import { useSignIn, useIsAuthenticated } from "react-auth-kit";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import api from '../api';
 
 const RedirectButton = styled(Button)`
   position: absolute;
   top: 20px;
   right: 20px;
+`;
+
+const RegisterLink = styled(Link)`
+  margin-top: 20px;
+  display: block;
+  text-align: center;
 `;
 
 function Login(props: any) {
@@ -86,6 +92,10 @@ function Login(props: any) {
     onSubmit,
   });
 
+  const handleRedirectToRegister = () => {
+    navigate('/admin/register');
+  };
+
   return (
     <Container>
       <InnerContainer>
@@ -119,6 +129,7 @@ function Login(props: any) {
               Login
             </Button>
           </InputWrapper>
+          <RegisterLink to="/admin/register">Don't have an account? Register here</RegisterLink>
         </form>
       </InnerContainer>
     </Container>

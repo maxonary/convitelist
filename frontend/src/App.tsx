@@ -6,6 +6,7 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
+import Register from "./components/Register";
 import WithAuth from "./hoc/WithAuth";
 
 const AppContainer = styled.div`
@@ -22,6 +23,7 @@ function App() {
         <Route path="/" element={<Home />}></Route>
         <Route path="/admin/dashboard" element={<AuthenticatedDashboard />}></Route>
         <Route path="/admin/login" element={<Login />}></Route>
+        <Route path="/admin/register" element={<Register />}></Route>
       </Routes>
     </AppContainer>
   );
