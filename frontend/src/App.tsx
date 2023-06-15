@@ -3,6 +3,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import styled from "styled-components";
 import { Route, Routes } from "react-router-dom";
+import Home from "./components/Home";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import WithAuth from "./hoc/WithAuth";
@@ -18,8 +19,9 @@ function App() {
   return (
     <AppContainer>
       <Routes>
-        <Route path="/" element={<AuthenticatedDashboard />}></Route>
-        <Route path="/login" element={<Login />}></Route>
+        <Route path="/" element={<Home />}></Route>
+        <Route path="/admin/dashboard" element={<AuthenticatedDashboard />}></Route>
+        <Route path="/admin/login" element={<Login />}></Route>
       </Routes>
     </AppContainer>
   );

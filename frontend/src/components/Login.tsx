@@ -1,5 +1,6 @@
+import React, { useState, useEffect } from 'react';
 import { Button } from "baseui/button";
-import { Input } from "baseui/input";
+
 import styled from "styled-components";
 import {
   HeadingXXLarge,
@@ -17,16 +18,28 @@ import {
   StyledInput,
 } from "./commons";
 
-import { useSignIn } from "react-auth-kit";
+import { useSignIn, useIsAuthenticated } from "react-auth-kit";
 import { useFormik } from "formik";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from '../api';
+
+const RedirectButton = styled(Button)`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+`;
 
 function Login(props: any) {
   const [error, setError] = useState("");
   const signIn = useSignIn();
   const navigate = useNavigate();
+  const isAuthenticated = useIsAuthenticated();
+
+  useEffect(() => {
+    if (isAuthenticated()) {
+      navigate("/admin/dashboard");
+    }
+  }, [isAuthenticated, navigate]);
 
   const onSubmit = async (values: any) => {
     console.log("Values: ", values);
@@ -49,9 +62,9 @@ function Login(props: any) {
         expiresIn: 3600,
         tokenType: "Bearer",
         authState: { username: values.username },
-      }); {
-        navigate("/");
-      }
+      });
+
+      navigate("/admin/dashboard");
       
     } catch (err: unknown) {
       const error = err as ErrorResponse;

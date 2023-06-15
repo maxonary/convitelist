@@ -25,7 +25,7 @@ function Home() {
 
   const logout = () => {
     signOut();
-    navigate("/login");
+    navigate("/admin/login");
   }
 
   return (
