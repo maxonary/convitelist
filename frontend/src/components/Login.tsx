@@ -1,34 +1,3 @@
-// import React, { useState, FormEvent } from 'react';
-// import AuthService, { LoginData } from '../AuthService';
-
-// const Login: React.FC = () => {
-//   const [formData, setFormData] = useState<LoginData>({ username: '', password: '' });
-
-//   const handleSubmit = (event: FormEvent) => {
-//     event.preventDefault();
-//     AuthService.login(formData).then(response => {
-//       console.log(response.data);
-//       // Save the JWT token and redirect the user to the dashboard
-//     });
-//   };
-
-//   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     setFormData({ ...formData, [event.target.name]: event.target.value });
-//   };
-
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <input name="username" value={formData.username} onChange={handleChange} placeholder="Username" required />
-//       <input name="password" type="password" value={formData.password} onChange={handleChange} placeholder="Password" required />
-//       <button type="submit">Login</button>
-//     </form>
-//   );
-// };
-
-// export default Login;
-
-// Taken from react-easy-auth
-
 import { Button } from "baseui/button";
 import { Input } from "baseui/input";
 import styled from "styled-components";
@@ -50,9 +19,9 @@ import {
 
 import { useSignIn } from "react-auth-kit";
 import { useFormik } from "formik";
-import axios, { AxiosError } from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from '../api';
 
 function Login(props: any) {
   const [error, setError] = useState("");
@@ -63,11 +32,17 @@ function Login(props: any) {
     console.log("Values: ", values);
     setError("");
 
+    interface ErrorResponse {
+      response?: {
+        data: {
+          message: string;
+        };
+      };
+      message?: string;
+    }
+
     try {
-      const response = await axios.post(
-        "http://localhost:3001/auth/login",
-        values
-      );
+      const response = await api.post('/auth/login', values);
 
       signIn({
         token: response.data.token,
@@ -78,11 +53,14 @@ function Login(props: any) {
         navigate("/");
       }
       
-    } catch (err) {
-      if (err && err instanceof AxiosError)
-        setError(err.response?.data.message);
-      else if (err && err instanceof Error) setError(err.message);
-
+    } catch (err: unknown) {
+      const error = err as ErrorResponse;
+      
+      if (error && error.response) 
+        setError(error.response.data.message);
+      else if (error && error.message) 
+        setError(error.message);
+    
       console.log("Error: ", err);
     }
   };

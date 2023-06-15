@@ -1,67 +1,44 @@
-// import React, { useEffect, useState } from 'react';
-// import UserService, { User } from '../UserService';
-
-// const Dashboard: React.FC = () => {
-//   const [users, setUsers] = useState<User[]>([]);
-
-//   useEffect(() => {
-//     UserService.getAll().then(response => setUsers(response.data));
-//   }, []);
-
-//   return (
-//     <div>
-//       <h1>Dashboard</h1>
-//       {users.map(user => (
-//         <div key={user.id}>
-//           <h2>{user.minecraftUsername}</h2>
-//           <p>{user.approved ? 'Approved' : 'Not Approved'}</p>
-//         </div>
-//       ))}
-//     </div>
-//   );
-// };
-
-// export default Dashboard;
-
+import api from "../api";
 import axios from "axios";
 import { Button } from "baseui/button";
 import { HeadingXXLarge } from "baseui/typography";
-import { useIsAuthenticated, useSignOut } from "react-auth-kit";
-import { useEffect } from "react";
+import { Notification } from "baseui/notification";
+import { useSignOut } from "react-auth-kit";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container } from "./commons";
 
 function Home() {
-  const singOut = useSignOut();
-  const isAuth = useIsAuthenticated();
+  const signOut = useSignOut();
   const navigate = useNavigate();
 
+  const [invitationCode, setInvitationCode] = useState<string | null>(null);
+
+  const generateCode = async () => {
+    try {
+      const response = await api.post("/invitation/generate-invitation-code");
+      setInvitationCode(response.data.code);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const logout = () => {
-    if(singOut()) {
-      navigate("/login");
-    }
-  };
-
-  const getPayment = async () => {
-    const response = await axios.get("http://localhost:9000/api/v1/payment", {
-      withCredentials: true,
-    });
-    console.log("Response: ", response);
-  };
-
-  // Listen for changes in authentication status
-  useEffect(() => {
-    if(!isAuth()) {
-      navigate("/login");
-    }
-  }, [isAuth, navigate]);
+    signOut();
+    navigate("/login");
+  }
 
   return (
     <Container>
       <HeadingXXLarge color="secondary500">Welcome Home Bud!</HeadingXXLarge>
-      <Button kind="secondary" onClick={getPayment}>
-        Get Payment
+      <Button kind="secondary" onClick={generateCode}>
+        Get Admin Invitation Code
       </Button>
+      {invitationCode && (
+        <Notification>
+        {`Generated Invitation Code: ${invitationCode}`}
+      </Notification>
+      )}
       <Button kind="secondary" onClick={logout}>
         Logout
       </Button>

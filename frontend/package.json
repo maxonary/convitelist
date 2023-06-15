@@ -17,7 +17,7 @@
     "react": "^18.2.0",
     "react-auth-kit": "^2.12.2",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.12.1",
+    "react-router-dom": "^6.13.0",
     "react-scripts": "5.0.1",
     "styled-components": "^5.3.10",
     "styletron-engine-atomic": "^1.5.0",
