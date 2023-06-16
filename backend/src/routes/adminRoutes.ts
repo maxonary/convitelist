@@ -9,7 +9,7 @@ import {
 
 const router = express.Router();
 
-router.post('/', createAdminUser);
+router.post('/register', createAdminUser);
 router.get('/', getAllAdminUsers);
 router.get('/:adminUserId', getAdminUserById);
 router.put('/:adminUserId', updateAdminUserById);
