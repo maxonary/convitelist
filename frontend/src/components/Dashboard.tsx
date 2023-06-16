@@ -7,6 +7,7 @@ import { useSignOut } from "react-auth-kit";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container } from "./commons";
+import UserTable from "./UserTable";
 
 function Home() {
   const signOut = useSignOut();
@@ -39,6 +40,9 @@ function Home() {
         {`Generated Invitation Code: ${invitationCode}`}
       </Notification>
       )}
+      <br />
+      <UserTable />
+      <br />
       <Button kind="secondary" onClick={logout}>
         Logout
       </Button>
