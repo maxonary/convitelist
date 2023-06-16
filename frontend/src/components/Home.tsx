@@ -1,60 +1,8 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import { AxiosError } from 'axios';
-
-const PageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-`;
-
-const Title = styled.div`
-  font-size: 2em;
-  font-weight: bold;
-`;
-
-const StatusText = styled.div`
-  font-size: 1.2em;
-  text-align: center;
-`;
-
-const InputContainer = styled.div`
-  margin-top: 20px;
-`;
-
-const Input = styled.input`
-  font-size: 1em;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 20px;
-`;
-
-const Button = styled.button`
-  padding: 10px 20px;
-  font-size: 1em;
-  border: none;
-  border-radius: 5px;
-  background-color: #008cba;
-  color: white;
-  cursor: pointer;
-`;
-
-const AdminButton = styled(Button)`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-`;
+import '../styles/Home.css';
 
 const isAxiosError = (error: any): error is AxiosError => {
   return error.isAxiosError;
@@ -95,23 +43,24 @@ const Home = () => {
   };
 
   return (
-    <PageContainer>
-      <Title>Minecraft Server Status</Title>
-      <InputContainer>
-        <Input 
-          type="text" 
-          value={username} 
-          onChange={handleInputChange} 
-          placeholder="Enter Minecraft Username" 
+    <div className="PageContainer">
+      <div className="Title">Minecraft Server Whitelist</div>
+      <div className="InputContainer">
+        <input
+          className="Input"
+          type="text"
+          value={username}
+          onChange={handleInputChange}
+          placeholder="Enter Minecraft Username"
         />
-      </InputContainer>
-      <ButtonContainer>
-        <Button onClick={createUser}>Submit</Button>
-        <Button style={{ display: 'none' }}>Dynmap</Button>
-      </ButtonContainer>
+      </div>
+      <div className="ButtonContainer">
+        <button className="Button" onClick={createUser}>Submit</button>
+        <button className="Button" style={{ display: 'none' }}>Dynmap</button>
+      </div>
       {errorMessage && <p>{errorMessage}</p>}
-      <AdminButton onClick={handleAdminLogin}>Admin Login</AdminButton>
-    </PageContainer>
+      <button className="AdminButton" onClick={handleAdminLogin}>Admin Login</button>
+    </div>
   );
 }
 

@@ -1,0 +1,56 @@
+@font-face {
+  font-family: 'Minecraft';
+  src: url('../fonts/Minecraft-Regular.ttf') format('truetype');
+}
+
+body {
+  background-image: url('../images/dirt-background.png');
+  background-repeat: repeat;
+  font-family: 'Minecraft', Arial, sans-serif;
+  color: white;
+}
+
+.PageContainer {
+  text-align: center;
+  padding-top: 100px;
+  background: rgba(0, 0, 0, 0.7);
+  margin: 0 auto;
+  width: 70%;
+  height: 80%;
+  border-radius: 20px;
+  border: 3px solid #3c763d;
+}
+
+.Title {
+  color: #ffffff;
+}
+
+.InputContainer, .ButtonContainer {
+  margin: 20px 0;
+}
+
+.Input {
+  background-color: rgba(255, 255, 255, 0.7);
+  color: black;
+  width: 200px;
+}
+
+.Button, .AdminButton {
+  background-color: #3c763d;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.Button:hover, .AdminButton:hover {
+  background-color: #2e5932;
+}
+
+.AdminButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
