@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import { AxiosError } from 'axios';
-import '../styles/Home.css';
+import '../styles/Minecraft.css';
 
 const isAxiosError = (error: any): error is AxiosError => {
   return error.isAxiosError;
@@ -43,25 +43,53 @@ const Home = () => {
   };
 
   return (
-    <div className="PageContainer">
-      <div className="Title">Minecraft Server Whitelist</div>
-      <div className="InputContainer">
-        <input
-          className="Input"
-          type="text"
-          value={username}
-          onChange={handleInputChange}
-          placeholder="Enter Minecraft Username"
-        />
+    <div className="mc-menu">
+      <div className="mc-button full">
+        <div className="title">Singleplayer</div>
       </div>
-      <div className="ButtonContainer">
-        <button className="Button" onClick={createUser}>Submit</button>
-        <button className="Button" style={{ display: 'none' }}>Dynmap</button>
+      <div className="mc-button full">
+        <div className="title">Multiplayer</div>
       </div>
-      {errorMessage && <p>{errorMessage}</p>}
-      <button className="AdminButton" onClick={handleAdminLogin}>Admin Login</button>
+      <div className="mc-button full">
+        <div className="title">Minecraft Realms</div>
+      </div>
+      <div className="double">
+        <div className="mc-button full">
+          <div className="title">Options</div>
+        </div>
+        <div className="mc-button full">
+          <div className="title">Quit Game</div>
+        </div>
+      </div>
+      <div className="mc-button full lang">
+        <div className="title">
+          <img src="https://i.ibb.co/99187Lk/lang.png" alt=" Lang"/>
+        </div>
+      </div>
     </div>
   );
 }
+
+//   return (
+//     <div className="mc-menu">
+//       <div className="Title">Minecraft Server Whitelist</div>
+//       <div className="InputContainer">
+//         <input
+//           className="Input mc-button"
+//           type="text"
+//           value={username}
+//           onChange={handleInputChange}
+//           placeholder="Enter Minecraft Username"
+//         />
+//       </div>
+//       <div className="ButtonContainer">
+//         <button className="mc-button" onClick={createUser}>Submit</button>
+//         <button className="mc-button" style={{ display: 'none' }}>Dynmap</button>
+//       </div>
+//       {errorMessage && <p>{errorMessage}</p>}
+//       <button className="mc-button" onClick={handleAdminLogin}>Admin Login</button>
+//     </div>
+//   );
+// }
 
 export default Home;
