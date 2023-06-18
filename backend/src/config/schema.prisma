@@ -10,10 +10,12 @@ datasource db {
 model User {
   id               Int      @id @default(autoincrement())
   minecraftUsername String  @unique
+  gameType         String
   approved         Boolean  @default(false)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }
+
 
 model Admin {
   id      Int      @id @default(autoincrement())
