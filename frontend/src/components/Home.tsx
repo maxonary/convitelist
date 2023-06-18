@@ -10,31 +10,50 @@ const isAxiosError = (error: any): error is AxiosError => {
 
 const Home = () => {
   const [username, setUsername] = useState("");
+  const [gameType, setGameType] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
+    setSuccessMessage("");  // reset the success message
   };
+
+  const toggleGameType = () => {
+    setGameType(prevGameType => prevGameType === "" || prevGameType === "Bedrock" ? "Java Edition" : "Bedrock");
+    setSuccessMessage("");  // reset the success message
+  }
 
   const handleAdminLogin = () => {
     navigate("/admin/login");
   };
 
   const createUser = async () => {
+    if (username === "") {
+      setErrorMessage("Please enter a username");
+      return;
+    } else if (gameType === "") {
+      setErrorMessage("Please select a game type");
+      return;
+    }
+
     try {
-      const response = await api.post('/user', { minecraftUsername: username });
+      const response = await api.post('/user', { minecraftUsername: username, gameType: gameType });
 
       setErrorMessage("");
       setUsername("");
+      setGameType("");
+      setSuccessMessage("Success");
   
     } catch (error) {
+      setSuccessMessage("");
       if (isAxiosError(error)) {
         if (error.response) {
           const responseData = error.response.data as { message: string };
           setErrorMessage(responseData.message);
         } else if (error.request) {
-          setErrorMessage('Unable to make request to server');
+          setErrorMessage('Unable to make request to backend');
         } else {
           setErrorMessage(error.message);
         }
@@ -43,53 +62,45 @@ const Home = () => {
   };
 
   return (
-    <div className="mc-menu">
-      <div className="mc-button full">
-        <div className="title">Singleplayer</div>
-      </div>
-      <div className="mc-button full">
-        <div className="title">Multiplayer</div>
-      </div>
-      <div className="mc-button full">
-        <div className="title">Minecraft Realms</div>
-      </div>
-      <div className="double">
+    <div className="container">
+      <div className="mc-menu">
         <div className="mc-button full">
-          <div className="title">Options</div>
+          <div className="mc-input-wrapper full">
+            <input 
+              type="text" 
+              className="mc-input full" 
+              placeholder="Enter Minecraft Username"
+              value={username}
+              onChange={handleInputChange}
+            />
+          </div>
         </div>
-        <div className="mc-button full">
-          <div className="title">Quit Game</div>
+        <div className="mc-button full" onClick={toggleGameType}>
+          <div className="title">{gameType === "" ? "Select Game Type" : gameType}</div>
         </div>
-      </div>
-      <div className="mc-button full lang">
-        <div className="title">
-          <img src="https://i.ibb.co/99187Lk/lang.png" alt=" Lang"/>
+        <div className="mc-button full" onClick={createUser}>
+          <div className="title">
+            {successMessage ? <span style={{color: 'lightgreen'}}>{successMessage}</span> : errorMessage ? <span style={{color: 'red'}}>{errorMessage}</span> : "Submit to Whitelist"}
+          </div>
+        </div>
+        <div className="double">
+          <div className="mc-button full" onClick={handleAdminLogin}>
+            <div className="title">Admin Login</div>
+          </div>
+          <div className="mc-button full">
+            <a style={{ textDecoration: 'none' }} href="http://server.r-nold.eu:5000" target="_blank" rel="noreferrer">
+              <div className="title">Server Status</div>
+            </a>
+          </div>
+        </div>
+        <div className="mc-button full lang">
+          <div className="title">
+            <img src="https://i.ibb.co/99187Lk/lang.png" alt=" Lang"/>
+          </div>
         </div>
       </div>
     </div>
   );
 }
-
-//   return (
-//     <div className="mc-menu">
-//       <div className="Title">Minecraft Server Whitelist</div>
-//       <div className="InputContainer">
-//         <input
-//           className="Input mc-button"
-//           type="text"
-//           value={username}
-//           onChange={handleInputChange}
-//           placeholder="Enter Minecraft Username"
-//         />
-//       </div>
-//       <div className="ButtonContainer">
-//         <button className="mc-button" onClick={createUser}>Submit</button>
-//         <button className="mc-button" style={{ display: 'none' }}>Dynmap</button>
-//       </div>
-//       {errorMessage && <p>{errorMessage}</p>}
-//       <button className="mc-button" onClick={handleAdminLogin}>Admin Login</button>
-//     </div>
-//   );
-// }
 
 export default Home;
