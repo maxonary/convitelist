@@ -23,6 +23,7 @@ body {
   background-image: url('../images/dirt-background.png');
   background-position: center;
   position: relative;
+  color: #ffffff;
 }
 
 .mc-menu {
