@@ -6,12 +6,13 @@ import { connectRcon, disconnectRcon, sendRconCommand } from '../helpers/rconHel
 const prisma = new PrismaClient();
 interface User {
   minecraftUsername: string;
+  gameType: string;
   approved: boolean;
 }
 
 export const createUser = async (req: Request, res: Response) => {
   try {
-    const { minecraftUsername } = req.body as User;
+    const { minecraftUsername, gameType } = req.body as User;
 
     const existingUser = await prisma.user.findUnique({
       where: { minecraftUsername },
@@ -24,6 +25,7 @@ export const createUser = async (req: Request, res: Response) => {
     const newUser = await prisma.user.create({
       data: {
         minecraftUsername,
+        gameType,
       },
     });
 
@@ -92,7 +94,15 @@ export async function approveUser(req: AuthenticatedRequest, res: Response) {
     }
 
     await connectRcon();
-    await sendRconCommand(`whitelist add ${user.minecraftUsername}`);
+
+    if(user.gameType === 'Java Edition') {
+      await sendRconCommand(`whitelist add ${user.minecraftUsername}`);
+    } else if (user.gameType === 'Bedrock Edition') {
+      await sendRconCommand(`fwhitelist add ${user.minecraftUsername}`);
+    } else {
+      throw new Error('Invalid game type');
+    }
+
     await sendRconCommand(`whitelist reload`);
     await disconnectRcon();
 
@@ -117,7 +127,15 @@ export async function rejectUser(req: AuthenticatedRequest, res: Response) {
       return;
     }
     await connectRcon();
-    await sendRconCommand(`whitelist remove ${user.minecraftUsername}`);
+
+    if(user.gameType === 'Java Edition') {
+      await sendRconCommand(`whitelist remove ${user.minecraftUsername}`);
+    } else if (user.gameType === 'Bedrock Edition') {
+      await sendRconCommand(`fwhitelist remove ${user.minecraftUsername}`);
+    } else {
+      throw new Error('Invalid game type');
+    }
+    
     await sendRconCommand(`whitelist reload`);
     await disconnectRcon();
 
