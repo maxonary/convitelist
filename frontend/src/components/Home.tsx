@@ -21,7 +21,7 @@ const Home = () => {
   };
 
   const toggleGameType = () => {
-    setGameType(prevGameType => prevGameType === "" || prevGameType === "Bedrock" ? "Java Edition" : "Bedrock");
+    setGameType(prevGameType => prevGameType === "" || prevGameType === "Bedrock Edition" ? "Java Edition" : "Bedrock Edition");
     setSuccessMessage("");  // reset the success message
   }
 
