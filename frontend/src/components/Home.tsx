@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { isAxiosError } from '../utils/isAxiosError';
 import api from '../api';
-import { AxiosError } from 'axios';
 import '../styles/Minecraft.css';
-
-const isAxiosError = (error: any): error is AxiosError => {
-  return error.isAxiosError;
-};
 
 const Home = () => {
   const [username, setUsername] = useState("");
