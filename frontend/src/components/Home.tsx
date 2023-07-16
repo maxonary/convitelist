@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { isAxiosError } from '../utils/isAxiosError';
+import { isValidUsername } from '../utils/isValidUsername';
 import api from '../api';
 import '../styles/Minecraft.css';
 
@@ -24,31 +25,6 @@ const Home = () => {
   const handleAdminLogin = () => {
     navigate("/admin/login");
   };
-
-  const isValidUsername = (username: string) => {
-    // Username must be between 3 and 16 characters
-    if (username.length < 3 || username.length > 16) {
-      return false;
-    }
-  
-    // Username cannot start or end with an underscore
-    if (username.startsWith('_') || username.endsWith('_')) {
-      return false;
-    }
-  
-    // Username cannot have two underscores in a row
-    if (username.includes('__')) {
-      return false;
-    }
-  
-    // Username can only contain alphanumeric characters and underscores
-    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
-      return false;
-    }
-  
-    return true;
-  }
-  
 
   const createUser = async () => {
     if (username === "") {
