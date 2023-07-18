@@ -152,12 +152,6 @@ button {
   padding-bottom: 0;
 }
 
-/* .mc-input-wrapper {
-  position: relative;
-  height: var(--btn-size);
-  width: calc(var(--btn-size) * 10);
-} */
-
 .mc-input {
   background: var(--input-bg);
   border: 2px solid #000;
@@ -175,23 +169,8 @@ button {
 }
 
 .mc-input:active,
-.mc-input:focus,
 .mc-button:active .title {
   box-shadow: var(--color-active-shadow);
-}
-
-.mc-input-wrapper.full,
-.mc-input.full {
-  height: 100%;
-  width: 100%;
-}
-
-.mc-input[type="text"]::-webkit-input-placeholder,
-.mc-input[type="text"]::-moz-placeholder,
-.mc-input[type="text"]:-ms-input-placeholder,
-.mc-input[type="text"]::placeholder {
-  color: var(--color-default);
-  text-shadow: var(--text-shadow);
 }
 
 .blinking-placeholder::placeholder {
