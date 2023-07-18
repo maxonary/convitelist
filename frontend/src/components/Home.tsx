@@ -83,10 +83,10 @@ const Home = () => {
             />
           </div>
         </div>
-        <div className="mc-button full" onClick={toggleGameType}>
+        <button className="mc-button full" onClick={toggleGameType}>
           <div className="title">{gameType === "" ? "Select Game Type" : gameType}</div>
-        </div>
-        <div className="mc-button full" onClick={createUser}>
+        </button>
+        <button className="mc-button full" onClick={createUser}>
           <div className="title">
             {successMessage ? 
                 <span className='success-message'>{successMessage}</span> 
@@ -95,16 +95,16 @@ const Home = () => {
               : "Submit to Whitelist"
             }
           </div>
-        </div>
+        </button>
         <div className="double">
-          <div className="mc-button full" onClick={handleAdminLogin}>
+          <button className="mc-button full" onClick={handleAdminLogin}>
             <div className="title">Admin Login</div>
-          </div>
-          <div className="mc-button full">
-            <a style={{ textDecoration: 'none' }} href="http://server.r-nold.eu:5000" target="_blank" rel="noreferrer">
-              <div className="title">Server Status</div>
+          </button>
+          <button className="mc-button full">
+            <a className="title" href="http://server.r-nold.eu:5000" target="_blank" rel="noreferrer">
+              Server Status
             </a>
-          </div>
+          </button>
         </div>
         <div className="mc-button full lang">
           <div className="title">

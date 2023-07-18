@@ -1,4 +1,15 @@
 @charset "UTF-8";
+
+:root {
+  --btn-size: 30pt;
+  --input-bg: #999 url('https://i.ibb.co/rb2TWXL/bgbtn.png') center / cover;
+  --text-shadow: 2px 2px #000A;
+  --color-default: #DDD;
+  --color-hover: #FFFFA0;
+  --color-inset-shadow: inset -2px -4px #0006, inset 2px 2px #FFF7;
+  --color-active-shadow: inset -2px -4px #0004, inset 2px 2px #FFF5;
+}
+
 *,
 ::before,
 ::after {
@@ -14,20 +25,29 @@
 
 body {
 	font-family: 'Minecraft', Arial, sans-serif;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
   align-items: center;
-  flex-direction: column;
   background-color: #fff;
   background-image: url('../images/dirt-background.png');
   background-position: center;
-  position: relative;
   color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: center;
+  position: relative;
+}
+
+button {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
 }
 
 .mc-menu {
-  --btn-size: 30pt;
   display: grid;
   grid-template-columns: var(--btn-size) calc(var(--btn-size) * 10) var(--btn-size);
   grid-template-rows: repeat(3, var(--btn-size)) 16px var(--btn-size);
@@ -80,42 +100,44 @@ body {
 }
 
 .mc-button {
-  height: var(--btn-size);
-  width: calc(var(--btn-size) * 10);
-  cursor: pointer;
-  overflow: hidden;
-  white-space: nowrap;
-  user-select: none;
-  background: #999 url('https://i.ibb.co/rb2TWXL/bgbtn.png') center / cover;
-  image-rendering: pixelated;
+  background: var(--input-bg);
   border: 2px solid #000;
+  cursor: pointer;
+  height: var(--btn-size);
+  image-rendering: pixelated;
+  overflow: hidden;
+  user-select: none;
+  white-space: nowrap;
+  width: calc(var(--btn-size) * 10);
 }
 
 .mc-button:hover .title {
   background-color: rgba(100, 100, 255, .45);
-  text-shadow: 2px 2px #202013CC;
-  color: #FFFFA0;
+  color: var(--color-hover);
+  text-shadow: var(--text-shadow);
 }
 
 .mc-button:active .title {
-  box-shadow: inset -2px -4px #0004, inset 2px 2px #FFF5;
+  box-shadow: var(--color-active-shadow);
 }
 
 .title {
-  width: 100%;
-  height: 100%;
-  padding-bottom: .3em;
-  display: flex;
-  justify-content: center;
   align-items: center;
-  color: #DDD;
-  text-shadow: 2px 2px #000A;
-  box-shadow: inset -2px -4px #0006, inset 2px 2px #FFF7;
+  box-shadow: var(--color-inset-shadow);
+  color: var(--color-default);
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  padding-bottom: .3em;
+  text-shadow: var(--text-shadow);
+  width: 100%;
+  text-decoration: none;
 }
 
 .mc-button.full {
   width: 100%;
   height: 100%;
+  width: 100%;
 }
 
 .mc-button.lang img {
@@ -134,65 +156,58 @@ body {
 }
 
 .mc-input {
-  height: 100%;
-  width: 100%;
+  background: var(--input-bg);
+  border: none;
+  color: var(--color-default);
+  cursor: pointer;
   font: inherit;
   text-align: center;
-  cursor: pointer;
-  overflow: hidden;
+  text-shadow: var(--text-shadow);
   white-space: nowrap;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  background: #999 url('https://i.ibb.co/rb2TWXL/bgbtn.png') center / cover;
-  image-rendering: pixelated;
-  border: none;
-  color: #DDD;
-  text-shadow: 2px 2px #000A;
   box-shadow: inset -2px -4px #0006, inset 2px 2px #FFF7;
   padding-bottom: .3em;
   display: flex;
   justify-content: center;
-  align-items: center;
-  outline: none;
+  align-items: center
 }
 
-.mc-input:hover {
+.mc-input:hover,
+.mc-input:focus {
+  background-color: rgba(100, 100, 255, .45) !important;
+  color: var(--color-hover) !important;
+  text-shadow: var(--text-shadow) !important;
+}
+
+.mc-button:hover .title {
   background-color: rgba(100, 100, 255, .45);
-  text-shadow: 2px 2px #202013CC;
-  color: #FFFFA0;
+  color: var(--color-hover);
+  text-shadow: var(--text-shadow);
 }
 
 .mc-input:active,
-.mc-input:focus {
-  box-shadow: inset -2px -4px #0004, inset 2px 2px #FFF5;
+.mc-input:focus,
+.mc-button:active .title {
+  box-shadow: var(--color-active-shadow);
 }
 
 .mc-input-wrapper.full,
 .mc-input.full {
-  width: 100%;
   height: 100%;
+  width: 100%;
 }
 
-.mc-input[type="text"]::-webkit-input-placeholder {
-  color: #DDD;
-  text-shadow: 2px 2px #000A;
-}
-
-.mc-input[type="text"]::-moz-placeholder {
-  color: #DDD;
-  text-shadow: 2px 2px #000A;
-}
-
-.mc-input[type="text"]:-ms-input-placeholder {
-  color: #DDD;
-  text-shadow: 2px 2px #000A;
-}
-
+.mc-input[type="text"]::-webkit-input-placeholder,
+.mc-input[type="text"]::-moz-placeholder,
+.mc-input[type="text"]:-ms-input-placeholder,
 .mc-input[type="text"]::placeholder {
-  color: #DDD;
-  text-shadow: 2px 2px #000A;
+  color: var(--color-default);
+  text-shadow: var(--text-shadow);
+}
+
+.mc-input-blinking[type="text"]::-webkit-input-placeholder,
+.mc-input-blinking[type="text"]::-moz-placeholder,
+.mc-input-blinking[type="text"]:-ms-input-placeholder,
+.mc-input-blinking[type="text"]::placeholder {
   animation: blinker 1s linear infinite;
 }
 
