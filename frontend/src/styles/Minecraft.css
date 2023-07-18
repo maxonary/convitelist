@@ -201,3 +201,11 @@ body {
     opacity: 0;
   }
 }
+
+.success-message {
+  color: lightgreen;
+}
+
+.error-message {
+  color: red;
+}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
 import { isAxiosError } from '../utils/isAxiosError';
 import { isValidUsername } from '../utils/isValidUsername';
 import api from '../api';
@@ -26,6 +27,17 @@ const Home = () => {
     navigate("/admin/login");
   };
 
+  const handleAxiosError = (error: AxiosError) => {
+    if (error.response) {
+      const responseData = error.response.data as { message: string };
+      setErrorMessage(responseData.message);
+    } else if (error.request) {
+      setErrorMessage('Unable to make request to backend');
+    } else {
+      setErrorMessage(error.message);
+    }
+  };
+
   const createUser = async () => {
     if (username === "") {
       setErrorMessage("Please enter a username");
@@ -50,12 +62,8 @@ const Home = () => {
       setSuccessMessage("");
       if (isAxiosError(error)) {
         if (error.response) {
-          const responseData = error.response.data as { message: string };
-          setErrorMessage(responseData.message);
-        } else if (error.request) {
-          setErrorMessage('Unable to make request to backend');
-        } else {
-          setErrorMessage(error.message);
+          handleAxiosError(error);
+
         }
       }
     }
@@ -80,7 +88,12 @@ const Home = () => {
         </div>
         <div className="mc-button full" onClick={createUser}>
           <div className="title">
-            {successMessage ? <span style={{color: 'lightgreen'}}>{successMessage}</span> : errorMessage ? <span style={{color: 'red'}}>{errorMessage}</span> : "Submit to Whitelist"}
+            {successMessage ? 
+                <span className='success-message'>{successMessage}</span> 
+              : errorMessage ? 
+                <span className='error-message'>{errorMessage}</span> 
+              : "Submit to Whitelist"
+            }
           </div>
         </div>
         <div className="double">
