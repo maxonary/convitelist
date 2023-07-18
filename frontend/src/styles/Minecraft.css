@@ -26,7 +26,7 @@
 body {
 	font-family: 'Minecraft', Arial, sans-serif;
   align-items: center;
-  background-color: #fff;
+  background-color: #2E2117;
   background-image: url('../images/dirt-background.png');
   background-position: center;
   color: #ffffff;
@@ -61,15 +61,15 @@ button {
   grid-gap: 8px;
 }
 
-.mc-menu .mc-button:nth-child(1) {
+.mc-menu :nth-child(1) {
   grid-area: first;
 }
 
-.mc-menu .mc-button:nth-child(2) {
+.mc-menu :nth-child(2) {
   grid-area: second;
 }
 
-.mc-menu .mc-button:nth-child(3) {
+.mc-menu :nth-child(3) {
   grid-area: third;
 }
 
@@ -77,15 +77,15 @@ button {
   grid-area: fourth;
 }
 
-.mc-menu .double .mc-button:nth-child(1) {
+.mc-menu .double :nth-child(1) {
   grid-area: left;
 }
 
-.mc-menu .double .mc-button:nth-child(2) {
+.mc-menu .double :nth-child(2) {
   grid-area: right;
 }
 
-.mc-menu .mc-button:nth-child(5) {
+.mc-menu :nth-child(5) {
   grid-area: lang;
 }
 
@@ -111,7 +111,8 @@ button {
   width: calc(var(--btn-size) * 10);
 }
 
-.mc-button:hover .title {
+.mc-button:hover .title,
+.mc-input-wrapper:hover .title {
   background-color: rgba(100, 100, 255, .45);
   color: var(--color-hover);
   text-shadow: var(--text-shadow);
@@ -134,30 +135,32 @@ button {
   text-decoration: none;
 }
 
-.mc-button.full {
+.mc-button.full,
+.mc-input-wrapper.full {
   width: 100%;
   height: 100%;
-  width: 100%;
 }
 
-.mc-button.lang img {
+.mc-button.lang img,
+.mc-input-wrapper.lang img {
   width: 26px;
   height: 26px;
 }
 
-.mc-button.lang .title {
+.mc-button.lang .title,
+.mc-input-wrapper.lang .title {
   padding-bottom: 0;
 }
 
-.mc-input-wrapper {
+/* .mc-input-wrapper {
   position: relative;
   height: var(--btn-size);
   width: calc(var(--btn-size) * 10);
-}
+} */
 
 .mc-input {
   background: var(--input-bg);
-  border: none;
+  border: 2px solid #000;
   color: var(--color-default);
   cursor: pointer;
   font: inherit;
@@ -169,19 +172,6 @@ button {
   display: flex;
   justify-content: center;
   align-items: center
-}
-
-.mc-input:hover,
-.mc-input:focus {
-  background-color: rgba(100, 100, 255, .45) !important;
-  color: var(--color-hover) !important;
-  text-shadow: var(--text-shadow) !important;
-}
-
-.mc-button:hover .title {
-  background-color: rgba(100, 100, 255, .45);
-  color: var(--color-hover);
-  text-shadow: var(--text-shadow);
 }
 
 .mc-input:active,
@@ -204,17 +194,12 @@ button {
   text-shadow: var(--text-shadow);
 }
 
-.mc-input-blinking[type="text"]::-webkit-input-placeholder,
-.mc-input-blinking[type="text"]::-moz-placeholder,
-.mc-input-blinking[type="text"]:-ms-input-placeholder,
-.mc-input-blinking[type="text"]::placeholder {
-  animation: blinker 1s linear infinite;
+.blinking-placeholder::placeholder {
+    animation: blinkText 1s infinite;
 }
 
-@keyframes blinker {
-  50% {
-    opacity: 0;
-  }
+@keyframes blinkText {
+    50% { opacity: 0; }
 }
 
 .success-message {

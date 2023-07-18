@@ -72,16 +72,14 @@ const Home = () => {
   return (
     <div className="container">
       <div className="mc-menu">
-        <div className="mc-button full">
-          <div className="mc-input-wrapper full">
-            <input 
-              type="text" 
-              className="mc-input full" 
-              placeholder="Enter Minecraft Username"
-              value={username}
-              onChange={handleInputChange}
-            />
-          </div>
+        <div className="mc-input-wrapper full">
+          <input 
+            type="text" 
+            className="mc-input title blinking-placeholder" 
+            placeholder="Enter Minecraft Username"
+            value={username}
+            onChange={handleInputChange}
+          />
         </div>
         <button className="mc-button full" onClick={toggleGameType}>
           <div className="title">{gameType === "" ? "Select Game Type" : gameType}</div>
