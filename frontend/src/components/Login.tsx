@@ -1,41 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from "baseui/button";
-
-import styled from "styled-components";
-import {
-  HeadingXXLarge,
-  HeadingXLarge,
-  HeadingLarge,
-  HeadingMedium,
-  HeadingSmall,
-  HeadingXSmall,
-} from "baseui/typography";
-import {
-  Container,
-  ErrorText,
-  InnerContainer,
-  InputWrapper,
-  StyledInput,
-} from "./commons";
-
 import { useSignIn, useIsAuthenticated } from "react-auth-kit";
 import { useFormik } from "formik";
 import { useNavigate, Link } from "react-router-dom";
 import api from '../api';
+import '../styles/Minecraft.css';
 
-const RedirectButton = styled(Button)`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-`;
+interface ErrorResponse {
+  response?: {
+    data: {
+      message: string;
+    };
+  };
+  message?: string;
+}
 
-const RegisterLink = styled(Link)`
-  margin-top: 20px;
-  display: block;
-  text-align: center;
-`;
-
-function Login(props: any) {
+function Login() {
   const [error, setError] = useState("");
   const signIn = useSignIn();
   const navigate = useNavigate();
@@ -47,18 +27,8 @@ function Login(props: any) {
     }
   }, [isAuthenticated, navigate]);
 
-  const onSubmit = async (values: any) => {
-    console.log("Values: ", values);
+  const onSubmit = async (values: {username: string, password: string}) => {
     setError("");
-
-    interface ErrorResponse {
-      response?: {
-        data: {
-          message: string;
-        };
-      };
-      message?: string;
-    }
 
     try {
       const response = await api.post('/auth/login', values);
@@ -75,12 +45,8 @@ function Login(props: any) {
     } catch (err: unknown) {
       const error = err as ErrorResponse;
       
-      if (error && error.response) 
-        setError(error.response.data.message);
-      else if (error && error.message) 
-        setError(error.message);
-    
-      console.log("Error: ", err);
+      if (error?.response) setError(error.response.data.message);
+      else if (error?.message) setError(error.message);
     }
   };
 
@@ -92,47 +58,48 @@ function Login(props: any) {
     onSubmit,
   });
 
-  const handleRedirectToRegister = () => {
-    navigate('/admin/register');
-  };
-
   return (
-    <Container>
-      <InnerContainer>
-        <form onSubmit={formik.handleSubmit}>
-          <HeadingXXLarge>Welcome Back!</HeadingXXLarge>
-          <ErrorText>{error}</ErrorText>
-          <InputWrapper>
-            <StyledInput
-              name="username"
-              value={formik.values.username}
-              onChange={formik.handleChange}
-              placeholder="Username"
-              clearOnEscape
-              size="large"
-              type="text"
-            />
-          </InputWrapper>
-          <InputWrapper>
-            <StyledInput
-              name="password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              placeholder="Password"
-              clearOnEscape
-              size="large"
-              type="password"
-            />
-          </InputWrapper>
-          <InputWrapper>
-            <Button size="large" kind="primary" isLoading={formik.isSubmitting}>
-              Login
-            </Button>
-          </InputWrapper>
-          <RegisterLink to="/admin/register">Don't have an account? Register here</RegisterLink>
-        </form>
-      </InnerContainer>
-    </Container>
+    <div className="container">
+      <form onSubmit={formik.handleSubmit}>
+        <div className="mc-menu">
+          <div className="mc-button full">
+            <div className="mc-input-wrapper full">
+              <input 
+                name="username"
+                type="text" 
+                className="mc-input full" 
+                placeholder="Enter Email"
+                value={formik.values.username}
+                onChange={formik.handleChange}
+              />
+            </div>
+          </div>
+          <div className="mc-button full">
+            <div className="mc-input-wrapper full">
+              <input 
+                name="password"
+                type="password" 
+                className="mc-input full" 
+                placeholder="Enter Password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+              />
+            </div>
+          </div>
+          <Button className="mc-button full" type="submit">Login</Button>
+          <div className="double">
+            <div className="mc-button full">
+              <div className="title">Admin Login</div>
+            </div>
+            <div className="mc-button full">
+              <a style={{ textDecoration: 'none' }} href="/admin/login" target="_blank" rel="noreferrer">
+                <div className="title">Server Status</div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
   );
 }
 
