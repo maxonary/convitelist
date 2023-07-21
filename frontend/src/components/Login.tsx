@@ -62,29 +62,25 @@ function Login() {
     <div className="container">
       <form onSubmit={formik.handleSubmit}>
         <div className="mc-menu">
-          <div className="mc-button full">
-            <div className="mc-input-wrapper full">
-              <input 
-                name="username"
-                type="text" 
-                className="mc-input full" 
-                placeholder="Enter Email"
-                value={formik.values.username}
-                onChange={formik.handleChange}
-              />
-            </div>
+          <div className="mc-input-wrapper full">
+            <input 
+              name="username"
+              type="text" 
+              className="mc-input full" 
+              placeholder="Enter Email"
+              value={formik.values.username}
+              onChange={formik.handleChange}
+            />
           </div>
-          <div className="mc-button full">
-            <div className="mc-input-wrapper full">
-              <input 
-                name="password"
-                type="password" 
-                className="mc-input full" 
-                placeholder="Enter Password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-              />
-            </div>
+          <div className="mc-input-wrapper full">
+            <input 
+              name="password"
+              type="password" 
+              className="mc-input full" 
+              placeholder="Enter Password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+            />
           </div>
           <Button className="mc-button full" type="submit">Login</Button>
           <div className="double">
