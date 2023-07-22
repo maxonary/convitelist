@@ -8,6 +8,7 @@
   --color-hover: #FFFFA0;
   --color-inset-shadow: inset -2px -4px #0006, inset 2px 2px #FFF7;
   --color-active-shadow: inset -2px -4px #0004, inset 2px 2px #FFF5;
+  --background-color-hover: rgba(100, 100, 255, .45);
 }
 
 *,
@@ -121,7 +122,7 @@ button {
 
 .mc-button:hover .title,
 .mc-input-wrapper:hover .title {
-  background-color: rgba(100, 100, 255, .45);
+  background-color: var(--background-color-hover);
   color: var(--color-hover);
   text-shadow: var(--text-shadow);
 }

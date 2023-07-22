@@ -66,7 +66,7 @@ function Login() {
             <input 
               name="username"
               type="text" 
-              className="mc-input full" 
+              className="mc-input title" 
               placeholder="Enter Email"
               value={formik.values.username}
               onChange={formik.handleChange}
@@ -76,22 +76,23 @@ function Login() {
             <input 
               name="password"
               type="password" 
-              className="mc-input full" 
+              className="mc-input full title" 
               placeholder="Enter Password"
               value={formik.values.password}
               onChange={formik.handleChange}
             />
           </div>
-          <Button className="mc-button full" type="submit">Login</Button>
           <div className="double">
-            <div className="mc-button full">
-              <div className="title">Admin Login</div>
-            </div>
-            <div className="mc-button full">
-              <a style={{ textDecoration: 'none' }} href="/admin/login" target="_blank" rel="noreferrer">
-                <div className="title">Server Status</div>
+            <button className="mc-button full" type="submit">
+              <div className="title"> 
+                Login
+              </div>
+            </button>
+            <button className="mc-button full">
+              <a className="title" href="/" rel="noreferrer">
+                Back
               </a>
-            </div>
+            </button>
           </div>
         </div>
       </form>
