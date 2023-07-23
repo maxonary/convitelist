@@ -46,6 +46,7 @@ function Login() {
       
       if (error?.response) setError(error.response.data.message);
       else if (error?.message) setError(error.message);
+      else setError("Unable to login");
     }
   };
 
@@ -59,7 +60,6 @@ function Login() {
 
   return (
     <div className="container">
-      {error && <div className="error-message">{error}</div>}
       <form onSubmit={formik.handleSubmit}>
         <div className="mc-menu">
           <div className="mc-input-wrapper full">
@@ -88,7 +88,7 @@ function Login() {
           <div className="double">
             <button className="mc-button full" type="submit">
               <div className="title"> 
-                Login
+              {error ? <span className='error-message'>{error}</span> : "Login"}
               </div>
             </button>
             <button className="mc-button full" onClick={() => navigate("/")}>
