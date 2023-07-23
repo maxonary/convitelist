@@ -67,42 +67,42 @@ const Home = () => {
 
   return (
     <div className="container">
-      <div className="mc-menu">
-        <div className="mc-input-wrapper full">
-          <input 
-            type="text" 
-            className="mc-input title blinking-placeholder" 
-            placeholder="Enter Minecraft Username"
-            value={username}
-            onChange={handleInputChange}
-          />
-        </div>
-        <button className="mc-button full" onClick={toggleGameType}>
-          <div className="title">{gameType === "" ? "Select Game Type" : gameType}</div>
-        </button>
-        <button className="mc-button full" onClick={createUser}>
-          <div className="title">
-            {successMessage ? 
-                <span className='success-message'>{successMessage}</span> 
-              : errorMessage ? 
-                <span className='error-message'>{errorMessage}</span> 
-              : "Submit to Whitelist"
-            }
+        <div className="mc-menu">
+          <div className="mc-input-wrapper full">
+            <input 
+              type="text" 
+              className="mc-input title blinking-placeholder" 
+              placeholder="Enter Minecraft Username"
+              value={username}
+              onChange={handleInputChange}
+            />
           </div>
-        </button>
-        <div className="double">
-          <button className="mc-button full">
-            <a className="title" href="http://server.r-nold.eu:5000" target="_blank" rel="noreferrer">
-              Server Status
-            </a>
+          <button className="mc-button full" onClick={toggleGameType}>
+            <div className="title">{gameType === "" ? "Select Game Type" : gameType}</div>
           </button>
-          <button className="mc-button full" onClick={() => navigate("/admin/login")}>
-            <div className="title">Admin Login</div>
+          <button className="mc-button full" onClick={createUser}>
+            <div className="title">
+              {successMessage ? 
+                  <span className='success-message'>{successMessage}</span> 
+                : errorMessage ? 
+                  <span className='error-message'>{errorMessage}</span> 
+                : "Submit to Whitelist"
+              }
+            </div>
           </button>
-        </div>
-        <div className="mc-button full lang">
-          <div className="title">
-            <img src="https://i.ibb.co/99187Lk/lang.png" alt=" Lang"/>
+          <div className="double">
+            <button className="mc-button full">
+              <a className="title" href="http://server.r-nold.eu:5000" target="_blank" rel="noreferrer">
+                Server Status
+              </a>
+            </button>
+            <button className="mc-button full" onClick={() => navigate("/admin/login")}>
+              <div className="title">Admin Login</div>
+            </button>
+          </div>
+          <div className="mc-button full lang">
+            <div className="title">
+              <img src="https://i.ibb.co/99187Lk/lang.png" alt=" Lang"/>
           </div>
         </div>
       </div>

@@ -67,6 +67,7 @@ button {
 
 .mc-menu {
   display: grid;
+  justify-content: center;
   grid-template-columns: var(--btn-size) calc(var(--btn-size) * 10) var(--btn-size);
   grid-template-rows: repeat(3, var(--btn-size)) 16px var(--btn-size);
   grid-template-areas:
