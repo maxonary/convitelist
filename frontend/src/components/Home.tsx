@@ -23,10 +23,6 @@ const Home = () => {
     setSuccessMessage("");  // reset the success message
   }
 
-  const handleAdminLogin = () => {
-    navigate("/admin/login");
-  };
-
   const handleAxiosError = (error: AxiosError) => {
     if (error.response) {
       const responseData = error.response.data as { message: string };
@@ -95,13 +91,13 @@ const Home = () => {
           </div>
         </button>
         <div className="double">
-          <button className="mc-button full" onClick={handleAdminLogin}>
-            <div className="title">Admin Login</div>
-          </button>
           <button className="mc-button full">
             <a className="title" href="http://server.r-nold.eu:5000" target="_blank" rel="noreferrer">
               Server Status
             </a>
+          </button>
+          <button className="mc-button full" onClick={() => navigate("/admin/login")}>
+            <div className="title">Admin Login</div>
           </button>
         </div>
         <div className="mc-button full lang">

@@ -30,7 +30,7 @@ body {
   background-color: #2E2117;
   background-image: url('../images/dirt-background.png');
   background-position: center;
-  color: #ffffff;
+  color: var(--color-default);
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -46,6 +46,22 @@ button {
   font: inherit;
   cursor: pointer;
   outline: inherit;
+}
+
+::placeholder {
+  color: var(--color-default);
+}
+
+.center-link {
+  align-items: center;
+  color: var(--color-default);
+  display: flex;
+  justify-content: center;
+  text-decoration: underline;
+}
+
+.center-link:hover {
+  color: var(--color-hover);
 }
 
 .mc-menu {

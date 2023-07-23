@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from "baseui/button";
 import { useSignIn, useIsAuthenticated } from "react-auth-kit";
 import { useFormik } from "formik";
 import { useNavigate, Link } from "react-router-dom";
@@ -82,6 +81,9 @@ function Login() {
               onChange={formik.handleChange}
             />
           </div>
+          <button onClick={() => navigate("/admin/register")} className="center-link">
+            Don't have an account? Register here
+          </button>
           <div className="double">
             <button className="mc-button full" type="submit">
               <div className="title"> 
