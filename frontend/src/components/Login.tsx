@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSignIn, useIsAuthenticated } from "react-auth-kit";
 import { useFormik } from "formik";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import api from '../api';
 import '../styles/Minecraft.css';
 
@@ -59,13 +59,14 @@ function Login() {
 
   return (
     <div className="container">
+      {error && <div className="error-message">{error}</div>}
       <form onSubmit={formik.handleSubmit}>
         <div className="mc-menu">
           <div className="mc-input-wrapper full">
             <input 
               name="username"
               type="text" 
-              className="mc-input title" 
+              className="mc-input title"
               placeholder="Enter Email"
               value={formik.values.username}
               onChange={formik.handleChange}
@@ -75,25 +76,25 @@ function Login() {
             <input 
               name="password"
               type="password" 
-              className="mc-input full title" 
+              className="mc-input title" 
               placeholder="Enter Password"
               value={formik.values.password}
               onChange={formik.handleChange}
             />
           </div>
-          <button onClick={() => navigate("/admin/register")} className="center-link">
+          <a onClick={() => navigate("/admin/register")} className="center-link">
             Don't have an account? Register here
-          </button>
+          </a>
           <div className="double">
             <button className="mc-button full" type="submit">
               <div className="title"> 
                 Login
               </div>
             </button>
-            <button className="mc-button full">
-              <a className="title" href="/" rel="noreferrer">
+            <button className="mc-button full" onClick={() => navigate("/")}>
+              <div className="title">
                 Back
-              </a>
+              </div>
             </button>
           </div>
         </div>

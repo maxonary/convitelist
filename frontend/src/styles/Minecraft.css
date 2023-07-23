@@ -58,6 +58,7 @@ button {
   display: flex;
   justify-content: center;
   text-decoration: underline;
+  cursor: pointer;
 }
 
 .center-link:hover {
