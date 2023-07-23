@@ -20,7 +20,7 @@ const AuthenticatedDashboard = WithAuth(Dashboard);
 function App() {
   return (
     <AppContainer>
-      <TitleImage src="cw-rustical.png" alt="Title" />
+      {/* <TitleImage src="cw-rustical.png" alt="Title" /> */}
       <Routes>
         <Route path="/" element={<Home />}></Route>
         <Route path="/admin/dashboard" element={<AuthenticatedDashboard />}></Route>
