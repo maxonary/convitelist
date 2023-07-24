@@ -92,7 +92,7 @@ const Home = () => {
           </button>
           <div className="double">
             <button className="item full">
-              <a className="title" href="http://server.r-nold.eu:5000" target="_blank" rel="noreferrer">
+              <a className="title" href="http://localhost:3000" target="_blank" rel="noreferrer">
                 Server Status
               </a>
             </button>
