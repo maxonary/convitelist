@@ -1,13 +1,12 @@
 import api from "../api";
-import axios from "axios";
-import { Button } from "baseui/button";
-import { HeadingXXLarge } from "baseui/typography";
-import { Notification } from "baseui/notification";
 import { useSignOut } from "react-auth-kit";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container } from "./commons";
 import UserTable from "./UserTable";
+import InputField from './InputField';
+import Button from './Button';
+import "../styles/Minecraft.css"
 
 function Home() {
   const signOut = useSignOut();
@@ -31,21 +30,28 @@ function Home() {
 
   return (
     <Container>
-      <HeadingXXLarge color="secondary500">Welcome Home Bud!</HeadingXXLarge>
-      <Button kind="secondary" onClick={generateCode}>
-        Get Admin Invitation Code
-      </Button>
-      {invitationCode && (
-        <Notification>
-        {`Generated Invitation Code: ${invitationCode}`}
-      </Notification>
-      )}
-      <br />
-      <UserTable />
-      <br />
-      <Button kind="secondary" onClick={logout}>
-        Logout
-      </Button>
+      <h1>Welcome Home Bud!</h1>
+      <div className="">
+        <UserTable />
+
+        <div className="double">
+          <Button className="item" onClick={generateCode} type="button">
+            <div className="title">
+              Get Admin Invitation Code
+            </div>
+          </Button>
+          <Button className="item" onClick={logout} type="button">
+            <div className="title">
+              Logout
+            </div>
+          </Button>
+        </div>
+        {/* {invitationCode && (
+            <Notification>
+            {`Generated Invitation Code: ${invitationCode}`}
+          </Notification>
+          )} */}
+      </div>
     </Container>
   );
 }

@@ -30,6 +30,7 @@ body {
   background-color: #2E2117;
   background-image: url('../images/dirt-background.png');
   background-position: center;
+  color: var(--color-default);
   display: flex;
   flex-direction: column;
   height: 100vh;
