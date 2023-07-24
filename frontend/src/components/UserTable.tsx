@@ -5,6 +5,7 @@ interface User {
   id: number;
   minecraftUsername: string;
   approved: boolean;
+  gameType: string;
 }
 
 const UserTable: React.FC = () => {
@@ -38,7 +39,7 @@ const UserTable: React.FC = () => {
         {users.map(user => (
           <tr key={user.id}>
             <td>{user.minecraftUsername}</td>
-            <td>{user.approved ? 'Yes' : 'No'}</td>
+            <td>{user.gameType ? 'Yes' : 'No'}</td>
             <td>
               <input 
                 type="checkbox" 

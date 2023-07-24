@@ -3,6 +3,8 @@ import { useSignIn, useIsAuthenticated } from "react-auth-kit";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import api from '../api';
+import InputField from './InputField';
+import Button from './Button';
 import '../styles/Minecraft.css';
 
 interface ErrorResponse {
@@ -61,22 +63,22 @@ function Login() {
   return (
     <div className="container">
       <form onSubmit={formik.handleSubmit}>
-        <div className="mc-menu">
-          <div className="mc-input-wrapper full">
-            <input 
+        <div className="menu">
+          <div className="item full">
+            <InputField
               name="username"
               type="text" 
-              className="mc-input title"
-              placeholder="Enter Email"
+              className="title"
+              placeholder="Enter Username"
               value={formik.values.username}
               onChange={formik.handleChange}
             />
           </div>
-          <div className="mc-input-wrapper full">
-            <input 
+          <div className="item">
+            <InputField
               name="password"
               type="password" 
-              className="mc-input title" 
+              className="title" 
               placeholder="Enter Password"
               value={formik.values.password}
               onChange={formik.handleChange}
@@ -85,17 +87,17 @@ function Login() {
           <a onClick={() => navigate("/admin/register")} className="center-link">
             Don't have an account? Register here
           </a>
-          <div className="double">
-            <button className="mc-button full" type="submit">
-              <div className="title"> 
-              {error ? <span className='error-message'>{error}</span> : "Login"}
-              </div>
-            </button>
-            <button className="mc-button full" onClick={() => navigate("/")}>
-              <div className="title">
-                Back
-              </div>
-            </button>
+            <div className="double">
+              <Button className="item" type="submit">
+                <div className="title"> 
+                {error ? <span className='error-message'>{error}</span> : "Login"}
+                </div>
+              </Button>
+              <Button className="item" onClick={() => navigate("/")}>
+                <div className="title">
+                  Back
+                </div>
+              </Button>
           </div>
         </div>
       </form>

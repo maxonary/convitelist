@@ -30,7 +30,6 @@ body {
   background-color: #2E2117;
   background-image: url('../images/dirt-background.png');
   background-position: center;
-  color: var(--color-default);
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -39,16 +38,11 @@ body {
 }
 
 button {
-  background: none;
-  color: inherit;
-  border: none;
-  padding: 0;
   font: inherit;
-  cursor: pointer;
-  outline: inherit;
 }
 
-::placeholder {
+::placeholder,
+:placeholder-shown {
   color: var(--color-default);
 }
 
@@ -61,11 +55,12 @@ button {
   cursor: pointer;
 }
 
-.center-link:hover {
+.center-link:hover,
+::placeholder:hover {
   color: var(--color-hover);
 }
 
-.mc-menu {
+.menu {
   display: grid;
   justify-content: center;
   grid-template-columns: var(--btn-size) calc(var(--btn-size) * 10) var(--btn-size);
@@ -80,35 +75,35 @@ button {
   grid-gap: 8px;
 }
 
-.mc-menu :nth-child(1) {
+.menu :nth-child(1) {
   grid-area: first;
 }
 
-.mc-menu :nth-child(2) {
+.menu :nth-child(2) {
   grid-area: second;
 }
 
-.mc-menu :nth-child(3) {
+.menu :nth-child(3) {
   grid-area: third;
 }
 
-.mc-menu .double {
+.menu .double {
   grid-area: fourth;
 }
 
-.mc-menu .double :nth-child(1) {
+.menu .double :nth-child(1) {
   grid-area: left;
 }
 
-.mc-menu .double :nth-child(2) {
+.menu .double :nth-child(2) {
   grid-area: right;
 }
 
-.mc-menu :nth-child(5) {
+.menu :nth-child(5) {
   grid-area: lang;
 }
 
-.mc-menu .double {
+.menu .double {
   width: 100%;
   height: 100%;
   display: grid;
@@ -116,37 +111,6 @@ button {
   grid-template-rows: 1fr;
   grid-template-areas: 'left right';
   grid-gap: 8px;
-}
-
-.mc-button {
-  background: var(--input-bg);
-  border: 2px solid #000;
-  cursor: pointer;
-  height: var(--btn-size);
-  image-rendering: pixelated;
-  overflow: hidden;
-  user-select: none;
-  white-space: nowrap;
-  width: calc(var(--btn-size) * 10);
-}
-
-.mc-input-wrapper {
-  border: 2px solid #000;
-  cursor: pointer;
-  height: var(--btn-size);
-  overflow: hidden;
-  width: calc(var(--btn-size) * 10);
-}
-
-.mc-button:hover .title,
-.mc-input-wrapper:hover .title {
-  background-color: var(--background-color-hover);
-  color: var(--color-hover);
-  text-shadow: var(--text-shadow);
-}
-
-.mc-button:active .title {
-  box-shadow: var(--color-active-shadow);
 }
 
 .title {
@@ -162,38 +126,38 @@ button {
   text-shadow: var(--text-shadow);
   width: 100%;
   text-decoration: none;
+  border: none;
+  background-color: var(--input-bg);
 }
 
-.mc-button.full,
-.mc-input-wrapper.full {
-  width: 100%;
-  height: 100%;
+.title:hover {
+  background-color: var(--background-color-hover);
+  color: var(--color-hover);
 }
 
-.mc-button.lang img,
-.mc-input-wrapper.lang img {
+.title:active {
+  box-shadow: var(--color-active-shadow);
+}
+
+.item {
+  background: var(--input-bg);
+  border: 2px solid #000;
+  cursor: pointer;
+  image-rendering: pixelated;
+  overflow: hidden;
+}
+
+.item.lang img {
   width: 26px;
   height: 26px;
 }
 
-.mc-button.lang .title,
-.mc-input-wrapper.lang .title {
+.item.lang .title {
   padding-bottom: 0;
-}
-
-.mc-input {
-  background: var(--input-bg);
-  border: none;
-}
-
-.mc-input:active,
-.mc-button:active .title {
-  box-shadow: var(--color-active-shadow);
 }
 
 .blinking-placeholder::placeholder {
     animation: blinkText 1s infinite;
-    color: var(--color-default);
 }
 
 @keyframes blinkText {
