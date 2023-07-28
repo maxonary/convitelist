@@ -1,43 +1,28 @@
-# Convinient Whitelist for Minecraft Servers
+# Convenient Whitelist for Minecraft Servers Backend
 
 This application allows admins and moderator to easily manage a whitelist for their Minecraft server.
-Users can be added and removed from the whitelist by simply clicking on a corresponding button in the admin panel.
+The Backend provides an API to be used for CRUD operations. 
 
-Users can also be added by registering on the website. They can log in with their minecraft username or via the Microsoft XBox integration.
-
-This is a Prisma, PostgreSQL, and Express application for users to register to a Minecraft server. Admins can accept or reject the applications through an admin panel, which automatically adds or removes the players from the Minecraft Server's whitelist.
-
+This is a Prisma, PostgreSQL, and Express application for users to register to a Minecraft server.
 ## Features
 
 - User registration with Minecraft username
 - Admin authentication
-- Admin panel for approving or rejecting users
 - Automatic Minecraft server whitelist management through RCON
-
-## Future Features
-* Microsoft XBox authentication
-* Automatically insert users on first join
-* User profile page
-* User profile picture
-* Check valid names by length and characters
-* Autosync with whitelist
-* Admin Pannel
-* Server statistics
 
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
 
 - You have installed [Node.js](https://nodejs.org/) (14.x or later is recommended)
-- You have a PostgreSQL database available
+- You have an SQLite database available
 - You have access to a Minecraft server with RCON enabled
 
 ## Installation
 
-1. Clone this repository:
+1. Navigate into the folder:
 ```bash
-git clone https://github.com/your_username/your_project_name.git
-cd convitelist
+cd convitelist/backend
 ```
 
 2. Install the dependencies:
@@ -67,6 +52,16 @@ npm run dev
 ```
 
 The application will be available at `http://localhost:3001`.
+
+7. Build the application:
+```bash
+npm run build
+```
+
+8. Start the production server:
+```bash
+npm run start
+```
 
 ## Deployment
 

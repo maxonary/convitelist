@@ -1,6 +1,60 @@
-# Getting Started with Create React App
+# Convenient Whitelist for Minecraft Servers Frontend
+
+This application allows admins and moderator to easily manage a whitelist for their Minecraft server.
+The Frontend provides a Minecraft title page style interface to be used with the corresponding Backend. 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Features
+
+- Minecraft style interface
+- User and Admin registration on multiple pages
+- Spell check and error handling
+- Admin Panel featuring tooltip and other functions
+
+## Prerequisites
+
+Before you begin, ensure you have met the following requirements:
+
+- You have installed [Node.js](https://nodejs.org/) (14.x or later is recommended)
+- You have the Backend set-up and running
+- You have access to a Minecraft server with RCON enabled
+
+## Installation
+
+1. Navigate into the folder:
+```bash
+cd convitelist/frontend
+```
+
+2. Install the dependencies:
+```bash
+npm install
+```
+
+3. Copy the `.env.example` file to `.env`:
+```bash
+cp .env.example .env
+```
+
+4. Update the `.env` file with your API urls and other configuration options.
+
+5. Start the development server:
+```bash
+npm run dev
+```
+
+The application will be available on an avalable port (usually `http://localhost:3001`).
+
+6. Build the application:
+```bash
+npm run build
+```
+
+7. Start the production server:
+```bash
+npm run start
+```
 
 ## Available Scripts
 
