@@ -1,0 +1,78 @@
+# Check tutorial here https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners
+
+name: Deploy to Raspberry Pi
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push events for the main branch
+  push:
+    branches:
+      - main
+
+  # Allows to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  NODE_ENV: production
+  REACT_APP_API_URL: $REACT_APP_API_URL
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # Build and deploy the frontend React app
+  frontend:
+    # The type of runner that the job will run on
+    runs-on: self-hosted
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out the repository under $GITHUB_WORKSPACE, so the job can access it
+      - uses: actions/checkout@v2
+
+      # Install Node.js and npm
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      # Install frontend app dependencies and build
+      - name: Build Frontend
+        run: |
+          cd frontend
+          npm install
+          npm run build
+
+      # Copy the frontend build to a folder accessible by the backend server
+      - name: Copy Frontend Build
+        run: |
+          cp -r frontend/build backend/public
+
+  # Build and deploy the backend Node.js server
+  backend:
+    runs-on: self-hosted
+    needs: frontend
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Install Node.js and npm
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      # Install backend app dependencies and build
+      - name: Build Backend
+        run: |
+          cd backend
+          npm install
+          npm run build
+
+      # Kill the existing backend server, if running already
+      - name: Kill Backend Server
+        run: pkill node || true
+
+      # Start the backend server using pm2
+      - name: Run Backend Server
+        run: |
+          npm install pm2 -g
+          pm2 start build/server.js --name="convitelist-backend-server"
