@@ -63,6 +63,11 @@ npm run build
 npm run start
 ```
 
+9. Generate a token in the console to create the first admin user:
+```bash
+node run scr/scripts/testInvitationCode.js # copy the token
+```
+
 ## Deployment
 
 The deployment process will depend on your chosen hosting provider. Please consult the provider's documentation for deploying Node.js applications and configuring environment variables.
