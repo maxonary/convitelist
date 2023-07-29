@@ -10,6 +10,35 @@ This is a Prisma, PostgreSQL, and Express application for users to register to a
 - Admin authentication
 - Automatic Minecraft server whitelist management through RCON
 
+## Database Entity Relationship Model
+
+```mermaid
+erDiagram
+    User ||--o{ InvitationCode : has
+    User ||--o{ Admin : "Approves"
+    User {
+        id INT [PK]
+        minecraftUsername VARCHAR [UNIQUE]
+        gameType VARCHAR
+        approved BOOLEAN [DEFAULT=false]
+        createdAt DateTime [DEFAULT=now()]
+        updatedAt DateTime [UpdatedAt]
+    }
+    Admin {
+        id INT [PK]
+        username VARCHAR [UNIQUE]
+        password VARCHAR
+        email VARCHAR [UNIQUE]
+        createdAt DateTime [DEFAULT=now()]
+        updatedAt DateTime [UpdatedAt]
+    }
+    InvitationCode {
+        id INT [PK]
+        code VARCHAR [UNIQUE]
+        used BOOLEAN [DEFAULT=false]
+    }
+```
+
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:

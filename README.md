@@ -29,6 +29,88 @@ For further details check the dedicated Backend and Frontend README docs.
 * Automatically insert users on first join
 * Server statistics icluding graphs
 
+## Website Architecture
+```
+bash
+                    +----------------------+
+                    |   User's Web Browser |
+                    +----------------------+
+                                |
+                        (1) HTTP Request (GET)
+                                |
+                                v
+                    +-----------------------+
+                    |      Frontend App     |
+                    |  (React, React Router)|
+                    +-----------------------+
+                                |
+             (2) Client-Side Routing (React Router)
+                                |
+                                v
+                    +-----------------------+
+                    |      Frontend API     |
+                    | (Axios, Fetch, etc.)  |
+                    +-----------------------+
+                                |
+                     (3) HTTP Request (GET/POST)
+                                |
+                                v
+              +----------------------------------+
+              |        Backend Server            |
+              | (Node.js, Express, SQLite, etc.) |
+              +----------------------------------+
+                                |
+            (4) Authentication (Passport, JWT, etc.)
+                                |
+                                v
+              +----------------------------------+
+              |       Session Management         |
+              | (Cookies, Express-Session, etc.) |
+              +----------------------------------+
+                                |
+                   (5) HTTP Request (GET/POST)
+                                |
+                                v
+                      +------------------+
+                      |     Database     |
+                      |    (MongoDB)     |
+                      +------------------+
+                                |
+                       (6) Query Response
+                                |
+                                v
+                      +------------------+
+                      |      Backend     |
+                      |  Data Processing |
+                      +------------------+
+                                |
+                    (7) HTTP Response (JSON)
+                                |
+                                v
+                        +--------------+
+                        |   Backend    |
+                        |   Rendering  |
+                        +--------------+
+                                |
+                  (8) HTTP Response (HTML/JS/CSS)
+                                |
+                                v
+                       +----------------+
+                       | User's Browser |
+                       |    Rendering   |
+                       +----------------+
+```
+
+1. The user's web browser sends an HTTP request (GET) to the website to load the page.
+
+2. The frontend app (React) handles the routing and sends additional HTTP requests (GET/POST) to interact with the backend server.
+
+3. The backend server (Node.js, Express) processes the requests, interacts with the database (SQLite), and sends an HTTP response (JSON) back to the frontend app.
+
+4. The frontend app updates parts of the UI based on the response received from the server.
+
+5. The user's web browser renders the updated UI, and makes the website interactive.
+
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
@@ -49,7 +131,7 @@ cd convitelist
 
 2. Install the dependencies:
 ```bash
-npm install ./backend && npm install ./frontend
+cd backend && npm install && cd ../frontend && npm install
 ```
 
 3. Copy the `.env.example` files for Back- and Frontend to `.env`:
@@ -59,27 +141,32 @@ cp .env.example .env
 
 4. Update the `.env` file with your SQLite database URL, RCON credentials, and other configuration options.
 
-5. Run the database migrations:
+5. Run the database migrations in the backend folder:
 ```bash
-npx prisma migrate deploy
+cd backend && npx prisma migrate deploy
 ```
 or
 ```bash
-npx prisma migrate dev --name init    # for development to create a database
+cd backend && npx prisma migrate dev --name init    # for development to create a database
 ```
 
-6. Start the development server:
+6. Start the development server (individually):
 ```bash
 npm run dev
 ```
 
-7. Or start the production server:
+7. Build the code for production (individually):
+```bash
+npm run build
+```
+
+8. Start the production server (individually):
 ```bash
 npm run start
 ```
 
 The Backend application will be available at `http://localhost:3001` 
-and the Backend application will be available at `http://localhost:3000` 
+and the Backend application will be available at a free port (normally `http://localhost:3000`)
 
 ## Deployment
 
