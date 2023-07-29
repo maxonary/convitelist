@@ -14,28 +14,28 @@ This is a Prisma, PostgreSQL, and Express application for users to register to a
 
 ```mermaid
 erDiagram
-    User ||--o{ InvitationCode : has
-    User ||--o{ Admin : "Approves"
+    Admin ||--o{ InvitationCode : sends
+    User }|--o{ Admin : approves
     User {
-        id INT [PK]
-        minecraftUsername VARCHAR [UNIQUE]
+        id INT PK
+        minecraftUsername VARCHAR
         gameType VARCHAR
-        approved BOOLEAN [DEFAULT=false]
-        createdAt DateTime [DEFAULT=now()]
-        updatedAt DateTime [UpdatedAt]
+        approved BOOLEAN 
+        createdAt DateTime 
+        updatedAt DateTime 
     }
     Admin {
-        id INT [PK]
-        username VARCHAR [UNIQUE]
+        id INT PK
+        username VARCHAR 
         password VARCHAR
-        email VARCHAR [UNIQUE]
-        createdAt DateTime [DEFAULT=now()]
-        updatedAt DateTime [UpdatedAt]
+        email VARCHAR 
+        createdAt DateTime 
+        updatedAt DateTime 
     }
     InvitationCode {
-        id INT [PK]
-        code VARCHAR [UNIQUE]
-        used BOOLEAN [DEFAULT=false]
+        id INT 
+        code VARCHAR 
+        used BOOLEAN 
     }
 ```
 
