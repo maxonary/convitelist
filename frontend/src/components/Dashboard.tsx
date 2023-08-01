@@ -46,11 +46,11 @@ function Home() {
             </div>
           </Button>
         </div>
-        {/* {invitationCode && (
-            <Notification>
+        {invitationCode && (
+            <div>
             {`Generated Invitation Code: ${invitationCode}`}
-          </Notification>
-          )} */}
+          </div>
+          )}
       </div>
     </Container>
   );
