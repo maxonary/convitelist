@@ -4,11 +4,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container } from "./commons";
 import UserTable from "./UserTable";
-import InputField from './InputField';
 import Button from './Button';
 import "../styles/Minecraft.css"
 
-function Home() {
+function Dashboard() {
   const signOut = useSignOut();
   const navigate = useNavigate();
 
@@ -56,4 +55,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Dashboard;
