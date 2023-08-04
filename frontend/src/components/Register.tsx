@@ -1,23 +1,10 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import api from '../api';
-import { HeadingXXLarge } from 'baseui/typography';
-import { Button } from 'baseui/button';
-import { Input } from 'baseui/input';
-import { Container, InnerContainer, ErrorText, InputWrapper } from './commons';
-
-const RegisterLink = styled(Link)`
-  margin-top: 20px;
-  display: block;
-  text-align: center;
-`;
-
-const StyledInput = styled(Input)`
-  width: 100%;
-`;
+import InputField from './InputField';
+import Button from './Button';
 
 const initialValues = {
   username: '',
@@ -45,11 +32,23 @@ function Register() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const [blinkingField, setBlinkingField] = useState('username');
+  const fieldsOrder = ['username', 'password', 'email', 'invitationCode'];
+
+  const handleInputChange = (fieldName: any, value: any) => {
+    setBlinkingField(fieldName);
+    formik.setFieldValue(fieldName, value);
+    const nextFieldIndex = fieldsOrder.indexOf(fieldName) + 1;
+    if (nextFieldIndex < fieldsOrder.length) {
+      setBlinkingField(fieldsOrder[nextFieldIndex]);
+    }
+  };
+
   const onSubmit = async (values: any) => {
     setError('');
 
     try {
-      const response = await api.post('/admin/register', values);
+      await api.post('/admin/register', values);
 
       // Reset form and show success message
       formik.resetForm();
@@ -72,74 +71,71 @@ function Register() {
   });
 
   return (
-    <Container>
-      <InnerContainer>
-        <form onSubmit={formik.handleSubmit}>
-          <HeadingXXLarge>Register</HeadingXXLarge>
-          <ErrorText>{error}</ErrorText>
-          <InputWrapper>
-            <StyledInput
+    <div className="container">
+      <form onSubmit={formik.handleSubmit}>
+        <div className="menu-register">
+          <div className="item">
+            <InputField
               name="username"
+              type="text"
+              className={`title ${blinkingField === 'username' ? 'blinking' : ''}`}
+              placeholder="Enter Username"
               value={formik.values.username}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              placeholder="Username"
-              clearOnEscape
-              size="large"
-              type="text"
+              onChange={(e) => handleInputChange('username', e.target.value)}
             />
-            {formik.touched.username && formik.errors.username && <ErrorText>{formik.errors.username}</ErrorText>}
-          </InputWrapper>
-          <InputWrapper>
-            <StyledInput
+            {formik.touched.username && formik.errors.username && <span className="error-message">{formik.errors.username}</span>}
+          </div>
+          <div className="item">
+            <InputField
               name="password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              placeholder="Password"
-              clearOnEscape
-              size="large"
               type="password"
+              className={`title ${blinkingField === 'password' ? 'blinking' : ''}`}
+              placeholder="Enter Password"
+              value={formik.values.password}
+              onChange={(e) => handleInputChange('password', e.target.value)}
             />
-            {formik.touched.password && formik.errors.password && <ErrorText>{formik.errors.password}</ErrorText>}
-          </InputWrapper>
-          <InputWrapper>
-            <StyledInput
+            {formik.touched.password && formik.errors.password && <span className="error-message">{formik.errors.password}</span>}
+          </div>
+          <div className="item">
+            <InputField
               name="email"
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              placeholder="Email"
-              clearOnEscape
-              size="large"
               type="email"
+              className={`title ${blinkingField === 'email' ? 'blinking' : ''}`}
+              placeholder="Enter Email"
+              value={formik.values.email}
+              onChange={(e) => handleInputChange('email', e.target.value)}
             />
-            {formik.touched.email && formik.errors.email && <ErrorText>{formik.errors.email}</ErrorText>}
-          </InputWrapper>
-          <InputWrapper>
-            <StyledInput
+            {formik.touched.email && formik.errors.email && <span className="error-message">{formik.errors.email}</span>}
+          </div>
+          <div className="item">
+            <InputField
               name="invitationCode"
-              value={formik.values.invitationCode}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              placeholder="Invitation Code"
-              clearOnEscape
-              size="large"
               type="text"
+              className={`title ${blinkingField === 'invitationCode' ? 'blinking' : ''}`}
+              placeholder="Enter Invitation Code"
+              value={formik.values.invitationCode}
+              onChange={(e) => handleInputChange('invitationCode', e.target.value)}
             />
-            {formik.touched.invitationCode && formik.errors.invitationCode && (
-              <ErrorText>{formik.errors.invitationCode}</ErrorText>
-            )}
-          </InputWrapper>
-          <InputWrapper>
-            <Button size="large" kind="primary" type="submit" isLoading={formik.isSubmitting}>
-              Register
+            {formik.touched.invitationCode && formik.errors.invitationCode && <span className="error-message">{formik.errors.invitationCode}</span>}
+          </div>
+          <div onClick={() => navigate("/admin/login")} className="center-link">
+            Already have an account? Login here
+          </div>
+          <div className="double">
+            <Button className="item" type="submit">
+              <div className="title">
+                {error ? <span className="error-message">{error}</span> : 'Register'}
+              </div>
             </Button>
-          </InputWrapper>
-          <RegisterLink to="/admin/login">Already have an account? Login here</RegisterLink>
-        </form>
-      </InnerContainer>
-    </Container>
+            <Button className="item" onClick={() => navigate(-1)}>
+              <div className="title">
+                Back
+              </div>
+            </Button>
+          </div>
+        </div>
+      </form>
+    </div>
   );
 }
 
