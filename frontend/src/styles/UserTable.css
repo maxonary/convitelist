@@ -3,8 +3,9 @@ table {
   display: block;
   max-height: 300px;
   overflow-y: auto;
-  width: 100%;
+  width: 81%;
   table-layout: fixed;
+  border-collapse: collapse;
 }
 
 th, td {
@@ -17,7 +18,7 @@ td:nth-child(1):hover {
   color: #FFFFA0;
 }
 
-td:nth-child(5), td:nth-child(6) {
+td:nth-child(3), td:nth-child(4) {
   text-align: center;
 }
 
