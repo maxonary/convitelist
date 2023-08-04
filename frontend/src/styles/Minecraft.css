@@ -76,35 +76,15 @@ button {
   grid-gap: 8px;
 }
 
-.menu :nth-child(1) {
-  grid-area: first;
-}
+.menu :nth-child(1) {grid-area: first;}
+.menu :nth-child(2) {grid-area: second;}
+.menu :nth-child(3) {grid-area: third;}
+.menu .double {grid-area: fourth;}
+.menu .double :nth-child(1) {grid-area: left;}
+.menu .double :nth-child(2) {grid-area: right;}
+.menu :nth-child(5) {grid-area: lang;}
 
-.menu :nth-child(2) {
-  grid-area: second;
-}
-
-.menu :nth-child(3) {
-  grid-area: third;
-}
-
-.menu .double {
-  grid-area: fourth;
-}
-
-.menu .double :nth-child(1) {
-  grid-area: left;
-}
-
-.menu .double :nth-child(2) {
-  grid-area: right;
-}
-
-.menu :nth-child(5) {
-  grid-area: lang;
-}
-
-.menu .double {
+.double {
   width: 100%;
   height: 100%;
   display: grid;
@@ -113,6 +93,47 @@ button {
   grid-template-areas: 'left right';
   grid-gap: 8px;
 }
+
+.menu-register {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: var(--btn-size) calc(var(--btn-size) * 10) var(--btn-size);
+  grid-template-rows: repeat(6, var(--btn-size)) 16px var(--btn-size);
+  grid-template-areas:
+  '. 		first 		.'
+  '. 		second 		.'
+  '. 		third 		.'
+  '. 		fourth 		.'
+  '. 		fifth 		.'
+  '.    sixth 		.'
+;
+grid-gap: 8px;
+}
+
+.menu-register :nth-child(1) {grid-area: first;}
+.menu-register :nth-child(2) {grid-area: second;}
+.menu-register :nth-child(3) {grid-area: third;}
+.menu-register :nth-child(4) {grid-area: fourth;}
+.menu-register :nth-child(5) {grid-area: fifth;}
+.menu-register .double {grid-area: sixth;}
+.menu-register .double :nth-child(1) {grid-area: left;}
+.menu-register .double :nth-child(2) {grid-area: right;}
+
+.menu-dashboard {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: var(--btn-size) calc(var(--btn-size) * 10) var(--btn-size);
+  grid-template-rows: repeat(2, var(--btn-size)) 16px var(--btn-size);
+  grid-template-areas:
+  '. 		first 		.'
+  '. 		second 		.'
+;
+grid-gap: 8px;
+}
+.menu-dashboard :nth-child(1) {grid-area: first;}
+.menu-dashboard .double {grid-area: second;}
+.menu-dashboard .double :nth-child(1) {grid-area: left;}
+.menu-dashboard .double :nth-child(2) {grid-area: right;}
 
 .title {
   align-items: center;
@@ -157,7 +178,7 @@ button {
   padding-bottom: 0;
 }
 
-.blinking-placeholder::placeholder {
+.blinking::placeholder {
     animation: blinkText 1s infinite;
 }
 

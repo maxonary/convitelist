@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "./logo.svg";
+// import logo from "./logo.svg";
 import "./App.css";
 import styled from "styled-components";
 import { Route, Routes } from "react-router-dom";
@@ -8,7 +8,7 @@ import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import Register from "./components/Register";
 import WithAuth from "./hoc/WithAuth";
-import TitleImage from "./components/TitleImage";
+// import TitleImage from "./components/TitleImage";
 
 const AppContainer = styled.div`
   width: 100%;

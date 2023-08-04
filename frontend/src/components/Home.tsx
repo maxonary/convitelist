@@ -119,7 +119,7 @@ return (
           <div className="item full">
             <input 
               type="text" 
-              className="title blinking-placeholder" 
+              className="title blinking" 
               placeholder="Enter Minecraft Username"
               value={username}
               onChange={handleInputChange}
