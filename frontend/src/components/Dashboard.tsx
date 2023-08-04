@@ -1,15 +1,22 @@
-import api from "../api";
-import { useSignOut } from "react-auth-kit";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSignOut, useIsAuthenticated } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
 import { Container } from "./commons";
 import UserTable from "./UserTable";
-import Button from './Button';
-import "../styles/Minecraft.css"
+import Button from "./Button";
+import api from "../api";
+import "../styles/Minecraft.css";
 
 function Dashboard() {
   const signOut = useSignOut();
   const navigate = useNavigate();
+  const isAuthenticated = useIsAuthenticated();
+
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      navigate("/admin/login");
+    }
+  }, [isAuthenticated, navigate]);
 
   const [invitationCode, setInvitationCode] = useState<string | null>(null);
 
@@ -29,10 +36,16 @@ function Dashboard() {
 
   return (
     <Container>
-      <h1>Welcome Home Bud!</h1>
-      <div className="">
-        <UserTable />
+      <h1>Admin Dashboard</h1>
 
+      <UserTable />
+      
+      <div className="menu-dashboard">
+        {invitationCode && (
+          <div>
+            {`Generated Invitation Code: ${invitationCode}`}
+          </div>
+        )}
         <div className="double">
           <Button className="item" onClick={generateCode} type="button">
             <div className="title">
@@ -45,11 +58,6 @@ function Dashboard() {
             </div>
           </Button>
         </div>
-        {invitationCode && (
-            <div>
-            {`Generated Invitation Code: ${invitationCode}`}
-          </div>
-          )}
       </div>
     </Container>
   );
