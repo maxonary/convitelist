@@ -128,7 +128,11 @@ function Register() {
                 {error ? <span className="error-message">{error}</span> : 'Register'}
               </div>
             </Button>
-            <BackButton className="item" />
+            <BackButton className="item">
+              <div className="title">
+                Back
+              </div>
+            </BackButton>
           </div>
         </div>
       </form>

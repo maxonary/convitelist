@@ -5,9 +5,10 @@ import { navigateBackOrHome } from '../utils/navigation';
 
 interface BackButtonProps {
   className?: string;
+  children: React.ReactNode;
 }
 
-const BackButton: React.FC<BackButtonProps> = ({ className }) => {
+const BackButton: React.FC<BackButtonProps> = ({ className, children }) => {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
@@ -16,9 +17,7 @@ const BackButton: React.FC<BackButtonProps> = ({ className }) => {
 
   return (
     <Button className={className} onClick={handleButtonClick}>
-      <div className="title">
-        Back
-      </div>
+      {children}
     </Button>
   );
 };
