@@ -7,11 +7,11 @@ const WithAuth = (WrappedComponent: React.ComponentType) => {
     const isAuthenticated = useIsAuthenticated();
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //   if (!isAuthenticated()) {
-    //     navigate('/login');
-    //   }
-    // }, [isAuthenticated, navigate]);
+    useEffect(() => {
+      if (!isAuthenticated()) {
+        navigate('/admin/login');
+      }
+    }, [isAuthenticated, navigate]);
 
     if (isAuthenticated()) {
       return <WrappedComponent {...props} />;
