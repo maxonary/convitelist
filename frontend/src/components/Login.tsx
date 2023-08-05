@@ -103,7 +103,7 @@ function Login() {
               onChange={(e) => handleInputChange('password', e.target.value)}
             />
           </div>
-          <div onClick={() => navigate("/admin/register")} className="center-link">
+          <div onClick={() => navigate("/admin/register")} className="link-text">
             Don't have an account? Register here
           </div>
             <div className="double">

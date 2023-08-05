@@ -47,16 +47,27 @@ button {
   color: var(--color-default);
 }
 
-.center-link {
-  align-items: center;
+.standard-text{
   color: var(--color-default);
-  display: flex;
-  justify-content: center;
-  text-decoration: underline;
-  cursor: pointer;
+  font: inherit;
+  text-align: center;
 }
 
-.center-link:hover,
+.link-text {
+  align-items: center;
+  background: none;
+  border: none;
+  color: var(--color-default);
+  display: flex;
+  font: inherit;
+  justify-content: center;
+  text-decoration: underline;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+.link-text:hover,
 ::placeholder:hover {
   color: var(--color-hover);
 }

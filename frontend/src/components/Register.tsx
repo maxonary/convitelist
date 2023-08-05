@@ -119,7 +119,7 @@ function Register() {
             />
             {formik.touched.invitationCode && formik.errors.invitationCode && <span className="error-message">{formik.errors.invitationCode}</span>}
           </div>
-          <div onClick={() => navigate("/admin/login")} className="center-link">
+          <div onClick={() => navigate("/admin/login")} className="link-text">
             Already have an account? Login here
           </div>
           <div className="double">
