@@ -15,10 +15,17 @@ const UserTable: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
-    api.get('/user')
-      .then(response => setUsers(response.data))
-      .catch(error => console.error(error));
+    fetchUsers();
   }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await api.get('/user');
+      setUsers(response.data);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
 
   const toggleApproval = (user: User) => {
     const endpoint = user.approved ? 'reject' : 'approve';
@@ -27,6 +34,19 @@ const UserTable: React.FC = () => {
         setUsers(prevUsers => prevUsers.map(u => u.id === response.data.id ? response.data : u));
       })
       .catch(error => console.error(error));
+  };
+
+  const deleteHandler = async (userId: number) => {
+    const confirmed = window.confirm('Are you sure you want to delete this user?');
+
+    if (confirmed) {
+      try {
+        await api.delete(`/user/${userId}`);
+        fetchUsers();
+      } catch (error) {
+        console.error('Error deleting user:', error);
+      }
+    };
   };
 
   const formatGameType = (gameType: string) => {  
@@ -74,6 +94,7 @@ const UserTable: React.FC = () => {
             <th>Game Type</th>
             <th>Approved</th>
             <th>Action</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -93,6 +114,9 @@ const UserTable: React.FC = () => {
                   checked={user.approved} 
                   onChange={() => toggleApproval(user)}
                 />
+              </td>
+              <td>
+                <button onClick={() => deleteHandler(user.id)}>Delete</button>
               </td>
             </tr>
           ))}

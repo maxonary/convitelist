@@ -3,9 +3,18 @@ table {
   display: block;
   max-height: 300px;
   overflow-y: auto;
-  width: 81%;
   table-layout: fixed;
   border-collapse: collapse;
+  font-size: 16px;
+}
+
+button {
+
+  cursor: pointer;
+}
+
+button:hover {
+  color: red;
 }
 
 th, td {
