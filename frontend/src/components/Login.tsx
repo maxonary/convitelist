@@ -113,7 +113,11 @@ function Login() {
                 {error ? <span className='error-message'>{error}</span> : "Login"}
                 </div>
               </Button>
-              <BackButton className="item" />
+              <BackButton className="item">
+                <div className="title">
+                  Back
+                </div>
+              </BackButton>
           </div>
         </div>
       </form>
