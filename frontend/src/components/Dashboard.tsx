@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useSignOut, useIsAuthenticated } from "react-auth-kit";
+import React, { useState } from "react";
+import { useSignOut } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
 import { Container } from "./commons";
 import UserTable from "./UserTable";
@@ -10,13 +10,6 @@ import "../styles/Minecraft.css";
 function Dashboard() {
   const signOut = useSignOut();
   const navigate = useNavigate();
-  const isAuthenticated = useIsAuthenticated();
-
-  useEffect(() => {
-    if (!isAuthenticated()) {
-      navigate("/admin/login");
-    }
-  }, [isAuthenticated, navigate]);
 
   const [invitationCode, setInvitationCode] = useState<string | null>(null);
 
