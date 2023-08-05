@@ -93,7 +93,6 @@ const UserTable: React.FC = () => {
             <th>Username</th>
             <th>Game Type</th>
             <th>Approved</th>
-            <th>Action</th>
             <th>Delete</th>
           </tr>
         </thead>
@@ -107,8 +106,7 @@ const UserTable: React.FC = () => {
                 {user.minecraftUsername}
               </td>
               <td>{formatGameType(user.gameType)}</td>
-              <td>{user.approved ? 'Yes' : 'No'}</td>
-              <td>
+              <td>{user.approved ? 'Yes' : 'No'}
                 <input 
                   type="checkbox" 
                   checked={user.approved} 

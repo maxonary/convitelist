@@ -9,12 +9,17 @@ table {
 }
 
 button {
-
   cursor: pointer;
 }
 
 button:hover {
   color: red;
+}
+
+input[type="checkbox"] {
+  align-items: right;
+  margin-left: 15px;
+  cursor: pointer;
 }
 
 th, td {
