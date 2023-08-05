@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import api from '../api';
 import InputField from './InputField';
 import Button from './Button';
-import BackButton from './BackButton';
 import '../styles/Minecraft.css';
 
 interface ErrorResponse {
@@ -113,11 +112,11 @@ function Login() {
                 {error ? <span className='error-message'>{error}</span> : "Login"}
                 </div>
               </Button>
-              <BackButton className="item">
-                <div className="title">
+              <Button className="item">
+                <div className="title" onClick={() => navigate("/")}>
                   Back
                 </div>
-              </BackButton>
+              </Button>
           </div>
         </div>
       </form>
