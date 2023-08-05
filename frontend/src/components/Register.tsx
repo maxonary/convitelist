@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import api from '../api';
 import InputField from './InputField';
 import Button from './Button';
+import BackButton from './BackButton';
 
 const initialValues = {
   username: '',
@@ -127,11 +128,7 @@ function Register() {
                 {error ? <span className="error-message">{error}</span> : 'Register'}
               </div>
             </Button>
-            <Button className="item" onClick={() => navigate(-1)}>
-              <div className="title">
-                Back
-              </div>
-            </Button>
+            <BackButton className="item" />
           </div>
         </div>
       </form>
