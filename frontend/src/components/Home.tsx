@@ -47,7 +47,7 @@ const Home = () => {
     }
 
     try {
-      await api.post('/user', { minecraftUsername: username, gameType: gameType });
+      await api.post('/api/user', { minecraftUsername: username, gameType: gameType });
 
       setErrorMessage("");
       setUsername("");
