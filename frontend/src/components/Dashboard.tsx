@@ -18,7 +18,7 @@ function Dashboard() {
 
   const generateCode = async () => {
     try {
-      const response = await api.post("/invitation/generate-invitation-code");
+      const response = await api.post("/api/invitation/generate-invitation-code");
       const generatedCode = response.data.code;
       setInvitationCode(generatedCode);
       copyToClipboard(generatedCode); 

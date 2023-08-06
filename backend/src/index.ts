@@ -27,14 +27,14 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.status(200).json({ message: 'Welcome to the Minecraft Registration API!' });
 });
 
-app.use('/admin', adminRoutes);
-app.use('/auth', authRoutes);
-app.use('/invitation', invitationRoutes);
-app.use('/user', userRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/invitation', invitationRoutes);
+app.use('/api/user', userRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

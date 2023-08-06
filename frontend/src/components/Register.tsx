@@ -49,7 +49,7 @@ function Register() {
     setError('');
 
     try {
-      await api.post('/admin/register', values);
+      await api.post('/api/admin/register', values);
 
       // Reset form and show success message
       formik.resetForm();

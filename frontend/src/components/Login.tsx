@@ -47,7 +47,7 @@ function Login() {
     setError("");
 
     try {
-      const response = await api.post('/auth/login', values);
+      const response = await api.post('/api/auth/login', values);
 
       signIn({
         token: response.data.token,
