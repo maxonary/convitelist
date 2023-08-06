@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import { useSignOut } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
-import { Container } from "./commons";
 import UserTable from "./UserTable";
 import Button from "./Button";
 import api from "../api";
@@ -55,7 +54,7 @@ function Dashboard() {
   }
 
   return (
-    <Container>
+    <div className="container">
       <h1>Admin Dashboard</h1>
       <br />
       <UserTable />
@@ -88,7 +87,7 @@ function Dashboard() {
           </Button>
         </div>
       </div>
-    </Container>
+    </div>
   );
 }
 
