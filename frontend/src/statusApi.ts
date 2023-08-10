@@ -2,9 +2,10 @@ import axios from 'axios';
 
 const statusApi = axios.create({
   // baseURL: process.env.REACT_APP_SERVER_STATUS_URL,
-  baseURL: "http://localhost:3000",
+  baseURL: process.env.REACT_APP_STATUS_API_URL,
   headers: {
     'Content-Type': 'application/json',
+    'Connection': 'keep-alive',
   },
 });
 
