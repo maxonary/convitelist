@@ -62,7 +62,6 @@ function Dashboard() {
   return (
     <div className="container">
       <TitleImage src="/dashboard.png" alt="Dashboard"/>
-      <br />
       <UserTable />
       <br />
       <div className="menu-dashboard">
