@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { isAxiosError } from '../utils/isAxiosError';
 import { isValidUsername } from '../utils/isValidUsername';
 import api from '../api';
+import statusApi from '../statusApi';
 import '../styles/Minecraft.css';
+import TitleImage from './TitleImage';
 
 const Home = () => {
   const [username, setUsername] = useState("");
   const [gameType, setGameType] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [serverStatus, setServerStatus] = useState("");
   const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,8 +68,46 @@ const Home = () => {
     }
   };
 
-  return (
+  useEffect(() => {
+    const url = window.location.host;
+    document.title = `Add to Whitelist - ${url}`;
+    statusApi.get('/status')
+      .then(response => setServerStatus(response.data.status))
+      .catch(error => setServerStatus("Error fetching status"));
+  }, []);  
+
+  const startClick = () => {
+      console.log('WakeUp');
+      statusApi.post('/wakeup', {})
+          .then((response) => { console.log('WakeUp Sucess', response); })
+          .catch((error) => { console.log('WakeUp Error', error); })
+  };
+
+  const getTexts = (status: string) => {
+      let emoji = '❌'
+      let buttonText = status;
+      switch (status) {
+          case 'Running':
+              emoji = '🟩'
+              buttonText = 'Server is running'
+              break;
+          case 'Sleeping':
+              emoji = '🟥'
+              buttonText = "Wake Up Server"
+              break;
+          case 'Starting':
+              emoji = '🟧'
+              buttonText = '...Waiting...'
+              break;
+      }
+      return { emoji, buttonText };
+  };
+
+  const serverStatusLink = process.env.REACT_APP_SERVER_STATUS_URL;
+  
+return (
     <div className="container">
+      <TitleImage src="/whitelist-gras.png" alt="Whitelist"/>
         <div className="menu">
           <div className="item full">
             <input 
@@ -91,19 +132,31 @@ const Home = () => {
             </div>
           </button>
           <div className="double">
-            <button className="item full">
-              <a className="title" href="http://localhost:3000" target="_blank" rel="noreferrer">
-                Server Status
-              </a>
+            <button className="item full" onClick={startClick}>
+              <div className="title">
+                {serverStatus === "Error fetching status" ? (
+                  <a className="standard-text" href={serverStatusLink} target="_blank" rel="noopener noreferrer">
+                    Server Status
+                  </a>
+                ) : (
+                  getTexts(serverStatus).buttonText
+                )}
+              </div>
             </button>
             <button className="item full" onClick={() => navigate("/admin/login")}>
               <div className="title">Admin Login</div>
             </button>
           </div>
           <div className="item full lang">
-            <div className="title">
-              <img src="https://i.ibb.co/99187Lk/lang.png" alt=" Lang"/>
-          </div>
+          <button className="title">
+            <a className="standard-text" href={serverStatusLink} target="_blank" rel="noopener noreferrer">
+              {serverStatus === "Error fetching status" ? (
+                <img src="https://i.ibb.co/99187Lk/lang.png" alt="Lang"/>
+              ) : (
+                getTexts(serverStatus).emoji
+              )}
+            </a>
+          </button>
         </div>
       </div>
     </div>

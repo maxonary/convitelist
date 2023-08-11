@@ -1,5 +1,4 @@
 .title-image {
-  width: calc(var(--btn-size) * 13);
-  height: auto;
-  margin-bottom: 60px;
+  height: 100px;
+  margin-bottom: 50px;
 }

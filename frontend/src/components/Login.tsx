@@ -3,6 +3,7 @@ import { useSignIn, useIsAuthenticated } from "react-auth-kit";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import api from '../api';
+import TitleImage from './TitleImage';
 import InputField from './InputField';
 import Button from './Button';
 import '../styles/Minecraft.css';
@@ -35,6 +36,8 @@ function Login() {
   };
 
   useEffect(() => {
+    const url = window.location.host;
+    document.title = `Admin Login - ${url}`;
     if (isAuthenticated()) {
       navigate("/admin/dashboard");
     }
@@ -81,6 +84,7 @@ function Login() {
 
   return (
     <div className="container">
+      <TitleImage src="/login.png" alt="Title" />
       <form onSubmit={formik.handleSubmit}>
         <div className="menu">
           <div className="item">

@@ -1,10 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useSignOut } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
 import UserTable from "./UserTable";
 import Button from "./Button";
 import api from "../api";
 import "../styles/Minecraft.css";
+import TitleImage from "./TitleImage";
 
 function Dashboard() {
   const signOut = useSignOut();
@@ -53,10 +54,14 @@ function Dashboard() {
     navigate("/admin/login");
   }
 
+  useEffect(() => {
+    const url = window.location.host;
+    document.title = `Admin Dashboard - ${url}`;
+  }, []);  
+
   return (
     <div className="container">
-      <h1>Admin Dashboard</h1>
-      <br />
+      <TitleImage src="/dashboard.png" alt="Dashboard"/>
       <UserTable />
       <br />
       <div className="menu-dashboard">
