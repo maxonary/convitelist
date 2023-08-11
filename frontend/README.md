@@ -99,4 +99,4 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-The main title font was generated with [Font Meme](https://fontmeme.com/minecraft-font/).
+The main title font was generated with [Blockbench](https://web.blockbench.net).

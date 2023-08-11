@@ -5,6 +5,7 @@ import UserTable from "./UserTable";
 import Button from "./Button";
 import api from "../api";
 import "../styles/Minecraft.css";
+import TitleImage from "./TitleImage";
 
 function Dashboard() {
   const signOut = useSignOut();
@@ -60,7 +61,7 @@ function Dashboard() {
 
   return (
     <div className="container">
-      <h1>Admin Dashboard</h1>
+      <TitleImage src="/dashboard.png" alt="Dashboard"/>
       <br />
       <UserTable />
       <br />

@@ -6,6 +6,7 @@ import api from '../api';
 import InputField from './InputField';
 import Button from './Button';
 import BackButton from './BackButton';
+import TitleImage from './TitleImage';
 
 const initialValues = {
   username: '',
@@ -78,6 +79,7 @@ function Register() {
 
   return (
     <div className="container">
+      <TitleImage src='/register.png' alt='Title' />
       <form onSubmit={formik.handleSubmit}>
         <div className="menu-register">
           <div className="item">

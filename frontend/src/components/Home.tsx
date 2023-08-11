@@ -6,6 +6,7 @@ import { isValidUsername } from '../utils/isValidUsername';
 import api from '../api';
 import statusApi from '../statusApi';
 import '../styles/Minecraft.css';
+import TitleImage from './TitleImage';
 
 const Home = () => {
   const [username, setUsername] = useState("");
@@ -106,6 +107,7 @@ const Home = () => {
   
 return (
     <div className="container">
+      <TitleImage src="/whitelist-gras.png" alt="Whitelist"/>
         <div className="menu">
           <div className="item full">
             <input 
