@@ -67,22 +67,10 @@ const Home = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const fetchServerStatus = async () => {
-  //     try {
-  //       const response = await statusApi.get('/status');
-  //       setServerStatus(response.data.status);
-  //     } catch (error) {
-  //       setServerStatus("Error fetching server status");
-  //     }
-  //   };
-  //   fetchServerStatus();
-  // }, []);
-
   useEffect(() => {
     statusApi.get('/status')
       .then(response => setServerStatus(response.data.status))
-      .catch(error => console.error(error));
+      .catch(error => setServerStatus("Error fetching status"));
   }, []);
 
 
@@ -94,16 +82,16 @@ const Home = () => {
   };
 
   const getTexts = (status: string) => {
-      let emoji = '🟥'
+      let emoji = '❌'
       let buttonText = status;
       switch (status) {
           case 'Running':
               emoji = '🟩'
-              buttonText = 'Sleep'
+              buttonText = 'Server is running'
               break;
           case 'Sleeping':
-              emoji = '💤'
-              buttonText = "Wake Up"
+              emoji = '🟥'
+              buttonText = "Wake Up Server"
               break;
           case 'Starting':
               emoji = '🟧'
@@ -113,6 +101,8 @@ const Home = () => {
       return { emoji, buttonText };
   };
 
+  const serverStatusLink = process.env.REACT_APP_STATUS_API_URL;
+  
 return (
     <div className="container">
         <div className="menu">
@@ -140,17 +130,30 @@ return (
           </button>
           <div className="double">
             <button className="item full" onClick={startClick}>
-              <div className="title" >{getTexts(serverStatus).buttonText}</div>
+              <div className="title">
+                {serverStatus === "Error fetching status" ? (
+                  <a className="standard-text" href={serverStatusLink} target="_blank" rel="noopener noreferrer">
+                    Server Status
+                  </a>
+                ) : (
+                  getTexts(serverStatus).buttonText
+                )}
+              </div>
             </button>
             <button className="item full" onClick={() => navigate("/admin/login")}>
               <div className="title">Admin Login</div>
             </button>
           </div>
           <div className="item full lang">
-            <div className="title">
-              <a className="emoji" href="http://localhost:3000">{getTexts(serverStatus).emoji}</a>
-              {/* <img src="https://i.ibb.co/99187Lk/lang.png" alt=" Lang"/> */}
-          </div>
+          <button className="title">
+            <a className="standard-text" href={serverStatusLink} target="_blank" rel="noopener noreferrer">
+              {serverStatus === "Error fetching status" ? (
+                <img src="https://i.ibb.co/99187Lk/lang.png" alt="Lang"/>
+              ) : (
+                getTexts(serverStatus).emoji
+              )}
+            </a>
+          </button>
         </div>
       </div>
     </div>

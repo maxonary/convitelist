@@ -51,6 +51,7 @@ button {
   color: var(--color-default);
   font: inherit;
   text-align: center;
+  text-decoration: none;
 }
 
 .link-text {
