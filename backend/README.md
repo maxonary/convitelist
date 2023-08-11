@@ -75,26 +75,31 @@ or
 npx prisma migrate dev --name init    # for development to create a database
 ```
 
-6. Start the development server:
+6. Generate the Prisma client:
+```bash
+npx prisma generate
+```
+
+7. Start the development server:
 ```bash
 npm run dev
 ```
 
 The application will be available at `http://localhost:3001`.
 
-7. Build the application:
+8. Build the application:
 ```bash
 npm run build
 ```
 
-8. Start the production server:
+9. Start the production server:
 ```bash
 npm run start
 ```
 
-9. Generate a token in the console to create the first admin user:
+10. Generate a token in the console to create the first admin user:
 ```bash
-node run scr/scripts/testInvitationCode.js # copy the token
+node src/scripts/testInvitationCode.js # copy the token
 ```
 
 ## Deployment
