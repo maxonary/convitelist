@@ -68,11 +68,12 @@ const Home = () => {
   };
 
   useEffect(() => {
+    const url = window.location.host;
+    document.title = `Add to Whitelist - ${url}`;
     statusApi.get('/status')
       .then(response => setServerStatus(response.data.status))
       .catch(error => setServerStatus("Error fetching status"));
-  }, []);
-
+  }, []);  
 
   const startClick = () => {
       console.log('WakeUp');
@@ -101,7 +102,7 @@ const Home = () => {
       return { emoji, buttonText };
   };
 
-  const serverStatusLink = process.env.REACT_APP_STATUS_API_URL;
+  const serverStatusLink = process.env.REACT_APP_SERVER_STATUS_URL;
   
 return (
     <div className="container">

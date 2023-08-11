@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useSignOut } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
 import UserTable from "./UserTable";
@@ -52,6 +52,11 @@ function Dashboard() {
     signOut();
     navigate("/admin/login");
   }
+
+  useEffect(() => {
+    const url = window.location.host;
+    document.title = `Admin Dashboard - ${url}`;
+  }, []);  
 
   return (
     <div className="container">

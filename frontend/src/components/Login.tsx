@@ -35,6 +35,8 @@ function Login() {
   };
 
   useEffect(() => {
+    const url = window.location.host;
+    document.title = `Admin Login - ${url}`;
     if (isAuthenticated()) {
       navigate("/admin/dashboard");
     }

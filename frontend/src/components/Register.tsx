@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -70,6 +70,11 @@ function Register() {
     validationSchema,
     onSubmit,
   });
+
+  useEffect(() => {
+    const url = window.location.host;
+    document.title = `Admin Registration - ${url}`;
+  }, []);  
 
   return (
     <div className="container">
