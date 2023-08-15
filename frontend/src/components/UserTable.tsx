@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api';
+import { copyToClipboard } from '../utils/clipboardUtils';
 import '../styles/UserTable.css';
 
 interface User {
@@ -36,7 +37,7 @@ const UserTable: React.FC = () => {
       .catch(error => console.error(error));
   };
 
-  const deleteHandler = async (userId: number) => {
+  const handleDelete = async (userId: number) => {
     const confirmed = window.confirm('Are you sure you want to delete this user?');
 
     if (confirmed) {
@@ -84,6 +85,17 @@ const UserTable: React.FC = () => {
     }
   };
 
+  const handleUsernameClick = (username: string) => {
+    copyToClipboard(username);
+    const usernameCell = document.getElementById(`username-${username}`);
+    if (usernameCell) {
+      usernameCell.textContent = 'Copied to Clipboard';
+      setTimeout(() => {
+        usernameCell.textContent = username;
+      }, 1500);
+    }
+  };
+
   return (
     <>
       <div id="tooltip" style={{ position: 'absolute', display: 'none' }}></div>
@@ -100,8 +112,11 @@ const UserTable: React.FC = () => {
           {users.map(user => (
             <tr key={user.id}>
               <td 
+                id={`username-${user.minecraftUsername}`}
                 onMouseEnter={event => handleMouseEnter(event, user)}
                 onMouseLeave={handleMouseLeave}
+                onClick={() => handleUsernameClick(user.minecraftUsername)}
+                style={{ cursor: 'pointer' }}
               >
                 {user.minecraftUsername}
               </td>
@@ -114,7 +129,7 @@ const UserTable: React.FC = () => {
                 />
               </td>
               <td>
-                <button onClick={() => deleteHandler(user.id)}>Delete</button>
+                <button onClick={() => handleDelete(user.id)}>Delete</button>
               </td>
             </tr>
           ))}
