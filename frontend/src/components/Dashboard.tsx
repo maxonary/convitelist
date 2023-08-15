@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSignOut } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
+import { copyToClipboard } from "../utils/clipboardUtils";
 import UserTable from "./UserTable";
 import Button from "./Button";
 import api from "../api";
@@ -31,21 +32,14 @@ function Dashboard() {
     }
   };
 
-  const copyToClipboard = (textToCopy: string) => {
-    navigator.clipboard.writeText(textToCopy).then(() => {
+  const handleCopyToClipboard = () => {
+    if (invitationCode) {
+      copyToClipboard(invitationCode);
       setIsCopied(true);
 
       setTimeout(() => {
         setIsCopied(false);
       }, 1500);
-    }).catch((error) => {
-      console.error("Failed to copy to clipboard:", error);
-    });
-  };
-
-  const handleCopyToClipboard = () => {
-    if (invitationCode) {
-      copyToClipboard(invitationCode);
     }
   };
 
