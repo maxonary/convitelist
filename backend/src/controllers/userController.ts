@@ -131,7 +131,7 @@ export async function rejectUser(req: AuthenticatedRequest, res: Response) {
     if(user.gameType === 'Java Edition') {
       await sendRconCommand(`easywl remove ${user.minecraftUsername}`);
     } else if (user.gameType === 'Bedrock Edition') {
-      await sendRconCommand(`easywl remove ${user.minecraftUsername}`);
+      await sendRconCommand(`easywl remove .${user.minecraftUsername}`);
     } else {
       throw new Error('Invalid game type');
     }
