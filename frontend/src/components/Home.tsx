@@ -77,10 +77,15 @@ const Home = () => {
   }, []);  
 
   const startClick = () => {
-      console.log('WakeUp');
-      statusApi.post('/wakeup', {})
-          .then((response) => { console.log('WakeUp Sucess', response); })
-          .catch((error) => { console.log('WakeUp Error', error); })
+    console.log('WakeUp');
+    statusApi.post('/wakeup', {})
+      .then((response) => {
+        console.log('WakeUp Success', response);
+        setServerStatus(response.data.status);
+      })
+      .catch((error) => {
+        console.log('WakeUp Error', error);
+      });
   };
 
   const getTexts = (status: string) => {
