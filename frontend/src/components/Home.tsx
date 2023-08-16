@@ -9,24 +9,32 @@ import '../styles/Minecraft.css';
 import TitleImage from './TitleImage';
 
 const Home = () => {
-  const [username, setUsername] = useState("");
-  const [gameType, setGameType] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const [serverStatus, setServerStatus] = useState("");
+  const [username, setUsername] = useState('');
+  const [gameType, setGameType] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [serverStatus, setServerStatus] = useState('');
   const navigate = useNavigate();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    const url = window.location.host;
+    document.title = `Add to Whitelist - ${url}`;
+    statusApi.get('/status')
+      .then(response => setServerStatus(response.data.status))
+      .catch(error => setServerStatus('Error fetching status'));
+  }, []);
+
+  const handleInputChange = (e) => {
     setUsername(e.target.value);
-    setSuccessMessage("");  // reset the success message
+    setSuccessMessage('');
   };
 
   const toggleGameType = () => {
-    setGameType(prevGameType => prevGameType === "" || prevGameType === "Bedrock Edition" ? "Java Edition" : "Bedrock Edition");
-    setSuccessMessage("");  // reset the success message
-  }
+    setGameType(prevGameType => (prevGameType === '' || prevGameType === 'Bedrock Edition') ? 'Java Edition' : 'Bedrock Edition');
+    setSuccessMessage('');
+  };
 
-  const handleAxiosError = (error: AxiosError) => {
+  const handleAxiosError = (error : AxiosError) => {
     if (error.response) {
       const responseData = error.response.data as { message: string };
       setErrorMessage(responseData.message);
@@ -38,125 +46,112 @@ const Home = () => {
   };
 
   const createUser = async () => {
-    if (username === "") {
-      setErrorMessage("Please enter a username");
+    if (!username) {
+      setErrorMessage('Please enter a username');
       return;
     } else if (!isValidUsername(username)) {
-      setErrorMessage("Pleaser enter a valid username");
+      setErrorMessage('Please enter a valid username');
       return;
-    } else if (gameType === "") {
-      setErrorMessage("Please select a game type");
+    } else if (!gameType) {
+      setErrorMessage('Please select a game type');
       return;
     }
 
     try {
-      await api.post('/api/user', { minecraftUsername: username, gameType: gameType });
-
-      setErrorMessage("");
-      setUsername("");
-      setGameType("");
-      setSuccessMessage("Success");
-  
+      await api.post('/api/user', { minecraftUsername: username, gameType });
+      setErrorMessage('');
+      setUsername('');
+      setGameType('');
+      setSuccessMessage('Success');
     } catch (error) {
-      setSuccessMessage("");
-      if (isAxiosError(error)) {
-        if (error.response) {
-          handleAxiosError(error);
-
-        }
+      setSuccessMessage('');
+      if (isAxiosError(error) && error.response) {
+        handleAxiosError(error);
       }
     }
   };
 
-  useEffect(() => {
-    const url = window.location.host;
-    document.title = `Add to Whitelist - ${url}`;
-    statusApi.get('/status')
-      .then(response => setServerStatus(response.data.status))
-      .catch(error => setServerStatus("Error fetching status"));
-  }, []);  
-
-  const startClick = () => {
+  const startClick = async () => {
     console.log('WakeUp');
-    statusApi.post('/wakeup', {})
-      .then((response) => {
-        console.log('WakeUp Success', response);
-        setServerStatus(response.data.status);
-      })
-      .catch((error) => {
-        console.log('WakeUp Error', error);
-      });
+    try {
+      const response = await statusApi.post('/wakeup', {});
+      console.log('WakeUp Success', response);
+      setServerStatus(response.data.status);
+    } catch (error) {
+      console.log('WakeUp Error', error);
+    }
   };
 
-  const getTexts = (status: string) => {
-      let emoji = '❌'
-      let buttonText = status;
-      switch (status) {
-          case 'Running':
-              emoji = '🟩'
-              buttonText = 'Server is running'
-              break;
-          case 'Sleeping':
-              emoji = '🟥'
-              buttonText = "Wake Up Server"
-              break;
-          case 'Starting':
-              emoji = '🟧'
-              buttonText = '...Waiting...'
-              break;
-      }
-      return { emoji, buttonText };
+  const getTexts = (status : string) => {
+    let emoji = '❌';
+    let buttonText = status;
+    switch (status) {
+      case 'Running':
+        emoji = '🟩';
+        buttonText = 'Server is running';
+        break;
+      case 'Sleeping':
+        emoji = '🟥';
+        buttonText = 'Wake Up Server';
+        break;
+      case 'Starting':
+        emoji = '🟧';
+        buttonText = '...Waiting...';
+        break;
+    }
+    return { emoji, buttonText };
   };
 
   const serverStatusLink = process.env.REACT_APP_SERVER_STATUS_URL;
-  
-return (
+
+  return (
     <div className="container">
-      <TitleImage src="/whitelist-gras.png" alt="Whitelist"/>
-        <div className="menu">
-          <div className="item full">
-            <input 
-              type="text" 
-              className="title blinking" 
-              placeholder="Enter Minecraft Username"
-              value={username}
-              onChange={handleInputChange}
-            />
+      <TitleImage src="/whitelist-gras.png" alt="Whitelist" />
+      <div className="menu">
+        <div className="item full">
+          <input
+            type="text"
+            className="title blinking"
+            placeholder="Enter Minecraft Username"
+            value={username}
+            onChange={handleInputChange}
+          />
+        </div>
+        <button className="item full" onClick={toggleGameType}>
+          <div className="title">{gameType || 'Select Game Type'}</div>
+        </button>
+        <button className="item full" onClick={createUser}>
+          <div className="title">
+            {successMessage ? (
+              <span className="success-message">{successMessage}</span>
+            ) : errorMessage ? (
+              <span className="error-message">{errorMessage}</span>
+            ) : (
+              'Submit to Whitelist'
+            )}
           </div>
-          <button className="item full" onClick={toggleGameType}>
-            <div className="title">{gameType === "" ? "Select Game Type" : gameType}</div>
-          </button>
-          <button className="item full" onClick={createUser}>
+        </button>
+        <div className="double">
+          <button className="item full" onClick={startClick}>
             <div className="title">
-              {successMessage ? 
-                  <span className='success-message'>{successMessage}</span> 
-                : errorMessage ? 
-                  <span className='error-message'>{errorMessage}</span> 
-                : "Submit to Whitelist"
-              }
+              {serverStatus === 'Error fetching status' ? (
+                <a className="standard-text" href={serverStatusLink} target="_blank" rel="noopener noreferrer">
+                  Server Status
+                </a>
+              ) : (
+                getTexts(serverStatus).buttonText
+              )}
             </div>
           </button>
-          <div className="double">
-            <button className="item full" onClick={startClick}>
-              <div className="title">
-                {serverStatus === "Error fetching status" ? (
-                  <a className="standard-text" href={serverStatusLink} target="_blank" rel="noopener noreferrer">
-                    Server Status
-                  </a>
-                ) : (
-                  getTexts(serverStatus).buttonText
-                )}
-              </div>
-            </button>
-            <button className="item full" onClick={() => navigate("/admin/login")}>
-              <div className="title">Admin Login</div>
-            </button>
-          </div>
-          <div className="item full lang">
+          <button className="item full" onClick={() => navigate('/admin/login')}>
+            <div className="title">Admin Login</div>
+          </button>
+        </div>
+        <div className="item full lang">
           <button className="title">
             <a className="standard-text" href={serverStatusLink} target="_blank" rel="noopener noreferrer">
-              {serverStatus === "Error fetching status" ? (
-                <img src="https://i.ibb.co/99187Lk/lang.png" alt="Lang"/>
+              {serverStatus === 'Error fetching status' ? (
+                <img src="https://i.ibb.co/99187Lk/lang.png" alt="Lang" />
               ) : (
                 getTexts(serverStatus).emoji
               )}
@@ -166,6 +161,6 @@ return (
       </div>
     </div>
   );
-}
+};
 
 export default Home;
