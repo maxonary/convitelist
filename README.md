@@ -9,7 +9,7 @@ Then a registered admin can login to the admin pannel to review all submissions.
 
 This application consists of two parts: A Backend built on Prisma, SQLite, and Express, and a Frontend build on React. 
 
-It is recommended to have the Minecraft Server running and to use [MC-Sleeping-Server-Starter](https://github.com/vincss/mcsleepingserverstarter). 
+To use the all features you must have a Paper Minecraft Server running and use [MC-Sleeping-Server-Starter](https://github.com/vincss/mcsleepingserverstarter), as well as the EmptyServerStopper and EasyWhitelist Plugins. 
 
 For further details check the dedicated Backend and Frontend README docs.
 
@@ -131,11 +131,15 @@ cd convitelist
 
 2. Install the dependencies:
 ```bash
-cd backend && npm install && cd ../frontend && npm install
+cd backend
+npm install 
+cd ../frontend 
+npm install
 ```
 
 3. Copy the `.env.example` files for Back- and Frontend to `.env`:
 ```bash
+# cd into the folders first
 cp .env.example .env
 ```
 
@@ -143,16 +147,18 @@ cp .env.example .env
 
 5. Run the database migrations in the backend folder:
 ```bash
-cd backend && npx prisma migrate deploy
+cd backend 
+npx prisma migrate deploy
 ```
 or
 ```bash
-cd backend && npx prisma migrate dev --name init    # for development to create a database
+cd backend 
+npx prisma migrate dev --name init    # for development to create a database
 ```
 
-6. Start the development server (individually):
-```bash
-npm run dev
+6. Generate the Prisma ORM
+```bash 
+npx prisma generate    # for development to create a database
 ```
 
 7. Build the code for production (individually):

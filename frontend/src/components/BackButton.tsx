@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from './Button';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from your routing library
-import { navigateBackOrHome } from '../utils/navigation';
+import { navigateBackOrHome } from '../utils/navigationUtils';
 
 interface BackButtonProps {
   className?: string;
