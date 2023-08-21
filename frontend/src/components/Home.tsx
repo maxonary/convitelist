@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { isAxiosError } from '../utils/isAxiosError';
 import { isValidUsername } from '../utils/isValidUsername';
+import { isAndroid, isIOS } from 'react-device-detect';
 import api from '../api';
 import statusApi from '../statusApi';
 import '../styles/Minecraft.css';
@@ -56,6 +57,7 @@ const Home = () => {
       setUsername("");
       setGameType("");
       setSuccessMessage("Success");
+      openApp()
   
     } catch (error) {
       setSuccessMessage("");
@@ -79,8 +81,13 @@ const Home = () => {
   const startClick = () => {
       console.log('WakeUp');
       statusApi.post('/wakeup', {})
-          .then((response) => { console.log('WakeUp Sucess', response); })
-          .catch((error) => { console.log('WakeUp Error', error); })
+          .then((response) => { 
+            console.log('WakeUp Sucess', response);
+            openApp();
+           })
+          .catch((error) => { 
+            console.log('WakeUp Error', error); 
+          })
   };
 
   const getTexts = (status: string) => {
@@ -104,6 +111,28 @@ const Home = () => {
   };
 
   const serverStatusLink = process.env.REACT_APP_SERVER_STATUS_URL;
+
+  const serverName = process.env.REACT_APP_SERVER_NAME;
+  const serverIp = process.env.REACT_APP_SERVER_IP;
+  const serverPort = process.env.EACT_APP_SERVER_PORT;
+
+  const openApp = () => {  
+    if (isIOS) {
+      // Open iOS app
+      window.location.replace(`minecraft://?addExternalServer=${serverName}|${serverIp}:${serverPort}`);
+      // Redirect to App Store if app is not installed
+      setTimeout(() => {
+        window.location.replace("https://apps.apple.com/de/app/minecraft/id479516143");
+      }, 10000);
+    } else if (isAndroid) {
+      // Open Android app
+      window.location.replace(`intent://play/#Intent;scheme=minecraft;package=com.mojang.minecraftpe;end`);
+      // Redirect to Play Store if app is not installed
+      setTimeout(() => {
+        window.location.replace("https://play.google.com/store/apps/details?id=com.mojang.minecraftpe");
+      }, 10000);
+    }
+  };
   
 return (
     <div className="container">
@@ -132,7 +161,7 @@ return (
             </div>
           </button>
           <div className="double">
-            <button className="item full" onClick={startClick}>
+            <button className="item full" onClick={serverStatus === "Error fetching status" ? openApp : startClick}>
               <div className="title">
                 {serverStatus === "Error fetching status" ? (
                   <a className="standard-text" href={serverStatusLink} target="_blank" rel="noopener noreferrer">
