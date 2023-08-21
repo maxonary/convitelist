@@ -164,11 +164,11 @@ return (
             <button className="item full" onClick={serverStatus === "Error fetching status" ? openApp : startClick}>
               <div className="title">
                 {serverStatus === "Error fetching status" ? (
+                  "Error fetching status"
+                ) : (
                   <a className="standard-text" href={serverStatusLink} target="_blank" rel="noopener noreferrer">
                     Server Status
                   </a>
-                ) : (
-                  getTexts(serverStatus).buttonText
                 )}
               </div>
             </button>
