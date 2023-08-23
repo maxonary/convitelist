@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/TitleImage.css';
 
 interface TitleImageProps {
@@ -7,11 +8,18 @@ interface TitleImageProps {
 }
 
 const TitleImage: React.FC<TitleImageProps> = ({src, alt}) => {
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate('/');
+    }
+
     return (
             <img
                 src={src}
                 alt={alt}
                 className="title-image"
+                onClick={handleClick}
             />
     );
 }
