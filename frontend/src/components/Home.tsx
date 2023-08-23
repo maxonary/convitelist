@@ -8,6 +8,7 @@ import api from '../api';
 import statusApi from '../statusApi';
 import '../styles/Minecraft.css';
 import TitleImage from './TitleImage';
+import SplashText from './SplashText';
 
 const Home = () => {
   const [username, setUsername] = useState("");
@@ -135,7 +136,8 @@ const Home = () => {
   
 return (
     <div className="container">
-      <TitleImage src="/whitelist-gras.png" alt="Whitelist"/>
+      <TitleImage src="/whitelist.png" alt="Whitelist" style={{marginBottom: "20px", cursor: "default"}}/>
+      <SplashText />
         <div className="menu">
           <div className="item full">
             <input 
