@@ -1,22 +1,24 @@
-# Convenient Whitelist for Minecraft Servers
+# ![minecraft_title](https://github.com/maxonary/convitelist/assets/62939182/6ba92ce8-031b-4cba-954c-16ce3adbab59)
+
+# A Convenient Whitelist Manager for Minecraft Servers
 
 This application allows admins and moderators to easily manage a whitelist for their Minecraft server.
 Users can be added and removed from the whitelist by simply clicking a checkbox.
 
-Users register by themselves on the website. The Minecraft options looking like screen guides the user through the process of registering.
-They can enter their minecraft username, select their game type (Java and Bedrock Edition) and submit straight for approval.
-Then a registered admin can login to the admin pannel to review all submissions. 
+Users register by themselves on the website. The style is inspired by the Minecraft options menu and guides the user through the process of registering.
+They can enter their Minecraft username, select their game type (Java and Bedrock Edition) and submit straight for approval.
+Then, a registered admin can log in to the admin panel to review all submissions. 
 
-This application consists of two parts: A Backend built on Prisma, SQLite, and Express, and a Frontend build on React. 
+This application consists of two parts: A Backend built on Prisma, SQLite, and Express, and a Frontend built on React. 
 
-To use the all features you must have a Paper Minecraft Server running and use [MC-Sleeping-Server-Starter](https://github.com/vincss/mcsleepingserverstarter), as well as the EmptyServerStopper and EasyWhitelist Plugins. 
+To use all the features, you must have a Paper Minecraft Server running and use [MC-Sleeping-Server-Starter](https://github.com/vincss/mcsleepingserverstarter), as well as the EmptyServerStopper and EasyWhitelist Plugins. 
 
-For further details check the dedicated Backend and Frontend README docs.
+For further details, check the dedicated Backend and Frontend README docs.
 
 ## Features
 
-- Minecraft style interface
-- User registration with Minecraft username and error checking
+- Minecraft-style interface
+- User registration with Minecraft username and error-checking
 - Admin authentication and registration with tokens
 - Admin panel for approving or rejecting users and registering new admins
 - Automatic Minecraft server whitelist management through RCON
@@ -25,9 +27,9 @@ For further details check the dedicated Backend and Frontend README docs.
 ## Future Features
 
 * Bedrock support with Floodgate integration
-* Microsoft XBox authentication
-* Automatically insert users on first join
-* Server statistics icluding graphs
+* Microsoft Xbox authentication
+* Automatically insert users on the first join
+* Server statistics including graphs
 
 ## Website Architecture
 ```
@@ -109,7 +111,7 @@ bash
 
 4. The frontend app updates parts of the UI based on the response received from the server.
 
-5. The user's web browser renders the updated UI, and makes the website interactive.
+5. The user's web browser renders the updated UI and makes the website interactive.
 
 ## Prerequisites
 
@@ -121,7 +123,7 @@ Before you begin, ensure you have met the following requirements:
 
 ## Installation
 
-Generally you can follow this guideline. Else you find more detailed descriptions in the dedicated Backend and Frontend README docs. 
+Generally, you can follow this guideline. More detailed descriptions are in the dedicated Backend and Frontend README docs. 
 
 1. Clone this repository:
 ```bash
