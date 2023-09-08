@@ -166,9 +166,9 @@ return (
                 {serverStatus === "Error fetching status" ? (
                   "Error fetching status"
                 ) : (
-                  <a className="standard-text" href={serverStatusLink} target="_blank" rel="noopener noreferrer">
+                  <div className="standard-text">
                     {getTexts(serverStatus).buttonText}
-                  </a>
+                  </div>
                 )}
               </div>
             </button>
