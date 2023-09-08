@@ -179,11 +179,7 @@ return (
           <div className="item full lang">
           <button className="title">
             <a className="standard-text" href={serverStatusLink} target="_blank" rel="noopener noreferrer">
-              {serverStatus === "Error fetching status" ? (
-                <img src="https://i.ibb.co/99187Lk/lang.png" alt="Lang"/>
-              ) : (
-                getTexts(serverStatus).emoji
-              )}
+                {getTexts(serverStatus).emoji}
             </a>
           </button>
         </div>
