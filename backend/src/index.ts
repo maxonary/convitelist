@@ -17,7 +17,7 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3001
-app.use(cors());
+app.use(cors({ credentials: true, origin: process.env.CLIENT_URL}));
 app.use(helmet());
 app.use(cookieParser());
 
@@ -36,10 +36,10 @@ app.get('/api', (req, res) => {
   res.status(200).json({ message: 'Welcome to the Minecraft Registration API!' });
 });
 
-app.use('/api/admin', authMiddleware, adminRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/invitation', authMiddleware, invitationRoutes);
-app.use('/api/user', authMiddleware, userRoutes);
+app.use('/api/user', userRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

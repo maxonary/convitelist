@@ -7,15 +7,16 @@ import {
   approveUser,
   rejectUser,
 } from '../controllers/userController';
+import { authMiddleware } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
 router.post('/', createUser);
-router.get('/', getAllUsers);
-router.get('/:userId', getUserById);
-router.delete('/:userId', deleteUserById);
+router.get('/', authMiddleware, getAllUsers);
+router.get('/:userId', authMiddleware, getUserById);
+router.delete('/:userId', authMiddleware, deleteUserById);
 
-router.put('/:userId/approve', approveUser);
-router.put('/:userId/reject', rejectUser);
+router.put('/:userId/approve', authMiddleware, approveUser);
+router.put('/:userId/reject', authMiddleware, rejectUser);
 
 export default router;

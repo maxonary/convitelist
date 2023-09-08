@@ -6,13 +6,14 @@ import {
   updateAdminUserById,
   deleteAdminUserById,
 } from '../controllers/adminController';
+import { authMiddleware } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
 router.post('/register', createAdminUser);
-router.get('/', getAllAdminUsers);
-router.get('/:adminUserId', getAdminUserById);
-router.put('/:adminUserId', updateAdminUserById);
-router.delete('/:adminUserId', deleteAdminUserById);
+router.get('/', authMiddleware, getAllAdminUsers);
+router.get('/:adminUserId', authMiddleware, getAdminUserById);
+router.put('/:adminUserId', authMiddleware, updateAdminUserById);
+router.delete('/:adminUserId', authMiddleware, deleteAdminUserById);
 
 export default router;
