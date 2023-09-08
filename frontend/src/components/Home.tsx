@@ -4,8 +4,7 @@ import { AxiosError } from 'axios';
 import { isAxiosError } from '../utils/isAxiosError';
 import { isValidUsername } from '../utils/isValidUsername';
 import { isAndroid, isIOS } from 'react-device-detect';
-import api from '../api';
-import statusApi from '../statusApi';
+import { api, apiStatus } from '../api';
 import '../styles/Minecraft.css';
 import TitleImage from './TitleImage';
 import SplashText from './SplashText';
@@ -73,14 +72,14 @@ const Home = () => {
   useEffect(() => {
     const url = window.location.host;
     document.title = `Add to Whitelist - ${url}`;
-    statusApi.get('/status')
+    apiStatus.get('/status')
       .then(response => setServerStatus(response.data.status))
       .catch(error => setServerStatus("Error fetching status"));
   }, []);  
 
   const startClick = () => {
       console.log('WakeUp');
-      statusApi.post('/wakeup', {})
+      apiStatus.post('/wakeup', {})
           .then((response) => { 
             console.log('WakeUp Sucess', response);
             openApp();
@@ -168,7 +167,7 @@ return (
                   "Error fetching status"
                 ) : (
                   <a className="standard-text" href={serverStatusLink} target="_blank" rel="noopener noreferrer">
-                    Server Status
+                    {getTexts(serverStatus).buttonText}
                   </a>
                 )}
               </div>

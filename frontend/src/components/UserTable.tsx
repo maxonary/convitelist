@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import api from '../api';
+import { apiJwt } from '../api';
 import { copyToClipboard } from '../utils/clipboardUtils';
 import '../styles/UserTable.css';
 
@@ -21,7 +21,7 @@ const UserTable: React.FC = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await api.get('/api/user');
+      const response = await apiJwt.get('/api/user');
       setUsers(response.data);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -30,7 +30,7 @@ const UserTable: React.FC = () => {
 
   const toggleApproval = (user: User) => {
     const endpoint = user.approved ? 'reject' : 'approve';
-    api.put(`/api/user/${user.id}/${endpoint}`)
+    apiJwt.put(`/api/user/${user.id}/${endpoint}`)
       .then(response => {
         setUsers(prevUsers => prevUsers.map(u => u.id === response.data.id ? response.data : u));
       })
@@ -42,7 +42,7 @@ const UserTable: React.FC = () => {
 
     if (confirmed) {
       try {
-        await api.delete(`/api/user/${userId}`);
+        await apiJwt.delete(`/api/user/${userId}`);
         fetchUsers();
       } catch (error) {
         console.error('Error deleting user:', error);

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { copyToClipboard } from "../utils/clipboardUtils";
 import UserTable from "./UserTable";
 import Button from "./Button";
-import api from "../api";
+import { apiJwt } from "../api";
 import "../styles/Minecraft.css";
 import TitleImage from "./TitleImage";
 
@@ -20,7 +20,7 @@ function Dashboard() {
 
   const generateCode = async () => {
     try {
-      const response = await api.post("/api/invitation/generate-invitation-code");
+      const response = await apiJwt.post("/api/invitation/generate-invitation-code");
       const generatedCode = response.data.code;
       setInvitationCode(generatedCode);
       copyToClipboard(generatedCode); 
@@ -62,7 +62,7 @@ function Dashboard() {
         {error && <div className="error">{error}</div>}
         {invitationCode && (
           <div className="standard-text">
-            Generated Invitation Code to register new Users:{" "}
+            Generated Invitation Code - Click to Copy:{" "}
             <input
               className="link-text"
               ref={invitationCodeRef}

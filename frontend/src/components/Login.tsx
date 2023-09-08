@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSignIn, useIsAuthenticated } from "react-auth-kit";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
-import api from '../api';
+import { api } from '../api';
 import TitleImage from './TitleImage';
 import InputField from './InputField';
 import Button from './Button';
