@@ -14,8 +14,11 @@ export const createUser = async (req: Request, res: Response) => {
   try {
     const { minecraftUsername, gameType } = req.body as User;
 
-    const existingUser = await prisma.user.findUnique({
-      where: { minecraftUsername },
+    const existingUser = await prisma.user.findFirst({
+      where: { 
+        minecraftUsername : minecraftUsername.toLowerCase(),
+        gameType : gameType,
+      },
     });
 
     if (existingUser) {

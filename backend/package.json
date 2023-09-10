@@ -17,7 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^4.15.0",
+    "@prisma/client": "^5.2.0",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
@@ -45,7 +45,7 @@
     "@types/passport-local": "^1.0.35",
     "concurrently": "^8.0.1",
     "esbuild": "^0.17.18",
-    "prisma": "^4.15.0",
+    "prisma": "^5.2.0",
     "prisma-client": "^0.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"

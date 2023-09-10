@@ -9,11 +9,12 @@ datasource db {
 
 model User {
   id               Int      @id @default(autoincrement())
-  minecraftUsername String  @unique
+  minecraftUsername String
   gameType         String
   approved         Boolean  @default(false)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+  @@unique([minecraftUsername, gameType])
 }
 
 
