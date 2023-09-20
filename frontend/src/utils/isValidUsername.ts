@@ -1,5 +1,3 @@
-// Checks if a username follows the minecraft username scheme
-
 export const isValidUsername = (username: string) => {
   // Username must be between 3 and 16 characters
   if (username.length < 3 || username.length > 16) {
@@ -16,8 +14,8 @@ export const isValidUsername = (username: string) => {
     return false;
   }
 
-  // Username can only contain alphanumeric characters and underscores
-  if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+  // Username can only contain alphanumeric characters and underscores and spaces
+  if (!/^[a-zA-Z0-9_ ]+$/.test(username)) {
     return false;
   }
 

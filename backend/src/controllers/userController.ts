@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { AuthenticatedRequest } from '../types/types';
 import { connectRcon, disconnectRcon, sendRconCommand } from '../helpers/rconHelper';
+import { isValidUsername } from '../utils/isValidUsername';
 
 const prisma = new PrismaClient();
 interface User {
@@ -23,6 +24,10 @@ export const createUser = async (req: Request, res: Response) => {
 
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
+    }
+
+    if (!isValidUsername(minecraftUsername)) {
+      return res.status(400).json({ message: 'Invalid username' });
     }
 
     const newUser = await prisma.user.create({
