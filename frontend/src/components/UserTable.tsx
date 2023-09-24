@@ -96,20 +96,32 @@ const UserTable: React.FC = () => {
     }
   };
 
-  return (
-    <>
-      <div id="tooltip" style={{ position: 'absolute', display: 'none' }}></div>
-      <table>
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>Game Type</th>
-            <th>Approved</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map(user => (
+const usernames = new Set<string>();
+
+return (
+  <>
+    <div id="tooltip" style={{ position: 'absolute', display: 'none' }}></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Game Type</th>
+          <th>Approved</th>
+          <th>Delete</th>
+        </tr>
+      </thead> 
+      <tbody>
+        {users.map(user => {
+
+          const lowercaseUserName = user.minecraftUsername.toLowerCase();
+
+          if (usernames.has(lowercaseUserName)) {
+            return null;
+          }
+
+          usernames.add(lowercaseUserName);
+
+          return (
             <tr key={user.id}>
               <td 
                 id={`username-${user.minecraftUsername}`}
@@ -132,11 +144,12 @@ const UserTable: React.FC = () => {
                 <button onClick={() => handleDelete(user.id)}>Delete</button>
               </td>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </>
-  );
+          );
+        })}
+      </tbody>
+    </table>
+  </>
+);
 };
 
 export default UserTable;
