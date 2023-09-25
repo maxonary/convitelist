@@ -3,16 +3,14 @@ export const isValidUsername = (username: string, gameType: string) => {
     return false;
   }
 
-  if ((gameType === 'Java Edition' && username.includes(' ')) || (username.startsWith(' ') || username.endsWith(' '))) {
+  if (gameType === 'Java Edition' && username.includes(' ')) {
     return false;
   }
 
-  // Username cannot have two underscores in a row
-  if (username.includes('__')) {
+  if (username.startsWith(' ') || username.endsWith(' ')) {
     return false;
   }
 
-  // Username can only contain alphanumeric characters and underscores and spaces
   if (!/^[a-zA-Z0-9_ ]+$/.test(username)) {
     return false;
   }
