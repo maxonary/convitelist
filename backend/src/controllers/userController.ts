@@ -26,7 +26,7 @@ export const createUser = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    if (!isValidUsername(minecraftUsername)) {
+    if (!isValidUsername(minecraftUsername, gameType)) {
       return res.status(400).json({ message: 'Invalid username' });
     }
 

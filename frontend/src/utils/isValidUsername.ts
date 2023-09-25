@@ -1,11 +1,9 @@
-export const isValidUsername = (username: string) => {
-  // Username must be between 3 and 16 characters
+export const isValidUsername = (username: string, gameType: string) => {
   if (username.length < 3 || username.length > 16) {
     return false;
   }
 
-  // Username cannot start or end with an underscore
-  if (username.startsWith('_') || username.endsWith('_')) {
+  if ((gameType === 'Java Edition' && username.includes(' ')) || (username.startsWith(' ') || username.endsWith(' '))) {
     return false;
   }
 

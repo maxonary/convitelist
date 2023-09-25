@@ -42,7 +42,7 @@ const Home = () => {
     if (username === "") {
       setErrorMessage("Please enter a username");
       return;
-    } else if (!isValidUsername(username)) {
+    } else if (!isValidUsername(username, gameType)) {
       setErrorMessage("Pleaser enter a valid username");
       return;
     } else if (gameType === "") {
