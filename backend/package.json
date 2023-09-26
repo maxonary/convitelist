@@ -32,7 +32,8 @@
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "pg": "^8.10.0",
-    "rcon-client": "^4.2.3"
+    "rcon-client": "^4.2.3",
+    "semver": "^7.5.4"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
