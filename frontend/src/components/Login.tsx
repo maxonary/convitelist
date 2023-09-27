@@ -54,7 +54,7 @@ function Login() {
 
       signIn({
         token: response.data.token,
-        expiresIn: 3600,
+        expiresIn: 60, // in minutes
         tokenType: "Bearer",
         authState: { username: values.username },
       });

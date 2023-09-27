@@ -27,10 +27,10 @@ export const authenticateAdminUser = (req: Request, res: Response, next: NextFun
           },
           jwtSecret,
           {
-            expiresIn: '1h',
+            expiresIn: 60, // in minutes
           }
         );
-        res.json({ token });
+        res.status(200).json({ token });
       } else {
         res.status(500).json({ message: 'JWT secret not found' });
       }
