@@ -1,6 +1,6 @@
 # Convenient Whitelist for Minecraft Servers Backend
 
-This application allows admins and moderator to easily manage a whitelist for their Minecraft server.
+This application allows admins and moderators to easily manage a whitelist for their Minecraft server.
 The Backend provides an API to be used for CRUD operations. 
 
 This is a Prisma, PostgreSQL, and Express application for users to register to a Minecraft server.

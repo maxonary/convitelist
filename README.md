@@ -30,6 +30,7 @@ For further details, check the dedicated Backend and Frontend README docs.
 * Microsoft Xbox authentication
 * Automatically insert users on the first join
 * Server statistics including graphs
+* User group management
 
 ## Website Architecture
 ```

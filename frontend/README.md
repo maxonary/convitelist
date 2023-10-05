@@ -1,6 +1,6 @@
 # Convenient Whitelist for Minecraft Servers Frontend
 
-This application allows admins and moderator to easily manage a whitelist for their Minecraft server.
+This application allows admins and moderators to easily manage a whitelist for their Minecraft server.
 The Frontend provides a Minecraft title page style interface to be used with the corresponding Backend. 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
