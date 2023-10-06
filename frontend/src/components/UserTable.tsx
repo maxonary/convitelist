@@ -85,13 +85,13 @@ const UserTable: React.FC = () => {
     }
   };
 
-  const handleUsernameClick = (username: string) => {
-    copyToClipboard(username);
-    const usernameCell = document.getElementById(`username-${username}`);
+  const handleUsernameClick = (user: User) => {
+    copyToClipboard(user.minecraftUsername);
+    const usernameCell = document.getElementById(`username-${user.minecraftUsername}-${user.id}`);
     if (usernameCell) {
       usernameCell.textContent = 'Copied to Clipboard';
       setTimeout(() => {
-        usernameCell.textContent = username;
+        usernameCell.textContent = user.minecraftUsername;
       }, 1500);
     }
   };
@@ -112,10 +112,10 @@ const UserTable: React.FC = () => {
           {users.map(user => (
             <tr key={user.id}>
               <td 
-                id={`username-${user.minecraftUsername}`}
+                id={`username-${user.minecraftUsername}-${user.id}`}
                 onMouseEnter={event => handleMouseEnter(event, user)}
                 onMouseLeave={handleMouseLeave}
-                onClick={() => handleUsernameClick(user.minecraftUsername)}
+                onClick={() => handleUsernameClick(user)}
                 style={{ cursor: 'pointer' }}
               >
                 {user.minecraftUsername}
