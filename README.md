@@ -174,8 +174,8 @@ npm run build
 npm run start
 ```
 
-The Backend application will be available at `http://localhost:3001` 
-and the Backend application will be available at a free port (normally `http://localhost:3000`)
+The backend application will be available at `http://localhost:3001` 
+and the frontend application will be available on a free port (normally `http://localhost:3000`).
 
 ## Deployment
 
