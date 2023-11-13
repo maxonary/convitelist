@@ -2,18 +2,18 @@
 
 # A Convenient Whitelist Manager for Minecraft Servers
 
-This application allows admins and moderators to easily manage a whitelist for their Minecraft server.
+This application allows admins and moderators to manage a whitelist for their Minecraft server efficiently.
 Users can be added and removed from the whitelist by simply clicking a checkbox.
 
-Users register by themselves on the website. The style is inspired by the Minecraft options menu and guides the user through the process of registering.
-They can enter their Minecraft username, select their game type (Java and Bedrock Edition) and submit straight for approval.
+Users register by themselves on the website. The Minecraft options menu inspires the style and guides the user through registration.
+They can enter their Minecraft username, select their game type (Java and Bedrock Edition), and submit for approval.
 Then, a registered admin can log in to the admin panel to review all submissions. 
 
 This application consists of two parts: A Backend built on Prisma, SQLite, and Express, and a Frontend built on React. 
 
 To use all the features, you must have a Paper Minecraft Server running and use [MC-Sleeping-Server-Starter](https://github.com/vincss/mcsleepingserverstarter), as well as the EmptyServerStopper and EasyWhitelist Plugins. 
 
-For further details, check the dedicated Backend and Frontend README docs.
+Please check the dedicated Backend and Frontend README docs if you want more details.
 
 ## Features
 
@@ -29,7 +29,7 @@ For further details, check the dedicated Backend and Frontend README docs.
 * Bedrock support with Floodgate integration
 * Microsoft Xbox authentication
 * Automatically insert users on the first join
-* Server statistics including graphs
+* Server statistics, including graphs
 * User group management
 
 ## Website Architecture
@@ -76,7 +76,7 @@ bash
                                 v
                       +------------------+
                       |     Database     |
-                      |    (MongoDB)     |
+                      |     (SQLite)     |
                       +------------------+
                                 |
                        (6) Query Response
@@ -91,7 +91,7 @@ bash
                                 |
                                 v
                         +--------------+
-                        |   Backend    |
+                        |    Backend   |
                         |   Rendering  |
                         +--------------+
                                 |
