@@ -16,7 +16,7 @@ const UserTable: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
-    fetchUsers();
+    fetchUsers()
   }, []);
 
   const fetchUsers = async () => {
@@ -47,7 +47,7 @@ const UserTable: React.FC = () => {
       } catch (error) {
         console.error('Error deleting user:', error);
       }
-    };
+    }
   };
 
   const formatGameType = (gameType: string) => {  
