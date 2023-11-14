@@ -108,7 +108,7 @@ function Login() {
             />
           </div>
           <div onClick={() => navigate("/admin/register")} className="link-text">
-            Don't have an account? Register here
+            Don&apos;t have an account? Register here
           </div>
             <div className="double">
               <Button className="item" type="submit">
