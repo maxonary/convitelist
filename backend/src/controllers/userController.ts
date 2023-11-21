@@ -104,14 +104,14 @@ export async function approveUser(req: AuthenticatedRequest, res: Response) {
     await connectRcon();
 
     if(user.gameType === 'Java Edition') {
-      await sendRconCommand(`easywl add ${user.minecraftUsername}`);
+      await sendRconCommand(`whitelist add ${user.minecraftUsername}`);
     } else if (user.gameType === 'Bedrock Edition') {
-      await sendRconCommand(`easywl add .${user.minecraftUsername}`);
+      await sendRconCommand(`fwhitelist add .${user.minecraftUsername}`);
     } else {
       throw new Error('Invalid game type');
     }
 
-    await sendRconCommand(`easywl reload`);
+    await sendRconCommand(`whitelist reload`);
     await disconnectRcon();
 
     const updatedUser = await prisma.user.update({
@@ -137,14 +137,14 @@ export async function rejectUser(req: AuthenticatedRequest, res: Response) {
     await connectRcon();
 
     if(user.gameType === 'Java Edition') {
-      await sendRconCommand(`easywl remove ${user.minecraftUsername}`);
+      await sendRconCommand(`whitelist remove ${user.minecraftUsername}`);
     } else if (user.gameType === 'Bedrock Edition') {
-      await sendRconCommand(`easywl remove .${user.minecraftUsername}`);
+      await sendRconCommand(`fwhitelist remove .${user.minecraftUsername}`);
     } else {
       throw new Error('Invalid game type');
     }
     
-    await sendRconCommand(`easywl reload`);
+    await sendRconCommand(`whitelist reload`);
     await disconnectRcon();
 
     const updatedUser = await prisma.user.update({
