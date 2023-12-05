@@ -1,4 +1,5 @@
 {
+    "ignorePatterns": ["node_modules/*", ".next/*", ".out/*", "!.prettierrc.js", "!.eslintrc.js", "!.babelrc.js", "build/*", "coverage/*"],
     "env": {
         "browser": true,
         "es2021": true
