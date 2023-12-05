@@ -74,7 +74,7 @@ const Home = () => {
     document.title = `Add to Whitelist - ${url}`;
     apiStatus.get('/status')
       .then(response => setServerStatus(response.data.status))
-      .catch(error => setServerStatus("Error fetching status"));
+      .catch(() => setServerStatus("Error fetching status"));
   }, []);  
 
   const startClick = () => {
