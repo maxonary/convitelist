@@ -1,7 +1,6 @@
 import { Response, NextFunction } from 'express';
 import { AuthenticatedRequest, JwtCustomPayload } from '../types/types';
-import jwt, { JwtPayload } from 'jsonwebtoken';
-import cookieParser from 'cookie-parser';
+import jwt from 'jsonwebtoken';
 
 const jwtSecret = process.env.JWT_SECRET || 'your-secret-key';
 
