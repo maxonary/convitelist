@@ -1,4 +1,4 @@
-name: CI
+name: Trunk or Treat
 
 on:
   push:
@@ -6,41 +6,21 @@ on:
   pull_request:
     branches: [ "master" ]
 
+defaults:
+  run:
+    working-directory: &wd ./{{ matrix.directory }}
+
 jobs:
-  backend-job:
-    name: ExpressJS Backend 
+  build-and-test:
+    name: Build and Test
     runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
-
-    - name: Setup Node.js v21
-      uses: actions/setup-node@v4
-      with:
-        node-version: 21.x
-        cache: "npm"
-
-    - name: Install Dependencies
-      run: npm ci
-      working-directory: ./backend
-
-    - name: Build
-      run: npm run build --if-present
-      working-directory: ./backend
-
-    - name: Lint
-      run: npm run lint
-      working-directory: ./backend
-
-    - name: Run Tests
-      run: npm test
-      working-directory: ./backend
-
-
-  frontend-job:
-    name: ReactJS Frontend
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - directory: backend
+            name: ExpressJS Backend
+          - directory: frontend
+            name: ReactJS Frontend
 
     steps:
     - name: Checkout Repository
@@ -53,21 +33,21 @@ jobs:
         cache: "npm"
 
     - name: Prisma Generate
+      if: matrix.directory == 'backend'
       run: npx prisma generate
-      working-directory: ./backend
 
     - name: Install Dependencies
       run: npm ci
-      working-directory: ./frontend
+      working-directory: *wd
 
     - name: Build
       run: npm run build --if-present
-      working-directory: ./frontend
+      working-directory: *wd
 
     - name: Lint
       run: npm run lint
-      working-directory: ./frontend
+      working-directory: *wd
 
     - name: Run Tests
       run: npm test
-      working-directory: ./frontend
+      working-directory: *wd
