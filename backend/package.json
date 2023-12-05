@@ -9,7 +9,9 @@
     "watch": "esbuild --watch --bundle src/index.ts --outfile=dist/index.js --platform=node --target=node14 --format=cjs",
     "dev": "concurrently \"npm:watch\" \"npm:start\"",
     "test": "vitest",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "prisma:generate": "prisma generate"
   },
   "prisma": {
     "schema": "src/config/schema.prisma"
