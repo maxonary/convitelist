@@ -20,5 +20,10 @@
     ],
     "rules": {
         "@typescript-eslint/no-explicit-any": "off"
+    },
+    "settings": {
+        "react": {
+          "version": "detect" // You can also specify a specific React version here if needed
+        }
     }
 }
