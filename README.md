@@ -13,7 +13,7 @@ This application consists of two parts: A Backend built on Prisma, SQLite, and E
 
 To use all the features, you must have a Paper Minecraft Server running and use [MC-Sleeping-Server-Starter](https://github.com/vincss/mcsleepingserverstarter), as well as the EmptyServerStopper and EasyWhitelist Plugins. 
 
-Please check the dedicated Backend and Frontend README docs if you want more details.
+Please check the dedicated Backend and Frontend README docs for more details.
 
 ## Features
 
@@ -180,3 +180,11 @@ and the frontend application will be available on a free port (normally `http://
 ## Deployment
 
 The deployment process will depend on your chosen hosting provider. Please consult the provider's documentation for deploying Node.js and React applications and configuring environment variables.
+
+## Contributing to Convitelist
+
+We are following the practice of Trunk Based Development.
+This means that all changes are made in the `master` branch and deployed to production as soon as they are ready.
+On each push to `master`, the application is automatically built and deployed to production using a CI/CD pipeline.
+
+If you want to contribute to this project, please fork the repository and create a pull request. This may not be the best pracitice for Trunk Bases Development, but it is the easiest for us to manage.
