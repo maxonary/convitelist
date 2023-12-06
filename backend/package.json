@@ -9,6 +9,10 @@
     "watch": "esbuild --watch --bundle src/index.ts --outfile=dist/index.js --platform=node --target=node14 --format=cjs",
     "dev": "concurrently \"npm:watch\" \"npm:start\"",
     "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage",
+    "test:unit": "vitest -c ./vitest.config.unit.ts",
+    "test:unit:watch": "vitest -c ./vitest.config.unit.ts --watch",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "prisma:generate": "prisma generate"
