@@ -110,5 +110,5 @@
   "include": [
     "src/**/*",
     "src/types/**/*"
-, "types.ts", "routes", "controllers", "index.ts"  ]
+, "types.ts", "routes", "controllers", "index.ts", "scripts"  ]
 }
