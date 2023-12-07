@@ -58,6 +58,7 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/passport": "^1.0.12",
     "@types/passport-local": "^1.0.35",
+    "@types/supertest": "^2.0.16",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",
     "@vitest/ui": "^1.0.1",
