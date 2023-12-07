@@ -23,7 +23,7 @@ jobs:
         cache-dependency-path: 'backend/package-lock.json'
 
     - name: Install Dependencies
-      run: npm ci
+      run: npm ci --legacy-peer-deps
       working-directory: ./backend
 
     - name: Prisma Generate
@@ -59,7 +59,7 @@ jobs:
         cache-dependency-path: 'frontend/package-lock.json'
 
     - name: Install Dependencies
-      run: npm ci --legacy-peer-deps
+      run: npm ci
       working-directory: ./frontend
 
     - name: Build
