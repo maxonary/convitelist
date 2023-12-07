@@ -1,11 +1,7 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { Request, Response } from 'express';
 import {
-  createAdminUser,
-  getAllAdminUsers,
-  getAdminUserById,
-  deleteAdminUserById,
-  updateAdminUserById
+  createAdminUser
 } from '../../src/controllers/adminController';
 import prismaMock from '../../src/lib/__mocks__/prisma';
 
@@ -16,6 +12,7 @@ vi.mock('bcrypt', () => ({
 }));
 
 describe('Admin Controller', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let mockRequest, mockResponse;
     beforeEach(() => {
         vi.restoreAllMocks();
