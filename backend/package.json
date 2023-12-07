@@ -16,10 +16,8 @@
     "test:unit:ui": "vitest -c ./vitest.config.unit.ts --ui",
     "test:unit:watch": "vitest -c ./vitest.config.unit.ts --watch",
     "test:unit:coverage": "vitest -c ./vitest.config.unit.ts --coverage",
-    "test:integration": "vitest -c ./vitest.config.integration.ts",
-    "test:integration:ui": "vitest -c ./vitest.config.integration.ts --ui",
-    "test:integration:watch": "vitest -c ./vitest.config.integration.ts --watch",
-    "test:integration:coverage": "vitest -c ./vitest.config.integration.ts --coverage",
+    "test:integration": "./scripts/run-integration.sh",
+    "test:integration:ui": "./scripts/run-integration.sh",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "prisma:generate": "prisma generate"
