@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { limiter } from '../../src/middleware/rateLimitMiddleware';
+import { limiter } from '../rateLimitMiddleware';
 import request from 'supertest';
 import express from 'express';
 

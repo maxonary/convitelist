@@ -2,8 +2,8 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { Request, Response } from 'express';
 import {
   createAdminUser
-} from '../../src/controllers/adminController';
-import prismaMock from '../../src/lib/__mocks__/prisma';
+} from '../adminController';
+import prismaMock from '../../lib/__mocks__/prisma';
 
 // Mock the PrismaClient and bcrypt
 vi.mock('lib/prisma');

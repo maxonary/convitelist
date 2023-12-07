@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { isValidUsername } from '../../src/utils/isValidUsername';
+import { isValidUsername } from '../isValidUsername';
 
 test('returns true for valid usernames', () => {
   expect(isValidUsername('Alice123', 'Java Edition')).toBeTruthy();

@@ -1,6 +1,6 @@
-import generateInvitationCode from '../../src/helpers/invitationHelper';
+import generateInvitationCode from '../invitationHelper';
 import { describe, beforeEach, it, expect, vi } from 'vitest';
-import prismaMock from '../../src/lib/__mocks__/prisma';
+import prismaMock from '../../lib/__mocks__/prisma';
 import crypto from 'crypto';
 
 vi.mock('lib/prisma')
