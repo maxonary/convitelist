@@ -90,3 +90,31 @@ jobs:
           budgetPath: ./budget.json # test performance budgets
           uploadArtifacts: true # save results as an action artifacts
           temporaryPublicStorage: true # upload lighthouse report to the temporary storage
+
+      
+  deploy-job:
+      name: Deploy to Server
+      needs: [ backend-job, frontend-job, lighthouse-job]
+      runs-on: ubuntu-latest
+      if: github.ref == 'refs/heads/master'
+  
+      steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 19.x
+      - run: npm ci
+      - run: npm run build
+      - name: Deploy to Server
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          HOST: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PORT: ${{ secrets.PORT }}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p $PORT $HOST >> ~/.ssh/known_hosts
+          ssh -p $PORT $USERNAME@$HOST 'bash -s' < deploy_script.sh
