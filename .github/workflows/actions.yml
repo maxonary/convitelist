@@ -132,4 +132,4 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -p $PORT $HOST >> ~/.ssh/known_hosts
-          ssh -p $PORT $USERNAME@$HOST 'bash -s' < deploy_script.sh
+          ssh -p $PORT $USERNAME@$HOST '~/deploy_script.sh'
