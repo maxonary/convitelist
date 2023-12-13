@@ -101,7 +101,7 @@ jobs:
   lighthouse-job:
     name: Lighthouse Audit
     runs-on: ubuntu-latest
-    needs: [frontend-job, deploy-job]
+    needs: [deploy-job]
 
     steps:
       - uses: actions/checkout@v3
