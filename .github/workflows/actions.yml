@@ -79,7 +79,7 @@ jobs:
       name: Deploy to Server
       needs: [ backend-job, frontend-job]
       runs-on: ubuntu-latest
-      if: github.ref == 'refs/heads/master'
+      if: github.event_name == 'push' && github.ref == 'refs/heads/master'
   
       steps:
       - name: Checkout Repository
