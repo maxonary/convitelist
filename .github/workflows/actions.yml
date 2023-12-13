@@ -84,7 +84,7 @@ jobs:
       steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-      - name: Deploy to Server
+      - name: Configure SSH
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           HOST: ${{ secrets.SSH_HOST }}
@@ -94,8 +94,8 @@ jobs:
           mkdir -p ~/.ssh/
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -p $PORT $HOST >> ~/.ssh/known_hosts
-          ssh -p $PORT $USERNAME@$HOST '~/deploy_script.sh'
+          ssh-keyscan -p $SHH_PORT $SSH_HOST >> ~/.ssh/known_hosts
+          ssh -p $PORT $SSH_USERNAME@$SSH_HOST '~/deploy_script.sh'
 
   
   lighthouse-job:
