@@ -1,4 +1,7 @@
-export const isValidUsername = (username: string, gameType: string) => {
-  const regex = gameType === 'Java Edition' ? /^[a-zA-Z0-9_]{3,16}$/ : /^[a-zA-Z0-9_][a-zA-Z0-9_ ]{1,14}[a-zA-Z0-9_]$/;
-  return regex.test(username);
+const JAVA_EDITION_USERNAME_PATTERN = /^\w{3,16}$/;
+const OTHER_EDITION_USERNAME_PATTERN = /^\w[\w ]{1,14}\w$/;
+
+export const isValidUsername = (username: string, gameType: string): boolean => {
+  const usernamePattern = gameType === 'Java Edition' ? JAVA_EDITION_USERNAME_PATTERN : OTHER_EDITION_USERNAME_PATTERN;
+  return usernamePattern.test(username);
 }
