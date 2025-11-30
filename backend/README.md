@@ -97,10 +97,41 @@ npm run build
 npm run start
 ```
 
-10. Generate a token in the console to create the first admin user:
-```bash
-node src/scripts/testInvitationCode.js # copy the token
-```
+## Admin Registration
+
+### First Admin User
+
+After setting up the application, you can register the first admin user directly through the web interface **without** needing an invitation code:
+
+1. Navigate to the admin registration page (typically `/admin/register`)
+2. Fill in the registration form with:
+   - **Username**: Choose a unique username
+   - **Password**: Must be at least 8 characters long
+   - **Email**: Your email address
+3. Click "Register" - no invitation code is required for the first admin
+
+The system automatically detects when no admins exist and allows the first registration without an invitation code.
+
+### Registering Additional Admin Users
+
+For subsequent admin registrations, an invitation code is required for security:
+
+1. **Generate an invitation code** (as an existing admin):
+   - Log in to the admin panel
+   - Use the invitation code generation endpoint: `POST /api/invitation/generate-invitation-code`
+   - Or use the script: `node src/scripts/testInvitationCode.js`
+   - Copy the generated code
+
+2. **Register the new admin**:
+   - Navigate to the admin registration page
+   - Fill in the registration form with:
+     - **Username**: Choose a unique username
+     - **Password**: Must be at least 8 characters long
+     - **Email**: The new admin's email address
+     - **Invitation Code**: Enter the code generated in step 1
+   - Click "Register"
+
+Each invitation code can only be used once. After successful registration, the code is marked as used and cannot be reused.
 
 ## Deployment
 
