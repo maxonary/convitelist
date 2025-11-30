@@ -26,7 +26,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '19.x'
           cache: 'npm'
           cache-dependency-path: |
             backend/package-lock.json
@@ -34,7 +34,7 @@ jobs:
 
       - name: Install backend dependencies
         working-directory: ./backend
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Run backend tests
         working-directory: ./backend
