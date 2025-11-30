@@ -15,11 +15,15 @@ const initialValues = {
   invitationCode: '',
 };
 
-const validationSchema = Yup.object({
+const getValidationSchema = (isFirstAdmin: boolean) => Yup.object({
   username: Yup.string().required('Username is required'),
-  password: Yup.string().required('Password is required'),
+  password: Yup.string()
+    .min(8, 'Password must be at least 8 characters')
+    .required('Password is required'),
   email: Yup.string().email('Invalid email address').required('Email is required'),
-  invitationCode: Yup.string().required('Invitation code is required'),
+  invitationCode: isFirstAdmin 
+    ? Yup.string() 
+    : Yup.string().required('Invitation code is required'),
 });
 
 interface ErrorResponse {
@@ -32,10 +36,31 @@ interface ErrorResponse {
 
 function Register() {
   const [error, setError] = useState('');
+  const [isFirstAdmin, setIsFirstAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const [blinkingField, setBlinkingField] = useState('username');
-  const fieldsOrder = ['username', 'password', 'email', 'invitationCode'];
+  const fieldsOrder = isFirstAdmin 
+    ? ['username', 'password', 'email']
+    : ['username', 'password', 'email', 'invitationCode'];
+
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      try {
+        const response = await api.get('/api/admin/check');
+        setIsFirstAdmin(response.data.isFirstAdmin);
+      } catch (err) {
+        console.error('Error checking admin status:', err);
+        // Default to requiring invitation code if check fails
+        setIsFirstAdmin(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAdminStatus();
+  }, []);
 
   const handleInputChange = (fieldName: any, value: any) => {
     setBlinkingField(fieldName);
@@ -50,7 +75,12 @@ function Register() {
     setError('');
 
     try {
-      await api.post('/api/admin/register', values);
+      // Only include invitationCode if it's not the first admin
+      const payload = isFirstAdmin 
+        ? { username: values.username, password: values.password, email: values.email }
+        : values;
+
+      await api.post('/api/admin/register', payload);
 
       // Reset form and show success message
       formik.resetForm();
@@ -68,8 +98,9 @@ function Register() {
 
   const formik = useFormik({
     initialValues,
-    validationSchema,
+    validationSchema: getValidationSchema(isFirstAdmin),
     onSubmit,
+    enableReinitialize: true,
   });
 
   useEffect(() => {
@@ -77,11 +108,31 @@ function Register() {
     document.title = `Admin Registration - ${url}`;
   }, []);  
 
+  if (loading) {
+    return (
+      <div className="container">
+        <TitleImage src='/register.png' alt='Title' />
+        <div className="menu-register">
+          <div className="item">
+            <div className="title">Loading...</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container">
       <TitleImage src='/register.png' alt='Title' />
       <form onSubmit={formik.handleSubmit}>
         <div className="menu-register">
+          {isFirstAdmin && (
+            <div className="item" style={{ marginBottom: '10px', textAlign: 'center' }}>
+              <div className="title" style={{ fontSize: '0.9em', color: '#4CAF50' }}>
+                🎉 Creating first admin account - No invitation code needed!
+              </div>
+            </div>
+          )}
           <div className="item">
             <InputField
               name="username"
@@ -98,7 +149,7 @@ function Register() {
               name="password"
               type="password"
               className={`title ${blinkingField === 'password' ? 'blinking' : ''}`}
-              placeholder="Enter Password"
+              placeholder="Enter Password (min. 8 characters)"
               value={formik.values.password}
               onChange={(e) => handleInputChange('password', e.target.value)}
             />
@@ -115,17 +166,19 @@ function Register() {
             />
             {formik.touched.email && formik.errors.email && <span className="error-message">{formik.errors.email}</span>}
           </div>
-          <div className="item">
-            <InputField
-              name="invitationCode"
-              type="text"
-              className={`title ${blinkingField === 'invitationCode' ? 'blinking' : ''}`}
-              placeholder="Enter Invitation Code"
-              value={formik.values.invitationCode}
-              onChange={(e) => handleInputChange('invitationCode', e.target.value)}
-            />
-            {formik.touched.invitationCode && formik.errors.invitationCode && <span className="error-message">{formik.errors.invitationCode}</span>}
-          </div>
+          {!isFirstAdmin && (
+            <div className="item">
+              <InputField
+                name="invitationCode"
+                type="text"
+                className={`title ${blinkingField === 'invitationCode' ? 'blinking' : ''}`}
+                placeholder="Enter Invitation Code"
+                value={formik.values.invitationCode}
+                onChange={(e) => handleInputChange('invitationCode', e.target.value)}
+              />
+              {formik.touched.invitationCode && formik.errors.invitationCode && <span className="error-message">{formik.errors.invitationCode}</span>}
+            </div>
+          )}
           <div onClick={() => navigate("/admin/login")} className="link-text">
             Already have an account? Login here
           </div>
