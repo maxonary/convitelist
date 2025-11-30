@@ -179,7 +179,50 @@ and the frontend application will be available on a free port (normally `http://
 
 ## Deployment
 
-The deployment process will depend on your chosen hosting provider. Please consult the provider's documentation for deploying Node.js and React applications and configuring environment variables.
+The recommended way to deploy this application is using Docker and Docker Compose.
+
+1. Clone this repository:
+```bash
+git clone https://github.com/maxonary/convitelist
+cd convitelist
+```
+
+2. Create and configure the environment file:
+```bash
+cp .env.example .env
+# Edit .env with your configuration (RCON credentials, API URLs, etc.)
+```
+
+3. Deploy using Docker Compose:
+```bash
+./deploy.sh up
+```
+
+The application will be available at:
+- Frontend: `http://localhost:3000`
+- Backend API: `http://localhost:3001`
+
+**Environment Variables:**
+- `SESSION_SECRET`: A secure random secret key for sessions
+- `CLIENT_URL`: The URL where your frontend is hosted
+- `RCON_HOST`, `RCON_PORT`, `RCON_PASSWORD`: Minecraft server RCON credentials
+- `REACT_APP_API_URL`: Backend API URL (used at build time)
+- `REACT_APP_STATUS_API_URL`: MC-Sleeping-Server-Starter API URL
+- `REACT_APP_SERVER_NAME`: Your Minecraft server name
+
+**Production Considerations:**
+- Set up SSL/HTTPS for production (configure in `nginx/nginx.conf`)
+- Consider migrating from SQLite to PostgreSQL for better performance
+- Configure regular database backups
+- Set up monitoring and health checks (already included in Docker setup)
+
+**Other Commands:**
+```bash
+./deploy.sh down        # Stop services
+./deploy.sh logs        # View logs
+./deploy.sh update      # Update and restart
+./deploy.sh health      # Check service health
+```
 
 ## Contributing to Convitelist
 
