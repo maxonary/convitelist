@@ -6,16 +6,16 @@ services:
     container_name: convitelist-backend
     restart: unless-stopped
     ports:
-      - "3001:3001"
+      - "3002:3001"
     environment:
       - NODE_ENV=production
       - PORT=3001
       - DATABASE_URL=file:./data/prod.db
       - SESSION_SECRET=${SESSION_SECRET}
       - CLIENT_URL=${CLIENT_URL:-http://localhost:3000}
-      - RCON_HOST=${RCON_HOST}
-      - RCON_PORT=${RCON_PORT}
-      - RCON_PASSWORD=${RCON_PASSWORD}
+      - MINECRAFT_RCON_HOST=${RCON_HOST}
+      - MINECRAFT_RCON_PORT=${RCON_PORT}
+      - MINECRAFT_RCON_PASSWORD=${RCON_PASSWORD}
       - STATUS_API_URL=${STATUS_API_URL}
     volumes:
       - backend-data:/app/data
@@ -40,7 +40,7 @@ services:
     container_name: convitelist-frontend
     restart: unless-stopped
     ports:
-      - "3000:80"
+      - "3003:80"
     depends_on:
       backend:
         condition: service_healthy

@@ -13,7 +13,8 @@ RUN npm ci
 # Copy source code and public assets
 COPY src ./src
 COPY public ./public
-COPY webpack.config.ts ./
+# Copy webpack config if it exists (react-scripts handles webpack, but custom config may be needed)
+COPY webpack.config.ts* ./
 
 # Build arguments for environment variables
 ARG REACT_APP_API_URL
