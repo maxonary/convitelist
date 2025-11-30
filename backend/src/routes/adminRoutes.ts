@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   createAdminUser,
+  checkAdminExists,
   getAllAdminUsers,
   getAdminUserById,
   updateAdminUserById,
@@ -10,6 +11,7 @@ import { authMiddleware } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
+router.get('/check', checkAdminExists);
 router.post('/register', createAdminUser);
 router.get('/', authMiddleware, getAllAdminUsers);
 router.get('/:adminUserId', authMiddleware, getAdminUserById);
