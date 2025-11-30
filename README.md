@@ -19,7 +19,7 @@ Please check the dedicated Backend and Frontend README docs for more details.
 
 - Minecraft-style interface
 - User registration with Minecraft username and error-checking
-- Admin authentication and registration with tokens
+- Admin authentication and registration (first admin requires no invitation code)
 - Admin panel for approving or rejecting users and registering new admins
 - Automatic Minecraft server whitelist management through RCON
 - Server Status when using [MC-Sleeping-Server-Starter](https://github.com/vincss/mcsleepingserverstarter) (recommended)
@@ -176,6 +176,38 @@ npm run start
 
 The backend application will be available at `http://localhost:3001` 
 and the frontend application will be available on a free port (normally `http://localhost:3000`).
+
+## Admin Registration
+
+### First Admin User
+
+After completing the installation and starting the application, register your first admin account:
+
+1. Navigate to the admin registration page (typically at `/admin/register` on your frontend URL)
+2. Fill in the registration form:
+   - **Username**: Choose a unique username
+   - **Password**: Must be at least 8 characters long
+   - **Email**: Your email address
+3. Click "Register" - **No invitation code is needed for the first admin**
+
+The system automatically detects when no admins exist and allows the first registration without requiring an invitation code.
+
+### Registering Additional Admin Users
+
+For security, additional admin users require an invitation code:
+
+1. **Generate an invitation code** (as an existing admin):
+   - Log in to the admin panel
+   - Use the API endpoint: `POST /api/invitation/generate-invitation-code`
+   - Or run the script: `node backend/src/scripts/testInvitationCode.js`
+   - Copy the generated code
+
+2. **Register the new admin**:
+   - Navigate to the admin registration page
+   - Fill in all fields including the **Invitation Code**
+   - Click "Register"
+
+Each invitation code can only be used once. See the [Backend README](backend/README.md) for more detailed instructions.
 
 ## Deployment
 
