@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { AuthenticatedRequest } from '../types/types';
-import { connectRcon, disconnectRcon, sendRconCommand } from '../helpers/rconHelper';
+import { connectRcon, disconnectRcon, sendRconCommand, sanitizeUsername } from '../helpers/rconHelper';
 import { isValidUsername } from '../utils/isValidUsername';
 
 const prisma = new PrismaClient();
@@ -101,18 +101,30 @@ export async function approveUser(req: AuthenticatedRequest, res: Response) {
       return;
     }
 
-    await connectRcon();
-
-    if(user.gameType === 'Java Edition') {
-      await sendRconCommand(`easywl add ${user.minecraftUsername}`);
-    } else if (user.gameType === 'Bedrock Edition') {
-      await sendRconCommand(`easywl add .${user.minecraftUsername}`);
-    } else {
-      throw new Error('Invalid game type');
+    // Sanitize username to prevent command injection
+    const sanitizedUsername = sanitizeUsername(user.minecraftUsername);
+    
+    if (!sanitizedUsername) {
+      res.status(400).json({ error: 'Invalid username format' });
+      return;
     }
 
-    await sendRconCommand(`easywl reload`);
-    await disconnectRcon();
+    try {
+      await connectRcon();
+
+      if(user.gameType === 'Java Edition') {
+        await sendRconCommand(`easywl add ${sanitizedUsername}`);
+      } else if (user.gameType === 'Bedrock Edition') {
+        await sendRconCommand(`easywl add .${sanitizedUsername}`);
+      } else {
+        throw new Error('Invalid game type');
+      }
+
+      await sendRconCommand(`easywl reload`);
+    } finally {
+      // Always disconnect, even if there was an error
+      disconnectRcon();
+    }
 
     const updatedUser = await prisma.user.update({
       where: { id: userId },
@@ -134,18 +146,31 @@ export async function rejectUser(req: AuthenticatedRequest, res: Response) {
       res.status(404).json({ error: 'User not found' });
       return;
     }
-    await connectRcon();
 
-    if(user.gameType === 'Java Edition') {
-      await sendRconCommand(`easywl remove ${user.minecraftUsername}`);
-    } else if (user.gameType === 'Bedrock Edition') {
-      await sendRconCommand(`easywl remove .${user.minecraftUsername}`);
-    } else {
-      throw new Error('Invalid game type');
-    }
+    // Sanitize username to prevent command injection
+    const sanitizedUsername = sanitizeUsername(user.minecraftUsername);
     
-    await sendRconCommand(`easywl reload`);
-    await disconnectRcon();
+    if (!sanitizedUsername) {
+      res.status(400).json({ error: 'Invalid username format' });
+      return;
+    }
+
+    try {
+      await connectRcon();
+
+      if(user.gameType === 'Java Edition') {
+        await sendRconCommand(`easywl remove ${sanitizedUsername}`);
+      } else if (user.gameType === 'Bedrock Edition') {
+        await sendRconCommand(`easywl remove .${sanitizedUsername}`);
+      } else {
+        throw new Error('Invalid game type');
+      }
+      
+      await sendRconCommand(`easywl reload`);
+    } finally {
+      // Always disconnect, even if there was an error
+      disconnectRcon();
+    }
 
     const updatedUser = await prisma.user.update({
       where: { id: userId },
