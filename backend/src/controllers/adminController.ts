@@ -1,14 +1,12 @@
 import { Response, Request } from 'express';
 import bcrypt from 'bcrypt';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '../lib/prisma';
 
 interface Admin {
   username: string;
   password: string;
   email: string;
-  invitationCode: string; // Add this
+  invitationCode?: string; // Optional for first admin
 }
 
 export const createAdminUser = async (req: Request, res: Response) => {
@@ -17,16 +15,32 @@ export const createAdminUser = async (req: Request, res: Response) => {
 
     const { username, password, email, invitationCode } = req.body as Admin;
 
-    const existingInvitationCode = await prisma.invitationCode.findUnique({
-      where: { code: invitationCode },
-    });
+    // Check if any admins exist
+    const adminCount = await prisma.admin.count();
+    const isFirstAdmin = adminCount === 0;
 
-    if (!existingInvitationCode) {
-      return res.status(400).json({ message: 'Invalid invitation code' });
+    // If not the first admin, require invitation code
+    if (!isFirstAdmin) {
+      if (!invitationCode) {
+        return res.status(400).json({ message: 'Invitation code is required' });
+      }
+
+      const existingInvitationCode = await prisma.invitationCode.findUnique({
+        where: { code: invitationCode },
+      });
+
+      if (!existingInvitationCode) {
+        return res.status(400).json({ message: 'Invalid invitation code' });
+      }
+
+      if (existingInvitationCode.used) {
+        return res.status(400).json({ message: 'Invitation code already used' });
+      }
     }
 
-    if (existingInvitationCode.used) {
-      return res.status(400).json({ message: 'Invitation code already used' });
+    // Validate password strength (minimum 8 characters)
+    if (password.length < 8) {
+      return res.status(400).json({ message: 'Password must be at least 8 characters long' });
     }
 
     const existingAdminUserByEmail = await prisma.admin.findUnique({
@@ -55,11 +69,13 @@ export const createAdminUser = async (req: Request, res: Response) => {
       },
     });
 
-    // Mark invitation code as used
-    await prisma.invitationCode.update({
-      where: { code: invitationCode },
-      data: { used: true },
-    });
+    // Mark invitation code as used (only required for non-first admins)
+    if (!isFirstAdmin && invitationCode) {
+      await prisma.invitationCode.update({
+        where: { code: invitationCode },
+        data: { used: true },
+      });
+    }
 
     res.status(201).json(newAdminUser);
   } catch (error) {
@@ -68,6 +84,16 @@ export const createAdminUser = async (req: Request, res: Response) => {
   }
 };
 
+
+export const checkAdminExists = async (req: Request, res: Response) => {
+  try {
+    const adminCount = await prisma.admin.count();
+    res.status(200).json({ exists: adminCount > 0, isFirstAdmin: adminCount === 0 });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error checking admin status' });
+  }
+};
 
 export const getAllAdminUsers = async (req: Request, res: Response) => {
   try {
