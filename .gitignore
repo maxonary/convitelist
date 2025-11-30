@@ -1,7 +1,7 @@
 # Sqlite3 Database
 
-database.db
-database.db-journal
+*.db
+*.db-journal
 
 .DS_STORE
 node_modules
