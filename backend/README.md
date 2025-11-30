@@ -43,7 +43,7 @@ erDiagram
 
 Before you begin, ensure you have met the following requirements:
 
-- You have installed [Node.js](https://nodejs.org/) (14.x or later is recommended)
+- You have installed [Node.js](https://nodejs.org/) (20.x or later is recommended, 22.x LTS preferred)
 - You have an SQLite database available
 - You have access to a Minecraft server with RCON enabled
 
