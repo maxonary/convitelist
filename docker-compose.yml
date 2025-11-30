@@ -11,6 +11,7 @@ services:
       - NODE_ENV=production
       - PORT=3001
       - DATABASE_URL=file:./data/prod.db
+      - JWT_SECRET=${JWT_SECRET}
       - SESSION_SECRET=${SESSION_SECRET}
       - CLIENT_URL=${CLIENT_URL:-http://localhost:3000}
       - MINECRAFT_RCON_HOST=${RCON_HOST}

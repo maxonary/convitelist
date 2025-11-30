@@ -118,7 +118,7 @@ bash
 
 Before you begin, ensure you have met the following requirements:
 
-- You have installed [Node.js](https://nodejs.org/) (14.x or later is recommended)
+- You have installed [Node.js](https://nodejs.org/) (20.x or later is recommended, 22.x LTS preferred)
 - You have access to a Minecraft server with RCON enabled
 - (You have installed [MC-Sleeping-Server-Starter](https://github.com/vincss/mcsleepingserverstarter) on top of your Minecraft server)
 
