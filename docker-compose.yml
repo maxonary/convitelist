@@ -1,0 +1,84 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: convitelist-backend
+    restart: unless-stopped
+    ports:
+      - "3002:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - DATABASE_URL=file:./data/prod.db
+      - SESSION_SECRET=${SESSION_SECRET}
+      - CLIENT_URL=${CLIENT_URL:-http://localhost:3000}
+      - MINECRAFT_RCON_HOST=${RCON_HOST}
+      - MINECRAFT_RCON_PORT=${RCON_PORT}
+      - MINECRAFT_RCON_PASSWORD=${RCON_PASSWORD}
+      - STATUS_API_URL=${STATUS_API_URL}
+    volumes:
+      - backend-data:/app/data
+    networks:
+      - convitelist-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3001/api', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_API_URL=${REACT_APP_API_URL:-http://localhost:3001}
+        - REACT_APP_STATUS_API_URL=${REACT_APP_STATUS_API_URL}
+        - REACT_APP_SERVER_STATUS_URL=${REACT_APP_SERVER_STATUS_URL}
+        - REACT_APP_SERVER_NAME=${REACT_APP_SERVER_NAME}
+    container_name: convitelist-frontend
+    restart: unless-stopped
+    ports:
+      - "3003:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - convitelist-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+  nginx:
+    image: nginx:alpine
+    container_name: convitelist-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - convitelist-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+volumes:
+  backend-data:
+    driver: local
+
+networks:
+  convitelist-network:
+    driver: bridge
+
