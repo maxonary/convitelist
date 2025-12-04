@@ -3,7 +3,14 @@
 *.db
 *.db-journal
 
-.DS_STORE
+# macOS Finder files (cover .DS_Store variants and nested/case variants)
+.DS_Store
+**/.DS_Store
+.DS_Store?
+**/.DS_Store?
+[Dd][Ss]_Store
+._.DS_Store
+**/._.DS_Store
 node_modules
 scripts/flow/*/.flowconfig
 .flowconfig
