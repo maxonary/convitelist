@@ -2,6 +2,7 @@ import express from "express";
 import passport from "../config/passport";
 import { configureSession } from "../config/session";
 import { authMiddleware } from "../middleware/authMiddleware";
+import { validateOrigin } from "../middleware/originValidationMiddleware";
 import dotenv from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
@@ -18,10 +19,43 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(passport.initialize());
-app.use(cors({ credentials: true, origin: process.env.CLIENT_URL }));
+
+// Configure CORS with allowed origins
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [];
+const clientUrl = process.env.CLIENT_URL;
+if (clientUrl && !allowedOrigins.includes(clientUrl)) {
+  allowedOrigins.push(clientUrl);
+}
+
+app.use(cors({ 
+  credentials: true, 
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, Postman, etc.)
+    if (!origin) return callback(null, true);
+    
+    // Check if origin is in allowed list
+    const isAllowed = allowedOrigins.some(allowed => {
+      if (origin === allowed) return true;
+      // Support wildcard patterns for Vercel
+      if (allowed.includes("*.vercel.app")) {
+        return /^https?:\/\/[^/]+\.vercel\.app(\/.*)?$/.test(origin);
+      }
+      return false;
+    });
+    
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  }
+}));
+
 app.use(helmet());
 app.use(cookieParser());
 app.use(limiter);
+// Add origin validation middleware for extra security
+app.use(validateOrigin);
 app.use((req, res, next) => {
   console.log(`Received ${req.method} request for ${req.url}`);
   next();
