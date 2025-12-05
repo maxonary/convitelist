@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/react";
 
 import { AuthProvider } from "react-auth-kit";
 
@@ -29,6 +30,7 @@ root.render(
             </BrowserRouter>
         </AuthProvider>
     </StyletronProvider>
+    <Analytics />
   </React.StrictMode>
 );
 
