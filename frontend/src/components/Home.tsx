@@ -74,7 +74,10 @@ const Home = () => {
     document.title = `Add to Whitelist - ${url}`;
     apiStatus.get('/status')
       .then(response => setServerStatus(response.data.status))
-      .catch(() => setServerStatus("Error fetching status"));
+      .catch(() => {
+        // Port 5000 service (Minecraft server status) is optional
+        setServerStatus("Status service unavailable");
+      });
   }, []);  
 
   const startClick = () => {
@@ -113,7 +116,7 @@ const Home = () => {
 
   const serverName = process.env.REACT_APP_SERVER_NAME;
   const serverIp = process.env.REACT_APP_SERVER_IP;
-  const serverPort = process.env.EACT_APP_SERVER_PORT;
+  const serverPort = process.env.REACT_APP_SERVER_PORT;
 
   const openApp = () => {  
     if (isIOS) {

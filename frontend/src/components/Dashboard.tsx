@@ -1,16 +1,37 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useSignOut } from "react-auth-kit";
+import { useSignOut, useAuthUser } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
 import { copyToClipboard } from "../utils/clipboardUtils";
 import UserTable from "./UserTable";
 import Button from "./Button";
-import { apiJwt } from "../api";
+import { apiJwt, setAuthToken } from "../api";
 import "../styles/Minecraft.css";
 import TitleImage from "./TitleImage";
 
 function Dashboard() {
   const signOut = useSignOut();
   const navigate = useNavigate();
+  
+  // Get token from localStorage (react-auth-kit stores it when authType is "localstorage")
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('__auth__');
+      if (stored) {
+        const authData = JSON.parse(stored);
+        if (authData.token) {
+          setAuthToken(authData.token);
+          console.log('[Dashboard] Token loaded from localStorage');
+        }
+      }
+    } catch (e) {
+      // If parsing fails, try reading as plain string
+      const token = localStorage.getItem('__auth__');
+      if (token) {
+        setAuthToken(token);
+        console.log('[Dashboard] Token loaded from localStorage (plain)');
+      }
+    }
+  }, []);
 
   const [invitationCode, setInvitationCode] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);

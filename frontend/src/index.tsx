@@ -21,12 +21,10 @@ root.render(
   <React.StrictMode>
     <StyletronProvider value={engine}>
         <AuthProvider
-          authType={"cookie"}
+          authType={"localstorage"}
           authName={"__auth__"}
-          cookieDomain={window.location.hostname}
-          cookieSecure={window.location.protocol === "https:"}
         >
-            <BrowserRouter>
+            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <App />
             </BrowserRouter>
         </AuthProvider>

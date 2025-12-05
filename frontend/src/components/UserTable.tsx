@@ -21,10 +21,27 @@ const UserTable: React.FC = () => {
 
   const fetchUsers = async () => {
     try {
+      console.log('[UserTable] Fetching users...');
+      const stored = localStorage.getItem('__auth__');
+      console.log('[UserTable] localStorage __auth__:', stored ? 'exists' : 'missing');
+      if (stored) {
+        try {
+          const authData = JSON.parse(stored);
+          console.log('[UserTable] Token type:', authData.type, 'Token exists:', !!authData.token);
+        } catch (e) {
+          console.log('[UserTable] Token stored as plain string');
+        }
+      }
       const response = await apiJwt.get('/api/user');
+      console.log('[UserTable] Success! Received', response.data.length, 'users');
       setUsers(response.data);
-    } catch (error) {
-      console.error('Error fetching users:', error);
+    } catch (error: any) {
+      console.error('[UserTable] Error fetching users:', error);
+      if (error.response?.status === 401) {
+        console.error('[UserTable] 401 Unauthorized - You are not logged in or token is invalid');
+        console.error('[UserTable] Please log in at /admin/login');
+        console.error('[UserTable] Current localStorage:', localStorage.getItem('__auth__'));
+      }
     }
   };
 

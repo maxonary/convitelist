@@ -16,11 +16,21 @@ export function authMiddleware(
   // Try to get token from cookie first, then from Authorization header
   let token = req.cookies.__auth__;
   
+  // Debug logging (remove in production)
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('[authMiddleware] Cookies:', Object.keys(req.cookies));
+    console.log('[authMiddleware] __auth__ cookie:', req.cookies.__auth__ ? 'present' : 'missing');
+    console.log('[authMiddleware] Authorization header:', req.headers.authorization ? 'present' : 'missing');
+  }
+  
   // Fallback to Authorization header (Bearer token)
   if (!token) {
     const authHeader = req.headers.authorization;
     if (authHeader && authHeader.startsWith('Bearer ')) {
       token = authHeader.substring(7);
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('[authMiddleware] Using token from Authorization header');
+      }
     }
   }
 
