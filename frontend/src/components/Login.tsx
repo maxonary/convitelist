@@ -52,14 +52,30 @@ function Login() {
     try {
       const response = await api.post('/api/auth/login', values);
 
-      signIn({
+      // Debug: Log the response to see what we're getting
+      console.log('[Login] Response:', response.data);
+      console.log('[Login] Token:', response.data.token);
+
+      if (!response.data.token) {
+        console.error('[Login] No token in response!', response.data);
+        setError("Login failed: No token received from server");
+        return;
+      }
+
+      const success = signIn({
         token: response.data.token,
         expiresIn: 60, // in minutes
         tokenType: "Bearer",
         authState: { username: values.username },
       });
 
-      navigate("/admin/dashboard");
+      if (success) {
+        console.log('[Login] Token stored successfully in localStorage');
+        navigate("/admin/dashboard");
+      } else {
+        console.error('[Login] Failed to store token');
+        setError("Login failed: Could not store authentication token");
+      }
       
     } catch (err: unknown) {
       const error = err as ErrorResponse;
