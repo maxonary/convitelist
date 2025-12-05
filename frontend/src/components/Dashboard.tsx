@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useSignOut, useAuthUser } from "react-auth-kit";
+import { useSignOut } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
 import { copyToClipboard } from "../utils/clipboardUtils";
 import UserTable from "./UserTable";
