@@ -42,6 +42,7 @@ export const authenticateAdminUser = (req: Request, res: Response, next: NextFun
         
         res.status(200).json({ 
           message: 'Login successful',
+          token: token, // Return token in response body for localStorage auth
           user: { id, username, email }
         });
       } else {
