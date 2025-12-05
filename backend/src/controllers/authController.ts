@@ -27,13 +27,38 @@ export const authenticateAdminUser = (req: Request, res: Response, next: NextFun
           },
           jwtSecret,
           {
-            expiresIn: 60, // in minutes
+            expiresIn: '60m', // 60 minutes
           }
         );
-        res.status(200).json({ token });
+        
+        // Set JWT token as HTTP-only cookie
+        const isProduction = process.env.NODE_ENV === 'production';
+        res.cookie('__auth__', token, {
+          httpOnly: true,
+          secure: isProduction, // Only send over HTTPS in production
+          sameSite: 'strict',
+          maxAge: 60 * 60 * 1000, // 60 minutes in milliseconds
+        });
+        
+        res.status(200).json({ 
+          message: 'Login successful',
+          user: { id, username, email }
+        });
       } else {
         res.status(500).json({ message: 'JWT secret not found' });
       }
     });
   })(req, res, next);
+};
+
+// Logout endpoint
+export const logoutAdminUser = (req: Request, res: Response) => {
+  // Clear the authentication cookie
+  res.clearCookie('__auth__', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+  });
+  
+  res.status(200).json({ message: 'Logout successful' });
 };

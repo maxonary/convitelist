@@ -13,10 +13,19 @@ export function authMiddleware(
   res: Response,
   next: NextFunction
 ) {
-  const token = req.cookies.__auth__;
+  // Try to get token from cookie first, then from Authorization header
+  let token = req.cookies.__auth__;
+  
+  // Fallback to Authorization header (Bearer token)
+  if (!token) {
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      token = authHeader.substring(7);
+    }
+  }
 
   if (!token) {
-    res.status(401).json({ error: 'No token provided' });
+    res.status(401).json({ error: 'No token provided. Please log in.' });
     return;
   }
 
@@ -42,6 +51,12 @@ export function authMiddleware(
     req.adminId = adminId;
     next();
   } catch (error) {
-    res.status(401).json({ error: 'Invalid token' });
+    if (error instanceof jwt.TokenExpiredError) {
+      res.status(401).json({ error: 'Token expired. Please log in again.' });
+    } else if (error instanceof jwt.JsonWebTokenError) {
+      res.status(401).json({ error: 'Invalid token' });
+    } else {
+      res.status(401).json({ error: 'Authentication failed' });
+    }
   }
 }

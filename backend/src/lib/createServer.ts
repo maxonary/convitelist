@@ -33,28 +33,59 @@ app.use(cors({
     // Allow requests with no origin (mobile apps, curl, Postman, etc.)
     if (!origin) return callback(null, true);
     
+    // Allow localhost for development
+    if (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) {
+      return callback(null, true);
+    }
+    
+    // Normalize origin for comparison (remove trailing slash, paths, etc.)
+    const normalizedOrigin = origin.replace(/\/+$/, '').split('/').slice(0, 3).join('/');
+    
     // Check if origin is in allowed list
     const isAllowed = allowedOrigins.some(allowed => {
-      if (origin === allowed) return true;
+      const normalizedAllowed = allowed.trim();
+      
+      // Exact match
+      if (normalizedOrigin === normalizedAllowed) return true;
+      
       // Support wildcard patterns for Vercel
-      if (allowed.includes("*.vercel.app")) {
-        return /^https?:\/\/[^/]+\.vercel\.app(\/.*)?$/.test(origin);
+      if (normalizedAllowed.includes("*.vercel.app")) {
+        const vercelPattern = /^https?:\/\/[^/]+\.vercel\.app$/i;
+        return vercelPattern.test(normalizedOrigin);
       }
+      
+      // Match other wildcard patterns
+      if (normalizedAllowed.includes("*")) {
+        const patternStr = normalizedAllowed
+          .replace(/[.+?^${}()|[\]\\]/g, '\\$&') // Escape special chars
+          .replace(/\*/g, '.*'); // Convert * to .*
+        const pattern = new RegExp(`^${patternStr}$`, 'i');
+        return pattern.test(normalizedOrigin);
+      }
+      
       return false;
     });
     
     if (isAllowed) {
       callback(null, true);
     } else {
+      console.warn(`CORS blocked origin: ${origin} (normalized: ${normalizedOrigin})`);
+      console.warn(`Allowed origins: ${allowedOrigins.join(', ')}`);
       callback(new Error("Not allowed by CORS"));
     }
   }
 }));
 
-app.use(helmet());
+// Configure helmet with CORS-friendly settings for API
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  crossOriginEmbedderPolicy: false,
+  contentSecurityPolicy: false // Disable CSP for API endpoints
+}));
 app.use(cookieParser());
 app.use(limiter);
 // Add origin validation middleware for extra security
+// Note: CORS already validates origins, this is a secondary check
 app.use(validateOrigin);
 app.use((req, res, next) => {
   console.log(`Received ${req.method} request for ${req.url}`);
