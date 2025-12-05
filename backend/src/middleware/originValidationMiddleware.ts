@@ -18,7 +18,14 @@ export const validateOrigin = (req: Request, res: Response, next: NextFunction) 
   const origin = req.headers.origin || req.headers.referer;
   
   // Health check endpoint - allow without origin
-  if (req.path === "/api" || req.path === "/api/health" || req.path === "/health") {
+  const path = req.path || req.url?.split('?')[0] || '';
+  // Allow /api root endpoint without strict origin check (CORS handles it)
+  if (path === "/api" || path === "/api/health" || path === "/health") {
+    return next();
+  }
+  
+  // For /api/* routes, CORS already validated, so just log and continue
+  if (path.startsWith("/api/")) {
     return next();
   }
 
@@ -30,7 +37,7 @@ export const validateOrigin = (req: Request, res: Response, next: NextFunction) 
     const isBrowser = /Mozilla|Chrome|Safari|Firefox|Edge/i.test(userAgent);
     
     if (isBrowser) {
-      console.warn(`Blocked browser request without origin from ${req.ip}`);
+      console.warn(`Blocked browser request without origin from ${req.ip} to ${path}`);
       return res.status(403).json({ error: "Origin header required" });
     }
     // Allow non-browser requests (API tools, health checks, etc.)
@@ -38,20 +45,34 @@ export const validateOrigin = (req: Request, res: Response, next: NextFunction) 
   }
 
   // Validate origin matches allowed origins
-  const originUrl = origin.startsWith("http") ? origin : `https://${origin}`;
+  // Normalize origin URL
+  let originUrl = origin;
+  if (!origin.startsWith("http://") && !origin.startsWith("https://")) {
+    originUrl = `https://${origin}`;
+  }
+  
+  // Remove trailing slashes and paths for comparison
+  originUrl = originUrl.replace(/\/+$/, '').split('/').slice(0, 3).join('/');
+  
   const isValidOrigin = allowedOrigins.some(allowed => {
+    const normalizedAllowed = allowed.trim();
+    
     // Exact match
-    if (originUrl === allowed) return true;
+    if (originUrl === normalizedAllowed) return true;
     
     // Match Vercel domains (*.vercel.app)
-    if (allowed.includes("*.vercel.app")) {
-      const vercelPattern = /^https?:\/\/[^/]+\.vercel\.app(\/.*)?$/;
+    if (normalizedAllowed.includes("*.vercel.app")) {
+      const vercelPattern = /^https?:\/\/[^/]+\.vercel\.app$/i;
       return vercelPattern.test(originUrl);
     }
     
-    // Match custom domain patterns
-    if (allowed.includes("*")) {
-      const pattern = new RegExp("^" + allowed.replace(/\*/g, ".*") + "$");
+    // Match custom domain patterns with wildcards
+    if (normalizedAllowed.includes("*")) {
+      // Convert wildcard pattern to regex
+      const patternStr = normalizedAllowed
+        .replace(/[.+?^${}()|[\]\\]/g, '\\$&') // Escape special chars
+        .replace(/\*/g, '.*'); // Convert * to .*
+      const pattern = new RegExp(`^${patternStr}$`, 'i');
       return pattern.test(originUrl);
     }
     
@@ -59,7 +80,8 @@ export const validateOrigin = (req: Request, res: Response, next: NextFunction) 
   });
 
   if (!isValidOrigin) {
-    console.warn(`Blocked request from unauthorized origin: ${origin} (IP: ${req.ip})`);
+    console.warn(`Blocked request from unauthorized origin: ${origin} (normalized: ${originUrl}) to ${path} (IP: ${req.ip})`);
+    console.warn(`Allowed origins: ${allowedOrigins.join(', ')}`);
     return res.status(403).json({ error: "Origin not allowed" });
   }
 
