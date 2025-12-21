@@ -115,8 +115,12 @@ app.use(
 
       const normalizedOrigin = normalizeOrigin(origin);
 
+      // Debug logging
+      console.log(`[CORS] Checking origin: ${origin} (normalized: ${normalizedOrigin})`);
+
       // 1) Exakter Match gegen die normalisierte Liste
       if (allowedOrigins.includes(normalizedOrigin)) {
+        console.log(`[CORS] ✅ Allowed origin: ${normalizedOrigin}`);
         return callback(null, true);
       }
 
