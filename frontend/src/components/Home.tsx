@@ -4,7 +4,7 @@ import { AxiosError } from 'axios';
 import { isAxiosError } from '../utils/isAxiosError';
 import { isValidUsername } from '../utils/isValidUsername';
 import { isAndroid, isIOS } from 'react-device-detect';
-import { api, apiStatus } from '../api';
+import { api, apiStatus, apiJwt } from '../api';
 import '../styles/Minecraft.css';
 import TitleImage from './TitleImage';
 import SplashText from './SplashText';
@@ -72,24 +72,46 @@ const Home = () => {
   useEffect(() => {
     const url = window.location.host;
     document.title = `Add to Whitelist - ${url}`;
-    apiStatus.get('/status')
+    // Try backend API status endpoint first, fallback to direct status service
+    api.get('/status')
       .then(response => setServerStatus(response.data.status))
       .catch(() => {
-        // Port 5000 service (Minecraft server status) is optional
-        setServerStatus("Status service unavailable");
+        // Fallback to direct status service if backend proxy is unavailable
+        if (process.env.REACT_APP_STATUS_API_URL) {
+          apiStatus.get('/status')
+            .then(response => setServerStatus(response.data.status))
+            .catch(() => {
+              setServerStatus("Status service unavailable");
+            });
+        } else {
+          setServerStatus("Status service unavailable");
+        }
       });
   }, []);  
 
   const startClick = () => {
       console.log('WakeUp');
-      apiStatus.post('/wakeup', {})
+      // Try backend API wakeup endpoint first, fallback to direct status service
+      api.post('/status/wakeup', {})
           .then((response) => { 
-            console.log('WakeUp Sucess', response);
+            console.log('WakeUp Success', response);
             openApp();
            })
-          .catch((error) => { 
-            console.log('WakeUp Error', error); 
-          })
+          .catch(() => {
+            // Fallback to direct status service if backend proxy is unavailable
+            if (process.env.REACT_APP_STATUS_API_URL) {
+              apiStatus.post('/wakeup', {})
+                .then((response) => { 
+                  console.log('WakeUp Success (direct)', response);
+                  openApp();
+                })
+                .catch((error) => { 
+                  console.log('WakeUp Error', error); 
+                });
+            } else {
+              console.log('WakeUp Error: No status service URL configured');
+            }
+          });
   };
 
   const getTexts = (status: string) => {
