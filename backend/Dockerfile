@@ -49,5 +49,6 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD node -e "require('http').get('http://localhost:3001/api', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
 # Run migrations and start server
-CMD ["sh", "-c", "npx prisma@5.22.0 migrate deploy --schema=./src/config/schema.prisma && node dist/index.js"]
+# Check if database exists before running migrations to avoid overwriting existing data
+CMD ["sh", "-c", "if [ ! -f /app/data/prod.db ] || [ ! -s /app/data/prod.db ]; then echo 'Database not found or empty, running migrations...'; npx prisma@5.22.0 migrate deploy --schema=./src/config/schema.prisma; else echo 'Database exists, skipping migrations'; fi && node dist/index.js"]
 
