@@ -10,7 +10,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3001
-      - DATABASE_URL=file:./data/prod.db
+      - DATABASE_URL=file:/app/data/prod.db
       - JWT_SECRET=${JWT_SECRET}
       - SESSION_SECRET=${SESSION_SECRET}
       - CLIENT_URL=${CLIENT_URL:-http://localhost:3000}
