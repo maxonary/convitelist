@@ -50,47 +50,45 @@ export async function connectRcon(): Promise<void> {
   }
 
   // Clean up any existing connection
+  // Don't try to call end() on a failed connection - just clear the reference
+  // The Rcon library throws "Not connected" if we try to end a connection that never connected
   if (rcon) {
-    try {
-      rcon.end();
-    } catch (error) {
-      // Ignore errors when cleaning up
-    }
+    // Instead of calling end(), just clear the reference
+    // This avoids the "Not connected" error when the connection failed
     rcon = null;
   }
 
   let lastError: Error | null = null;
   
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    let connectionAttempt: Rcon | null = null;
     try {
-      rcon = new Rcon({ 
+      connectionAttempt = new Rcon({ 
         host: host as string, 
         port, 
         password: password as string
       });
 
       // Create a promise that rejects on timeout
-      const connectPromise = rcon.connect();
+      const connectPromise = connectionAttempt.connect();
       const timeoutPromise = new Promise<never>((_, reject) => {
         setTimeout(() => reject(new Error('RCON connection timeout')), RCON_TIMEOUT);
       });
 
       await Promise.race([connectPromise, timeoutPromise]);
       
+      // Connection successful - assign to rcon
+      rcon = connectionAttempt;
       console.log(`[RCON] Connected to server at ${host}:${port}`);
       return;
     } catch (error) {
       lastError = error as Error;
       console.error(`[RCON] Connection attempt ${attempt}/${MAX_RETRIES} failed:`, error instanceof Error ? error.message : error);
       
-      if (rcon) {
-        try {
-          rcon.end();
-        } catch (cleanupError) {
-          // Ignore cleanup errors
-        }
-        rcon = null;
-      }
+      // Clean up failed connection attempt - just clear the reference
+      // Don't call end() on a failed connection as it throws "Not connected"
+      connectionAttempt = null;
+      rcon = null;
 
       // Wait before retrying (exponential backoff)
       if (attempt < MAX_RETRIES) {
