@@ -12,6 +12,7 @@ import adminRoutes from '../routes/adminRoutes';
 import authRoutes from '../routes/authRoutes';
 import invitationRoutes from '../routes/invitationRoutes';
 import userRoutes from '../routes/userRoutes';
+import serverStatusRoutes from '../routes/serverStatusRoutes';
 
 dotenv.config();
 
@@ -171,5 +172,6 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/invitation', authMiddleware, invitationRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/status', serverStatusRoutes);
 
 export default app;
