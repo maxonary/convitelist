@@ -49,12 +49,14 @@ export async function connectRcon(): Promise<void> {
     throw new Error('RCON configuration not provided');
   }
 
-  // Clean up any existing connection
-  // Don't try to call end() on a failed connection - just clear the reference
-  // The Rcon library throws "Not connected" if we try to end a connection that never connected
+  // Clean up any existing connection safely
   if (rcon) {
-    // Instead of calling end(), just clear the reference
-    // This avoids the "Not connected" error when the connection failed
+    try {
+      rcon.end();
+    } catch (error) {
+      // Ignore errors when cleaning up - connection might already be closed
+      // This prevents "Not connected" errors from crashing the server
+    }
     rcon = null;
   }
 
@@ -63,30 +65,52 @@ export async function connectRcon(): Promise<void> {
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     let connectionAttempt: Rcon | null = null;
     try {
-      connectionAttempt = new Rcon({ 
-        host: host as string, 
-        port, 
-        password: password as string
-      });
+      // Wrap the entire connection attempt in a try-catch to catch any synchronous errors
+      try {
+        connectionAttempt = new Rcon({ 
+          host: host as string, 
+          port, 
+          password: password as string
+        });
 
-      // Create a promise that rejects on timeout
-      const connectPromise = connectionAttempt.connect();
-      const timeoutPromise = new Promise<never>((_, reject) => {
-        setTimeout(() => reject(new Error('RCON connection timeout')), RCON_TIMEOUT);
-      });
+        // Create a promise that rejects on timeout
+        const connectPromise = connectionAttempt.connect();
+        const timeoutPromise = new Promise<never>((_, reject) => {
+          setTimeout(() => reject(new Error('RCON connection timeout')), RCON_TIMEOUT);
+        });
 
-      await Promise.race([connectPromise, timeoutPromise]);
+        await Promise.race([connectPromise, timeoutPromise]);
+        
+        // Connection successful - assign to rcon
+        rcon = connectionAttempt;
+        console.log(`[RCON] Connected to server at ${host}:${port}`);
+        return;
+      } catch (connectError) {
+        // Catch any errors during connection, including cleanup errors from the RCON library
+        lastError = connectError as Error;
+        const errorMessage = connectError instanceof Error ? connectError.message : String(connectError);
+        console.error(`[RCON] Connection attempt ${attempt}/${MAX_RETRIES} failed:`, errorMessage);
+        
+        // Don't try to call end() on a failed connection - just clear the reference
+        // The RCON library throws "Not connected" when trying to end a connection that never connected
+        // This prevents the error from being thrown and crashing the server
+        // The connection will be garbage collected automatically
+        connectionAttempt = null;
+        rcon = null;
+
+        // Wait before retrying (exponential backoff)
+        if (attempt < MAX_RETRIES) {
+          await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+        }
+      }
+    } catch (outerError) {
+      // Catch any unexpected errors that might slip through
+      lastError = outerError as Error;
+      const errorMessage = outerError instanceof Error ? outerError.message : String(outerError);
+      console.error(`[RCON] Unexpected error during connection attempt ${attempt}/${MAX_RETRIES}:`, errorMessage);
       
-      // Connection successful - assign to rcon
-      rcon = connectionAttempt;
-      console.log(`[RCON] Connected to server at ${host}:${port}`);
-      return;
-    } catch (error) {
-      lastError = error as Error;
-      console.error(`[RCON] Connection attempt ${attempt}/${MAX_RETRIES} failed:`, error instanceof Error ? error.message : error);
-      
-      // Clean up failed connection attempt - just clear the reference
-      // Don't call end() on a failed connection as it throws "Not connected"
+      // Don't try to call end() on a failed connection - just clear the reference
+      // This prevents "Not connected" errors from being thrown
       connectionAttempt = null;
       rcon = null;
 

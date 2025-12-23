@@ -121,9 +121,19 @@ export async function approveUser(req: AuthenticatedRequest, res: Response) {
       }
 
       await sendRconCommand(`easywl reload`);
+    } catch (rconError) {
+      // Log RCON error but don't crash - update database anyway
+      const errorMessage = rconError instanceof Error ? rconError.message : String(rconError);
+      console.warn(`[approveUser] RCON error (Minecraft server may not be running): ${errorMessage}`);
+      // Continue to update the database even if RCON fails
+      // The whitelist sync on startup will handle adding the user when the server is available
     } finally {
       // Always disconnect, even if there was an error
-      disconnectRcon();
+      try {
+        disconnectRcon();
+      } catch (disconnectError) {
+        // Ignore disconnect errors - connection might not have been established
+      }
     }
 
     const updatedUser = await prisma.user.update({
@@ -167,9 +177,19 @@ export async function rejectUser(req: AuthenticatedRequest, res: Response) {
       }
       
       await sendRconCommand(`easywl reload`);
+    } catch (rconError) {
+      // Log RCON error but don't crash - update database anyway
+      const errorMessage = rconError instanceof Error ? rconError.message : String(rconError);
+      console.warn(`[rejectUser] RCON error (Minecraft server may not be running): ${errorMessage}`);
+      // Continue to update the database even if RCON fails
+      // The whitelist sync on startup will handle removing the user when the server is available
     } finally {
       // Always disconnect, even if there was an error
-      disconnectRcon();
+      try {
+        disconnectRcon();
+      } catch (disconnectError) {
+        // Ignore disconnect errors - connection might not have been established
+      }
     }
 
     const updatedUser = await prisma.user.update({
