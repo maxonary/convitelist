@@ -11,6 +11,7 @@ services:
       - NODE_ENV=production
       - PORT=3001
       - DATABASE_URL=file:/app/data/prod.db
+      - SLEEPING_SERVER_URL=http://172.19.0.1:5000
       - JWT_SECRET=${JWT_SECRET}
       - SESSION_SECRET=${SESSION_SECRET}
       - CLIENT_URL=${CLIENT_URL:-http://localhost:3000}
