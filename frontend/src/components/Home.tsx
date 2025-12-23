@@ -73,7 +73,7 @@ const Home = () => {
     const url = window.location.host;
     document.title = `Add to Whitelist - ${url}`;
     // Try backend API status endpoint first, fallback to direct status service
-    api.get('/status')
+    api.get('/api/status')
       .then(response => setServerStatus(response.data.status))
       .catch(() => {
         // Fallback to direct status service if backend proxy is unavailable
@@ -92,7 +92,7 @@ const Home = () => {
   const startClick = () => {
       console.log('WakeUp');
       // Try backend API wakeup endpoint first, fallback to direct status service
-      api.post('/status/wakeup', {})
+      api.post('/api/status/wakeup', {})
           .then((response) => { 
             console.log('WakeUp Success', response);
             openApp();
