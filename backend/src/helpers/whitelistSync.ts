@@ -65,8 +65,8 @@ export async function syncWhitelistOnStartup(): Promise<void> {
             await sendRconCommand(`easywl add ${sanitizedUsername}`);
             console.log(`[WhitelistSync] Added Java user: ${sanitizedUsername}`);
           } else if (user.gameType === 'Bedrock Edition') {
-            await sendRconCommand(`easywl add .${sanitizedUsername}`);
-            console.log(`[WhitelistSync] Added Bedrock user: .${sanitizedUsername}`);
+            await sendRconCommand(`easywl add ${sanitizedUsername}`);
+            console.log(`[WhitelistSync] Added Bedrock user: ${sanitizedUsername}`);
           } else {
             console.warn(`[WhitelistSync] Skipping user ${user.minecraftUsername} (ID: ${user.id}) - unknown game type: ${user.gameType}`);
             errorCount++;
@@ -85,8 +85,8 @@ export async function syncWhitelistOnStartup(): Promise<void> {
                 await sendRconCommand(`easywl add ${sanitizedUsername}`);
                 console.log(`[WhitelistSync] Added Java user: ${sanitizedUsername} (after reconnect)`);
               } else if (user.gameType === 'Bedrock Edition') {
-                await sendRconCommand(`easywl add .${sanitizedUsername}`);
-                console.log(`[WhitelistSync] Added Bedrock user: .${sanitizedUsername} (after reconnect)`);
+                await sendRconCommand(`easywl add ${sanitizedUsername}`);
+                console.log(`[WhitelistSync] Added Bedrock user: ${sanitizedUsername} (after reconnect)`);
               }
               successCount++;
             } catch (retryError) {

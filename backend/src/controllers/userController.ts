@@ -115,7 +115,7 @@ export async function approveUser(req: AuthenticatedRequest, res: Response) {
       if(user.gameType === 'Java Edition') {
         await sendRconCommand(`easywl add ${sanitizedUsername}`);
       } else if (user.gameType === 'Bedrock Edition') {
-        await sendRconCommand(`easywl add .${sanitizedUsername}`);
+        await sendRconCommand(`easywl add ${sanitizedUsername}`);
       } else {
         throw new Error('Invalid game type');
       }
@@ -171,7 +171,7 @@ export async function rejectUser(req: AuthenticatedRequest, res: Response) {
       if(user.gameType === 'Java Edition') {
         await sendRconCommand(`easywl remove ${sanitizedUsername}`);
       } else if (user.gameType === 'Bedrock Edition') {
-        await sendRconCommand(`easywl remove .${sanitizedUsername}`);
+        await sendRconCommand(`easywl remove ${sanitizedUsername}`);
       } else {
         throw new Error('Invalid game type');
       }
