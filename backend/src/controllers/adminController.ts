@@ -87,10 +87,23 @@ export const createAdminUser = async (req: Request, res: Response) => {
 
 export const checkAdminExists = async (req: Request, res: Response) => {
   try {
+    // Try raw SQL query first
+    const rawCount = await prisma.$queryRaw<Array<{ count: bigint }>>`SELECT COUNT(*) as count FROM Admin`;
+    console.log(`[checkAdminExists] Raw SQL count: ${rawCount[0]?.count || 0}`);
+    
     const adminCount = await prisma.admin.count();
+    console.log(`[checkAdminExists] Prisma count: ${adminCount}`);
+    
+    const admins = await prisma.admin.findMany();
+    console.log(`[checkAdminExists] Found ${admins.length} admins:`, admins.map(a => a.username));
+    
+    // Also try to get all tables
+    const tables = await prisma.$queryRaw<Array<{ name: string }>>`SELECT name FROM sqlite_master WHERE type='table'`;
+    console.log(`[checkAdminExists] Tables in database:`, tables.map(t => t.name));
+    
     res.status(200).json({ exists: adminCount > 0, isFirstAdmin: adminCount === 0 });
   } catch (error) {
-    console.error(error);
+    console.error('[checkAdminExists] Error:', error);
     res.status(500).json({ message: 'Error checking admin status' });
   }
 };

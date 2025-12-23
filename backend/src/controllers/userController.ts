@@ -47,10 +47,10 @@ export const createUser = async (req: Request, res: Response) => {
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
     const users = await prisma.user.findMany();
-
+    console.log(`[getAllUsers] Returning ${users.length} users`);
     res.status(200).json(users);
   } catch (error) {
-    console.error(error);
+    console.error('[getAllUsers] Error:', error);
     res.status(500).json({ message: 'Error getting users' });
   }
 }
