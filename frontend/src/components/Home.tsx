@@ -4,7 +4,7 @@ import { AxiosError } from 'axios';
 import { isAxiosError } from '../utils/isAxiosError';
 import { isValidUsername } from '../utils/isValidUsername';
 import { isAndroid, isIOS } from 'react-device-detect';
-import { api, apiStatus, apiJwt } from '../api';
+import { api, apiStatus } from '../api';
 import '../styles/Minecraft.css';
 import TitleImage from './TitleImage';
 import SplashText from './SplashText';
@@ -69,9 +69,8 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-    const url = window.location.host;
-    document.title = `Add to Whitelist - ${url}`;
+  // Function to fetch server status
+  const fetchServerStatus = () => {
     // Try backend API status endpoint first, fallback to direct status service
     api.get('/api/status')
       .then(response => setServerStatus(response.data.status))
@@ -87,6 +86,24 @@ const Home = () => {
           setServerStatus("Status service unavailable");
         }
       });
+  };
+
+  useEffect(() => {
+    const url = window.location.host;
+    document.title = `Add to Whitelist - ${url}`;
+    
+    // Fetch status immediately
+    fetchServerStatus();
+    
+    // Set up polling to fetch status every 5 seconds
+    const statusInterval = setInterval(() => {
+      fetchServerStatus();
+    }, 5000); // Poll every 5 seconds
+    
+    // Cleanup interval on unmount
+    return () => {
+      clearInterval(statusInterval);
+    };
   }, []);  
 
   const startClick = () => {
@@ -95,6 +112,8 @@ const Home = () => {
       api.post('/api/status/wakeup', {})
           .then((response) => { 
             console.log('WakeUp Success', response);
+            // Update status immediately after wake-up attempt
+            fetchServerStatus();
             openApp();
            })
           .catch(() => {
@@ -103,6 +122,8 @@ const Home = () => {
               apiStatus.post('/wakeup', {})
                 .then((response) => { 
                   console.log('WakeUp Success (direct)', response);
+                  // Update status immediately after wake-up attempt
+                  fetchServerStatus();
                   openApp();
                 })
                 .catch((error) => { 
