@@ -11,7 +11,7 @@ services:
       - NODE_ENV=production
       - PORT=3001
       - DATABASE_URL=file:/app/data/prod.db
-      - SLEEPING_SERVER_URL=http://172.19.0.1:5000
+      - SLEEPING_SERVER_URL=http://host.docker.internal:5000
       - JWT_SECRET=${JWT_SECRET}
       - SESSION_SECRET=${SESSION_SECRET}
       - CLIENT_URL=${CLIENT_URL:-http://localhost:3000}
@@ -22,6 +22,8 @@ services:
       - STATUS_API_URL=${STATUS_API_URL}
     volumes:
       - backend-data:/app/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - convitelist-network
     healthcheck:
