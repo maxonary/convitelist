@@ -64,8 +64,10 @@ export async function connectRcon(): Promise<void> {
   
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     let connectionAttempt: Rcon | null = null;
+    let connectionSucceeded = false;
+    
+    // Wrap everything in a try-catch to catch synchronous errors from RCON library cleanup
     try {
-      // Wrap the entire connection attempt in a try-catch to catch any synchronous errors
       try {
         connectionAttempt = new Rcon({ 
           host: host as string, 
@@ -79,38 +81,72 @@ export async function connectRcon(): Promise<void> {
           setTimeout(() => reject(new Error('RCON connection timeout')), RCON_TIMEOUT);
         });
 
-        await Promise.race([connectPromise, timeoutPromise]);
-        
-        // Connection successful - assign to rcon
-        rcon = connectionAttempt;
-        console.log(`[RCON] Connected to server at ${host}:${port}`);
-        return;
-      } catch (connectError) {
-        // Catch any errors during connection, including cleanup errors from the RCON library
-        lastError = connectError as Error;
-        const errorMessage = connectError instanceof Error ? connectError.message : String(connectError);
-        console.error(`[RCON] Connection attempt ${attempt}/${MAX_RETRIES} failed:`, errorMessage);
-        
-        // Don't try to call end() on a failed connection - just clear the reference
-        // The RCON library throws "Not connected" when trying to end a connection that never connected
-        // This prevents the error from being thrown and crashing the server
-        // The connection will be garbage collected automatically
-        connectionAttempt = null;
-        rcon = null;
-
-        // Wait before retrying (exponential backoff)
-        if (attempt < MAX_RETRIES) {
-          await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+        try {
+          await Promise.race([connectPromise, timeoutPromise]);
+          connectionSucceeded = true;
+        } catch (connectError) {
+          // The connection failed - the RCON library might throw "Not connected" during cleanup
+          // Catch it here and handle it gracefully
+          const errorMessage = connectError instanceof Error ? connectError.message : String(connectError);
+          if (errorMessage.includes('Not connected')) {
+            // This is expected when the server is offline - don't treat it as a fatal error
+            lastError = new Error('Server not available');
+            connectionAttempt = null;
+            rcon = null;
+            // Wait before retrying
+            if (attempt < MAX_RETRIES) {
+              await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+            }
+            continue; // Skip to next attempt
+          }
+          throw connectError; // Re-throw if it's not a "Not connected" error
         }
+        
+        // Only assign to rcon if connection succeeded
+        if (connectionSucceeded) {
+          rcon = connectionAttempt;
+          console.log(`[RCON] Connected to server at ${host}:${port}`);
+          return;
+        }
+      } catch (innerError) {
+        // Catch any synchronous errors that might be thrown during connection or cleanup
+        const errorMessage = innerError instanceof Error ? innerError.message : String(innerError);
+        
+        // If it's a "Not connected" error, it's from the RCON library's internal cleanup
+        // This is expected when the server is offline - treat it as a connection failure
+        if (errorMessage.includes('Not connected')) {
+          lastError = new Error('Server not available');
+          connectionAttempt = null;
+          rcon = null;
+          // Wait before retrying
+          if (attempt < MAX_RETRIES) {
+            await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+          }
+          continue; // Skip to next attempt
+        }
+        // Re-throw if it's not a "Not connected" error
+        throw innerError;
       }
     } catch (outerError) {
-      // Catch any unexpected errors that might slip through
-      lastError = outerError as Error;
+      // Catch any other errors during connection setup
       const errorMessage = outerError instanceof Error ? outerError.message : String(outerError);
-      console.error(`[RCON] Unexpected error during connection attempt ${attempt}/${MAX_RETRIES}:`, errorMessage);
+      
+      // Ignore "Not connected" errors - these happen when the RCON library tries to clean up
+      // a connection that was never successfully established. These are expected when the server is offline.
+      if (errorMessage.includes('Not connected')) {
+        // This is expected when the server is offline - don't treat it as a fatal error
+        console.warn(`[RCON] Connection attempt ${attempt}/${MAX_RETRIES} failed: Server not available (may be offline)`);
+        // Set lastError to a more descriptive message
+        lastError = new Error('Server not available');
+      } else {
+        lastError = outerError as Error;
+        console.error(`[RCON] Connection attempt ${attempt}/${MAX_RETRIES} failed:`, errorMessage);
+      }
       
       // Don't try to call end() on a failed connection - just clear the reference
-      // This prevents "Not connected" errors from being thrown
+      // The RCON library may throw "Not connected" when trying to end a connection that never connected
+      // This prevents the error from being thrown and crashing the server
+      // The connection will be garbage collected automatically
       connectionAttempt = null;
       rcon = null;
 

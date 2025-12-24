@@ -22,25 +22,19 @@ export async function syncWhitelistOnStartup(): Promise<void> {
     console.log(`[WhitelistSync] Found ${approvedUsers.length} approved users to sync`);
 
     // Connect to RCON - wrap in try-catch to handle any errors
-    let rconConnected = false;
+    // Don't try to disconnect if connection failed - it will cause "Not connected" errors
     try {
       await connectRcon();
-      rconConnected = true;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
-      console.warn('[WhitelistSync] Failed to connect to RCON (Minecraft server may not be running), skipping whitelist sync');
-      console.warn(`[WhitelistSync] Error: ${errorMessage}`);
-      console.warn('[WhitelistSync] Whitelist will be synced when Minecraft server is available');
-      // Make sure RCON is disconnected even if connection failed
-      try {
-        disconnectRcon();
-      } catch (disconnectError) {
-        // Ignore disconnect errors
+      // Ignore "Not connected" errors - these are expected when the server is offline
+      if (errorMessage.includes('Not connected')) {
+        console.warn('[WhitelistSync] RCON connection failed (Minecraft server may not be running), skipping whitelist sync');
+      } else {
+        console.warn('[WhitelistSync] Failed to connect to RCON (Minecraft server may not be running), skipping whitelist sync');
+        console.warn(`[WhitelistSync] Error: ${errorMessage}`);
       }
-      return;
-    }
-
-    if (!rconConnected) {
+      console.warn('[WhitelistSync] Whitelist will be synced when Minecraft server is available');
       return;
     }
 

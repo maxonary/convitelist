@@ -6,6 +6,17 @@ dotenv.config();
 
 const port = process.env.PORT || 3001;
 
+// Set up unhandled rejection handler to catch RCON library errors
+process.on('unhandledRejection', (reason, promise) => {
+  const errorMessage = reason instanceof Error ? reason.message : String(reason);
+  if (errorMessage.includes('Not connected')) {
+    // Ignore "Not connected" errors from RCON library - these are expected when server is offline
+    console.warn('[UnhandledRejection] Caught RCON "Not connected" error (server may be offline) - ignoring');
+    return;
+  }
+  console.error('[UnhandledRejection] Unhandled promise rejection:', reason);
+});
+
 app.listen(port, async () => {
   console.log(`Server listening on port ${port}`);
   
@@ -18,13 +29,23 @@ app.listen(port, async () => {
       try {
         syncWhitelistOnStartup().catch(error => {
           const errorMessage = error instanceof Error ? error.message : String(error);
-          console.warn('[Startup] Whitelist sync failed (Minecraft server may not be running), but backend is operational');
-          console.warn(`[Startup] Error: ${errorMessage}`);
+          // Ignore "Not connected" errors - these are expected when the server is offline
+          if (errorMessage.includes('Not connected')) {
+            console.warn('[Startup] Whitelist sync skipped (Minecraft server is offline), but backend is operational');
+          } else {
+            console.warn('[Startup] Whitelist sync failed (Minecraft server may not be running), but backend is operational');
+            console.warn(`[Startup] Error: ${errorMessage}`);
+          }
         });
       } catch (syncError) {
         const errorMessage = syncError instanceof Error ? syncError.message : String(syncError);
-        console.warn('[Startup] Whitelist sync initialization failed, but backend is operational');
-        console.warn(`[Startup] Error: ${errorMessage}`);
+        // Ignore "Not connected" errors - these are expected when the server is offline
+        if (errorMessage.includes('Not connected')) {
+          console.warn('[Startup] Whitelist sync skipped (Minecraft server is offline), but backend is operational');
+        } else {
+          console.warn('[Startup] Whitelist sync initialization failed, but backend is operational');
+          console.warn(`[Startup] Error: ${errorMessage}`);
+        }
       }
     }, 2000); // Wait 2 seconds for server to fully initialize
   });
