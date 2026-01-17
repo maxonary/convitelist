@@ -7,7 +7,7 @@ dotenv.config();
 const port = process.env.PORT || 3001;
 
 // Set up unhandled rejection handler to catch RCON library errors
-process.on('unhandledRejection', (reason, promise) => {
+process.on('unhandledRejection', (reason) => {
   const errorMessage = reason instanceof Error ? reason.message : String(reason);
   if (errorMessage.includes('Not connected')) {
     // Ignore "Not connected" errors from RCON library - these are expected when server is offline
