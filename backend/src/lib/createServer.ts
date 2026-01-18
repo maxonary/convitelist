@@ -150,7 +150,17 @@ app.use(
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" },
   crossOriginEmbedderPolicy: false,
-  contentSecurityPolicy: false // Disable CSP for API endpoints
+  contentSecurityPolicy: {
+    useDefaults: true,
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'"],
+      imgSrc: ["'self'", "data:"],
+      connectSrc: ["'self'", "https:"],
+      frameAncestors: ["'self'"]
+    }
+  }
 }));
 app.use(cookieParser());
 app.use(limiter);
