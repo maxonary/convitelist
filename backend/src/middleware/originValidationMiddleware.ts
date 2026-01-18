@@ -52,7 +52,10 @@ export const validateOrigin = (req: Request, res: Response, next: NextFunction) 
   }
   
   // Remove trailing slashes and paths for comparison
-  originUrl = originUrl.replace(/\/+$/, '').split('/').slice(0, 3).join('/');
+  while (originUrl.endsWith('/')) {
+    originUrl = originUrl.slice(0, -1);
+  }
+  originUrl = originUrl.split('/').slice(0, 3).join('/');
   
   const isValidOrigin = allowedOrigins.some(allowed => {
     const normalizedAllowed = allowed.trim();
@@ -68,6 +71,11 @@ export const validateOrigin = (req: Request, res: Response, next: NextFunction) 
     
     // Match custom domain patterns with wildcards
     if (normalizedAllowed.includes("*")) {
+      if (originUrl.length > 2000) {
+        console.warn(`Origin URL too long (${originUrl.length} chars), rejecting for security`);
+        return false;
+      }
+      
       // Convert wildcard pattern to regex
       const patternStr = normalizedAllowed
         .replace(/[.+?^${}()|[\]\\]/g, '\\$&') // Escape special chars
