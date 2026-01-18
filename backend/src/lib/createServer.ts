@@ -23,8 +23,11 @@ console.log('process.env.ALLOWED_ORIGINS:', process.env.ALLOWED_ORIGINS);
 // Hilfsfunktion zum Normalisieren
 const normalizeOrigin = (value: string) => {
   if (!value) return '';
-  return value
-    .replace(/\/+$/, '')       // trailing Slash weg
+  let normalized = value;
+  while (normalized.endsWith('/')) {
+    normalized = normalized.slice(0, -1);
+  }
+  return normalized
     .split('/').slice(0, 3)    // nur schema + host (+ optional Port)
     .join('/');
 };
