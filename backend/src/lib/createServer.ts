@@ -13,6 +13,7 @@ import authRoutes from '../routes/authRoutes';
 import invitationRoutes from '../routes/invitationRoutes';
 import userRoutes from '../routes/userRoutes';
 import serverStatusRoutes from '../routes/serverStatusRoutes';
+import csurf from "csurf";
 
 dotenv.config();
 
@@ -163,6 +164,24 @@ app.use((req, res, next) => {
 });
 
 configureSession(app);
+
+const csrfProtection = csurf({ cookie: false });
+app.use(csrfProtection);
+
+// Expose CSRF token for clients via response header when available
+app.use((req, res, next) => {
+  try {
+    // req.csrfToken is added by csurf; guard in case of non-protected routes
+    const anyReq = req as any;
+    if (typeof anyReq.csrfToken === "function") {
+      const token = anyReq.csrfToken();
+      res.setHeader("X-CSRF-Token", token);
+    }
+  } catch {
+    // If token generation fails, proceed; csurf will still enforce on protected methods
+  }
+  next();
+});
 
 app.get('/api', (req, res) => {
   res.status(200).json({ message: 'Welcome to the Minecraft Registration API!' });

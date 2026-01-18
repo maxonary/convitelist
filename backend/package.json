@@ -46,7 +46,8 @@
     "pg": "^8.16.0",
     "rcon-client": "^4.2.4",
     "semver": "^7.7.2",
-    "supertest": "^7.1.0"
+    "supertest": "^7.1.0",
+    "csurf": "^1.11.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
