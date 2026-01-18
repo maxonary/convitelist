@@ -34,20 +34,20 @@
     "body-parser": "^1.20.4",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+    "csurf": "^1.2.2",
     "dotenv": "^16.4.7",
     "express": "^4.22.1",
     "express-rate-limit": "^7.5.0",
     "express-session": "^1.18.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
-    "minecraft-protocol": "^1.49.2",
+    "minecraft-protocol": "^1.26.5",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "pg": "^8.16.0",
     "rcon-client": "^4.2.4",
     "semver": "^7.7.2",
-    "supertest": "^7.1.0",
-    "csurf": "^1.11.0"
+    "supertest": "^7.1.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -62,15 +62,15 @@
     "@types/supertest": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
-    "@vitest/ui": "^2.1.9",
+    "@vitest/ui": "^4.0.17",
     "concurrently": "^9.1.2",
     "esbuild": "^0.25.5",
     "eslint": "^8.57.1",
     "eslint-plugin-node": "^11.1.0",
     "prisma": "^5.22.0",
-    "ts-node": "^10.9.2",
+    "ts-node": "^1.7.1",
     "typescript": "^5.8.3",
-    "vitest": "^2.1.9",
+    "vitest": "^4.0.17",
     "vitest-mock-extended": "^2.0.2"
   }
 }
