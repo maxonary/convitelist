@@ -204,3 +204,134 @@ export async function rejectUser(req: AuthenticatedRequest, res: Response) {
     res.status(400).json({ error: (error as Error).message });
   }
 }
+
+export async function bulkDeleteUsers(req: AuthenticatedRequest, res: Response) {
+  try {
+    const { userIds } = req.body as { userIds: number[] };
+
+    if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+      res.status(400).json({ error: 'Invalid or empty userIds array' });
+      return;
+    }
+
+    await prisma.user.deleteMany({
+      where: {
+        id: { in: userIds }
+      }
+    });
+
+    res.status(200).json({ message: 'Users deleted successfully', count: userIds.length });
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+}
+
+export async function bulkApproveUsers(req: AuthenticatedRequest, res: Response) {
+  try {
+    const { userIds } = req.body as { userIds: number[] };
+
+    if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+      res.status(400).json({ error: 'Invalid or empty userIds array' });
+      return;
+    }
+
+    const users = await prisma.user.findMany({
+      where: { id: { in: userIds } }
+    });
+
+    if (users.length === 0) {
+      res.status(404).json({ error: 'No users found' });
+      return;
+    }
+
+    try {
+      await connectRcon();
+
+      for (const user of users) {
+        const sanitizedUsername = sanitizeUsername(user.minecraftUsername);
+        if (!sanitizedUsername) continue;
+
+        if(user.gameType === 'Java Edition') {
+          await sendRconCommand(`easywl add ${sanitizedUsername}`);
+        } else if (user.gameType === 'Bedrock Edition') {
+          await sendRconCommand(`easywl add .${sanitizedUsername}`);
+        }
+      }
+
+      await sendRconCommand(`easywl reload`);
+    } catch (rconError) {
+      const errorMessage = rconError instanceof Error ? rconError.message : String(rconError);
+      console.warn(`[bulkApproveUsers] RCON error (Minecraft server may not be running): ${errorMessage}`);
+    } finally {
+      try {
+        disconnectRcon();
+      } catch (disconnectError) {
+        // Ignore disconnect errors
+      }
+    }
+
+    await prisma.user.updateMany({
+      where: { id: { in: userIds } },
+      data: { approved: true }
+    });
+
+    res.status(200).json({ message: 'Users approved successfully', count: users.length });
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+}
+
+export async function bulkRejectUsers(req: AuthenticatedRequest, res: Response) {
+  try {
+    const { userIds } = req.body as { userIds: number[] };
+
+    if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+      res.status(400).json({ error: 'Invalid or empty userIds array' });
+      return;
+    }
+
+    const users = await prisma.user.findMany({
+      where: { id: { in: userIds } }
+    });
+
+    if (users.length === 0) {
+      res.status(404).json({ error: 'No users found' });
+      return;
+    }
+
+    try {
+      await connectRcon();
+
+      for (const user of users) {
+        const sanitizedUsername = sanitizeUsername(user.minecraftUsername);
+        if (!sanitizedUsername) continue;
+
+        if(user.gameType === 'Java Edition') {
+          await sendRconCommand(`easywl remove ${sanitizedUsername}`);
+        } else if (user.gameType === 'Bedrock Edition') {
+          await sendRconCommand(`easywl remove .${sanitizedUsername}`);
+        }
+      }
+
+      await sendRconCommand(`easywl reload`);
+    } catch (rconError) {
+      const errorMessage = rconError instanceof Error ? rconError.message : String(rconError);
+      console.warn(`[bulkRejectUsers] RCON error (Minecraft server may not be running): ${errorMessage}`);
+    } finally {
+      try {
+        disconnectRcon();
+      } catch (disconnectError) {
+        // Ignore disconnect errors
+      }
+    }
+
+    await prisma.user.updateMany({
+      where: { id: { in: userIds } },
+      data: { approved: false }
+    });
+
+    res.status(200).json({ message: 'Users rejected successfully', count: users.length });
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+}

@@ -6,6 +6,9 @@ import {
   deleteUserById,
   approveUser,
   rejectUser,
+  bulkDeleteUsers,
+  bulkApproveUsers,
+  bulkRejectUsers,
 } from '../controllers/userController';
 import { authMiddleware } from '../middleware/authMiddleware';
 
@@ -23,5 +26,10 @@ router.delete('/:userId', authMiddleware, deleteUserById);
 
 router.put('/:userId/approve', authMiddleware, approveUser);
 router.put('/:userId/reject', authMiddleware, rejectUser);
+
+// Bulk operations
+router.post('/bulk/delete', authMiddleware, bulkDeleteUsers);
+router.post('/bulk/approve', authMiddleware, bulkApproveUsers);
+router.post('/bulk/reject', authMiddleware, bulkRejectUsers);
 
 export default router;
