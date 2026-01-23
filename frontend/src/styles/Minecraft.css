@@ -135,17 +135,21 @@ grid-gap: 8px;
   display: grid;
   justify-content: center;
   grid-template-columns: var(--btn-size) calc(var(--btn-size) * 10) var(--btn-size);
-  grid-template-rows: repeat(2, var(--btn-size)) 16px var(--btn-size);
+  grid-template-rows: repeat(3, var(--btn-size)) 16px var(--btn-size);
   grid-template-areas:
   '. 		first 		.'
   '. 		second 		.'
+  '. 		third 		.'
+  '.		.					.'
+  'lang fourth 		.'
 ;
 grid-gap: 8px;
 }
-.menu-dashboard :nth-child(1) {grid-area: first;}
+.menu-dashboard .server-status-btn {grid-area: first;}
 .menu-dashboard .double {grid-area: second;}
 .menu-dashboard .double :nth-child(1) {grid-area: left;}
 .menu-dashboard .double :nth-child(2) {grid-area: right;}
+.menu-dashboard .lang {grid-area: lang;}
 
 .title {
   align-items: center;
