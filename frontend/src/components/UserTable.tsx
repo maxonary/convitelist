@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { apiJwt } from '../api';
 import { copyToClipboard } from '../utils/clipboardUtils';
 import '../styles/UserTable.css';
@@ -15,10 +15,18 @@ interface User {
 const UserTable: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUserIds, setSelectedUserIds] = useState<Set<number>>(new Set());
+  const selectAllRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchUsers()
   }, []);
+
+  useEffect(() => {
+    // Update indeterminate state of select all checkbox
+    if (selectAllRef.current) {
+      selectAllRef.current.indeterminate = selectedUserIds.size > 0 && selectedUserIds.size < users.length;
+    }
+  }, [selectedUserIds, users]);
 
   const fetchUsers = async () => {
     try {
@@ -191,6 +199,7 @@ const UserTable: React.FC = () => {
             <th>
               <input 
                 type="checkbox" 
+                ref={selectAllRef}
                 checked={selectedUserIds.size === users.length && users.length > 0}
                 onChange={handleSelectAll}
               />

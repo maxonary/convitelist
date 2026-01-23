@@ -214,13 +214,23 @@ export async function bulkDeleteUsers(req: AuthenticatedRequest, res: Response) 
       return;
     }
 
+    // Verify users exist before deletion
+    const users = await prisma.user.findMany({
+      where: { id: { in: userIds } }
+    });
+
+    if (users.length === 0) {
+      res.status(404).json({ error: 'No users found' });
+      return;
+    }
+
     await prisma.user.deleteMany({
       where: {
         id: { in: userIds }
       }
     });
 
-    res.status(200).json({ message: 'Users deleted successfully', count: userIds.length });
+    res.status(200).json({ message: 'Users deleted successfully', count: users.length });
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });
   }
