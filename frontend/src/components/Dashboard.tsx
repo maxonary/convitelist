@@ -200,13 +200,11 @@ function Dashboard() {
           </Button>
         </div>
         {serverStatusLink && (
-          <button className="item full lang">
-            <button className="title">
-              <a className="standard-text" href={serverStatusLink} target="_blank" rel="noopener noreferrer">
-                {getTexts(serverStatus).emoji}
-              </a>
-            </button>
-          </button>
+          <div className="item full lang">
+            <a className="standard-text title" href={serverStatusLink} target="_blank" rel="noopener noreferrer">
+              {getTexts(serverStatus).emoji}
+            </a>
+          </div>
         )}
       </div>
     </div>
