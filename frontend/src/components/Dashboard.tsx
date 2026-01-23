@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { copyToClipboard } from "../utils/clipboardUtils";
 import UserTable from "./UserTable";
 import Button from "./Button";
-import { apiJwt, setAuthToken, api } from "../api";
+import { apiJwt, setAuthToken } from "../api";
 import "../styles/Minecraft.css";
 import TitleImage from "./TitleImage";
 
@@ -36,7 +36,6 @@ function Dashboard() {
   const [invitationCode, setInvitationCode] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [rconStatus, setRconStatus] = useState<string>("");
   const [rconConnected, setRconConnected] = useState<boolean>(true);
 
   const invitationCodeRef = useRef<HTMLInputElement>(null);
@@ -74,12 +73,10 @@ function Dashboard() {
   // Function to fetch RCON status
   const fetchRconStatus = async () => {
     try {
-      const response = await api.get('/api/status/rcon');
-      setRconStatus(response.data.status);
+      const response = await apiJwt.get('/api/status/rcon');
       setRconConnected(response.data.connected);
     } catch (error) {
       console.error('[Dashboard] Error fetching RCON status:', error);
-      setRconStatus('Error');
       setRconConnected(false);
     }
   };
