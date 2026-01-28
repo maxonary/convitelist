@@ -18,7 +18,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 Before you begin, ensure you have met the following requirements:
 
-- You have installed [Node.js](https://nodejs.org/) (20.19.0 or 22.12.0+ - see `engines` in package.json)
+- You have installed [Node.js](https://nodejs.org/) (^20.19.0 or >=22.12.0 - see `engines` in package.json)
 - You have the Backend set-up and running
 - You have access to a Minecraft server with RCON enabled
 

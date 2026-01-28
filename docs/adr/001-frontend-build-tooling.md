@@ -79,13 +79,13 @@ We have decided to:
 1. Added npm `overrides` section to package.json:
    ```json
    "overrides": {
-     "webpack": "^5.103.0"
+     "webpack": ">=5.103.0 <6.0.0"
    }
    ```
 
 2. Verified build succeeds without warnings on:
-   - Node.js 20.20.0 ✅
-   - Node.js 22.22.0 ✅
+   - Node.js 20.20.0 ✅ (minimum supported: 20.19.0)
+   - Node.js 22.22.0 ✅ (minimum supported: 22.12.0)
 
 ### Future Migration Checklist
 
