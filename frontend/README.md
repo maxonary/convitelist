@@ -5,6 +5,8 @@ The Frontend provides a Minecraft title page style interface to be used with the
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+> **Note on Build Tooling:** This project currently uses Create React App (CRA), which is no longer actively maintained. The build tooling works correctly with Node.js 20.x and 22.x without deprecation warnings. For information about the current state and future migration plans, see [ADR 001: Frontend Build Tooling and Node.js 22 Compatibility](../docs/adr/001-frontend-build-tooling.md).
+
 ## Features
 
 - Minecraft style interface
@@ -16,7 +18,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 Before you begin, ensure you have met the following requirements:
 
-- You have installed [Node.js](https://nodejs.org/) (14.x or later is recommended)
+- You have installed [Node.js](https://nodejs.org/) (20.19.0 or 22.12.0+ - see `engines` in package.json)
 - You have the Backend set-up and running
 - You have access to a Minecraft server with RCON enabled
 
