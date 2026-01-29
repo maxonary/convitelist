@@ -1,5 +1,5 @@
 # Backend Dockerfile
-FROM node:22-slim AS builder
+FROM node:25-slim AS builder
 
 WORKDIR /app
 
@@ -20,7 +20,7 @@ RUN npx prisma generate
 RUN npm run build
 
 # Production stage
-FROM node:22-slim
+FROM node:25-slim
 
 # Install OpenSSL and other dependencies for Prisma
 RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
