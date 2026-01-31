@@ -73,6 +73,6 @@
     "ts-node": "^1.7.1",
     "typescript": "^5.8.3",
     "vitest": "^4.0.17",
-    "vitest-mock-extended": "^2.0.2"
+    "vitest-mock-extended": "^3.1.0"
   }
 }
