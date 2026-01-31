@@ -45,7 +45,7 @@
     "minecraft-protocol": "^1.26.5",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
-    "pg": "^8.16.0",
+    "pg": "^8.17.2",
     "rcon-client": "^4.2.4",
     "semver": "^7.7.2",
     "supertest": "^7.1.0"
