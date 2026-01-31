@@ -28,17 +28,71 @@ th, td {
   height: 30px;
 }
 
-td:nth-child(1):hover {
+td:nth-child(2):hover {
   color: #FFFFA0;
 }
 
-td:nth-child(3), td:nth-child(4) {
+td:nth-child(4), td:nth-child(5) {
   text-align: center;
+}
+
+.bulk-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+.bulk-selection-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.selection-count {
+  font-size: 14px;
+  font-weight: bold;
+  color: #FFFFA0;
+}
+
+.bulk-action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.action-select {
+  padding: 6px 12px;
+  border: 1px solid #555;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.action-select:hover {
+  background-color: rgba(0, 0, 0, 0.9);
 }
 
 @media (max-width: 600px) {
   table {
     font-size: 14px;
+  }
+  
+  .bulk-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .bulk-action-buttons {
+    width: 100%;
+  }
+  
+  .action-select {
+    width: 100%;
   }
 }
 

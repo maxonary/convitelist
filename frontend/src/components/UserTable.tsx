@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { apiJwt } from '../api';
 import { copyToClipboard } from '../utils/clipboardUtils';
 import '../styles/UserTable.css';
@@ -14,10 +14,19 @@ interface User {
 
 const UserTable: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [selectedUserIds, setSelectedUserIds] = useState<Set<number>>(new Set());
+  const selectAllRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchUsers()
   }, []);
+
+  useEffect(() => {
+    // Update indeterminate state of select all checkbox
+    if (selectAllRef.current) {
+      selectAllRef.current.indeterminate = selectedUserIds.size > 0 && selectedUserIds.size < users.length;
+    }
+  }, [selectedUserIds, users]);
 
   const fetchUsers = async () => {
     try {
@@ -64,6 +73,50 @@ const UserTable: React.FC = () => {
       } catch (error) {
         console.error('Error deleting user:', error);
       }
+    }
+  };
+
+  const handleSelectUser = (userId: number) => {
+    setSelectedUserIds(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(userId)) {
+        newSet.delete(userId);
+      } else {
+        newSet.add(userId);
+      }
+      return newSet;
+    });
+  };
+
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      setSelectedUserIds(new Set(users.map(u => u.id)));
+    } else {
+      setSelectedUserIds(new Set());
+    }
+  };
+
+  const handleBulkAction = async (action: 'delete' | 'approve' | 'reject') => {
+    if (selectedUserIds.size === 0) return;
+
+    const userIds = Array.from(selectedUserIds);
+    const actionText = action === 'delete' ? 'delete' : (action === 'approve' ? 'approve' : 'reject');
+    const confirmed = window.confirm(`Are you sure you want to ${actionText} ${userIds.length} user(s)?`);
+
+    if (!confirmed) return;
+
+    try {
+      if (action === 'delete') {
+        await apiJwt.post('/api/user/bulk/delete', { userIds });
+      } else if (action === 'approve') {
+        await apiJwt.post('/api/user/bulk/approve', { userIds });
+      } else if (action === 'reject') {
+        await apiJwt.post('/api/user/bulk/reject', { userIds });
+      }
+      setSelectedUserIds(new Set());
+      fetchUsers();
+    } catch (error) {
+      console.error(`Error performing bulk ${action}:`, error);
     }
   };
 
@@ -116,9 +169,41 @@ const UserTable: React.FC = () => {
   return (
     <>
       <div id="tooltip" style={{ position: 'absolute', display: 'none' }}></div>
+      {selectedUserIds.size > 0 && (
+        <div className="bulk-actions">
+          <div className="bulk-selection-info">
+            <span className="selection-count">{selectedUserIds.size} item(s) selected</span>
+          </div>
+          <div className="bulk-action-buttons">
+            <select 
+              className="action-select" 
+              onChange={(e) => {
+                if (e.target.value) {
+                  handleBulkAction(e.target.value as 'delete' | 'approve' | 'reject');
+                  e.target.value = '';
+                }
+              }}
+              defaultValue=""
+            >
+              <option value="" disabled>Action</option>
+              <option value="approve">Approve</option>
+              <option value="reject">Reject</option>
+              <option value="delete">Delete</option>
+            </select>
+          </div>
+        </div>
+      )}
       <table>
         <thead>
           <tr>
+            <th>
+              <input 
+                type="checkbox" 
+                ref={selectAllRef}
+                checked={selectedUserIds.size === users.length && users.length > 0}
+                onChange={handleSelectAll}
+              />
+            </th>
             <th>Username</th>
             <th>Game Type</th>
             <th>Approved</th>
@@ -128,6 +213,13 @@ const UserTable: React.FC = () => {
         <tbody>
           {users.map(user => (
             <tr key={user.id}>
+              <td>
+                <input 
+                  type="checkbox" 
+                  checked={selectedUserIds.has(user.id)}
+                  onChange={() => handleSelectUser(user.id)}
+                />
+              </td>
               <td 
                 id={`username-${user.minecraftUsername}-${user.id}`}
                 onMouseEnter={event => handleMouseEnter(event, user)}
