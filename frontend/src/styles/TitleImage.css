@@ -2,4 +2,21 @@
   height: 100px;
   margin-bottom: 50px;
   cursor: pointer;
+  max-width: calc(100vw - 40px);
+  object-fit: contain;
+}
+
+@media (max-width: 768px) {
+  .title-image {
+    height: 80px;
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title-image {
+    height: 60px;
+    margin-bottom: 20px;
+    max-width: calc(100vw - 20px);
+  }
 }
