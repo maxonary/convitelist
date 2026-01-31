@@ -16,7 +16,7 @@ jobs:
     
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Setup Node.js v22
       uses: actions/setup-node@v6
@@ -52,7 +52,7 @@ jobs:
 
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Setup Node.js v22
       uses: actions/setup-node@v6
@@ -87,7 +87,7 @@ jobs:
   #   needs: [frontend-job, backend-job]
   #   permissions: read-all
   #   steps:
-  #     - uses: actions/checkout@v4
+  #     - uses: actions/checkout@v6
   #       with:
   #           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
   #     - uses: sonarsource/sonarqube-scan-action@master
@@ -110,7 +110,7 @@ jobs:
   # 
   #     steps:
   #     - name: Checkout Repository
-  #       uses: actions/checkout@v4
+  #       uses: actions/checkout@v6
   #     - name: Configure SSH
   #       env:
   #         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
