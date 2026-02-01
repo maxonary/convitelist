@@ -41,7 +41,7 @@
     "express-rate-limit": "^7.5.0",
     "express-session": "^1.19.0",
     "helmet": "^8.1.0",
-    "jsonwebtoken": "^9.0.2",
+    "jsonwebtoken": "^9.0.3",
     "minecraft-protocol": "^1.26.5",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
