@@ -222,7 +222,7 @@ box-sizing: border-box;
   .menu,
   .menu-register,
   .menu-dashboard {
-    grid-template-columns: var(--btn-size) calc(100vw - calc(var(--btn-size) * 2) - 40px) var(--btn-size);
+    grid-template-columns: var(--btn-size) calc(100vw - calc(var(--btn-size) * 2) - 36px) var(--btn-size);
     padding: 0 10px;
   }
 }
