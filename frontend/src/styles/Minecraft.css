@@ -36,6 +36,8 @@ body {
   height: 100vh;
   justify-content: center;
   position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 button {
@@ -86,6 +88,9 @@ button {
     'lang fourth 		.'
   ;
   grid-gap: 8px;
+  max-width: 100vw;
+  padding: 0 10px;
+  box-sizing: border-box;
 }
 
 .menu :nth-child(1) {grid-area: first;}
@@ -120,6 +125,9 @@ button {
   '.    sixth 		.'
 ;
 grid-gap: 8px;
+max-width: 100vw;
+padding: 0 10px;
+box-sizing: border-box;
 }
 
 .menu-register :nth-child(1) {grid-area: first;}
@@ -141,6 +149,9 @@ grid-gap: 8px;
   '. 		second 		.'
 ;
 grid-gap: 8px;
+max-width: 100vw;
+padding: 0 10px;
+box-sizing: border-box;
 }
 .menu-dashboard :nth-child(1) {grid-area: first;}
 .menu-dashboard .double {grid-area: second;}
@@ -204,4 +215,14 @@ grid-gap: 8px;
 
 .error-message {
   color: red;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 480px) {
+  .menu,
+  .menu-register,
+  .menu-dashboard {
+    grid-template-columns: var(--btn-size) calc(100vw - calc(var(--btn-size) * 2) - 36px) var(--btn-size);
+    padding: 0 10px;
+  }
 }
