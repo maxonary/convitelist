@@ -256,10 +256,6 @@ The application will be available at:
 ./deploy.sh health      # Check service health
 ```
 
-## Architecture Documentation
-
-Important architectural decisions are documented in [Architecture Decision Records (ADRs)](docs/adr/README.md). These records help understand the rationale behind technical choices and the evolution of the system.
-
 ## Contributing to Convitelist
 
 We are following the practice of Trunk Based Development.
