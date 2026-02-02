@@ -56,9 +56,11 @@ export default [
       // Disable explicit any rule as per project preference
       '@typescript-eslint/no-explicit-any': 'off',
       
-      // Temporarily disable this rule to fix the build error
-      // The rule is having issues with option shape in ESLint 9 + react-scripts
-      // TODO: Re-enable once react-scripts is updated or migrated away
+      // Temporarily disable this rule to fix the build error with react-scripts 5.0.1
+      // The rule has issues with option shape when ESLint 9 + TypeScript ESLint 8.x
+      // is used by react-scripts which bundles ESLint 8.x internally.
+      // TODO: Re-enable once migrating away from react-scripts (to Vite/Next.js)
+      //       or upgrading to a react-scripts version that supports ESLint 9
       '@typescript-eslint/no-unused-expressions': 'off',
     },
   },
