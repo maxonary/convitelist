@@ -2,8 +2,10 @@ import js from '@eslint/js';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
 import react from 'eslint-plugin-react';
+import globals from 'globals';
 
 export default [
+  // Ignore patterns
   {
     ignores: [
       'node_modules/**',
@@ -14,7 +16,25 @@ export default [
       'dist/**',
     ],
   },
+  
+  // Base ESLint recommended config
   js.configs.recommended,
+  
+  // TypeScript ESLint flat config for recommended rules
+  // Using the official flat config preset instead of spreading rules
+  ...tseslint.configs['flat/recommended'],
+  
+  // React flat config for recommended rules
+  {
+    ...react.configs.flat.recommended,
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+  },
+  
+  // Custom overrides
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
@@ -27,54 +47,19 @@ export default [
         },
       },
       globals: {
-        // Browser globals
-        window: 'readonly',
-        document: 'readonly',
-        navigator: 'readonly',
-        console: 'readonly',
-        setTimeout: 'readonly',
-        clearTimeout: 'readonly',
-        setInterval: 'readonly',
-        clearInterval: 'readonly',
-        fetch: 'readonly',
-        localStorage: 'readonly',
-        sessionStorage: 'readonly',
-        HTMLElement: 'readonly',
-        HTMLInputElement: 'readonly',
-        HTMLButtonElement: 'readonly',
-        HTMLTableCellElement: 'readonly',
-        Event: 'readonly',
-        // Node.js globals for build/config files
-        process: 'readonly',
-        require: 'readonly',
-        module: 'readonly',
-        __dirname: 'readonly',
-        __filename: 'readonly',
-        // ES2021 globals
-        Promise: 'readonly',
-        Symbol: 'readonly',
-        WeakMap: 'readonly',
-        WeakSet: 'readonly',
-        Map: 'readonly',
-        Set: 'readonly',
-        Proxy: 'readonly',
-        Reflect: 'readonly',
-        BigInt: 'readonly',
+        ...globals.browser,
+        ...globals.es2021,
+        ...globals.node,
       },
-    },
-    plugins: {
-      '@typescript-eslint': tseslint,
-      react: react,
     },
     rules: {
-      ...tseslint.configs.recommended.rules,
-      ...react.configs.recommended.rules,
+      // Disable explicit any rule as per project preference
       '@typescript-eslint/no-explicit-any': 'off',
-    },
-    settings: {
-      react: {
-        version: 'detect',
-      },
+      
+      // Temporarily disable this rule to fix the build error
+      // The rule is having issues with option shape in ESLint 9 + react-scripts
+      // TODO: Re-enable once react-scripts is updated or migrated away
+      '@typescript-eslint/no-unused-expressions': 'off',
     },
   },
 ];

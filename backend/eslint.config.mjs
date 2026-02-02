@@ -1,8 +1,10 @@
 import js from '@eslint/js';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
+import globals from 'globals';
 
 export default [
+  // Ignore patterns
   {
     ignores: [
       'node_modules/**',
@@ -13,7 +15,15 @@ export default [
       'dist/**',
     ],
   },
+  
+  // Base ESLint recommended config
   js.configs.recommended,
+  
+  // TypeScript ESLint flat config for recommended rules
+  // Using the official flat config preset instead of spreading rules
+  ...tseslint.configs['flat/recommended'],
+  
+  // Custom overrides
   {
     files: ['**/*.ts', '**/*.js'],
     languageOptions: {
@@ -23,47 +33,18 @@ export default [
         sourceType: 'module',
       },
       globals: {
-        // Node.js globals
-        console: 'readonly',
-        process: 'readonly',
-        Buffer: 'readonly',
-        __dirname: 'readonly',
-        __filename: 'readonly',
-        exports: 'writable',
-        module: 'readonly',
-        require: 'readonly',
-        global: 'readonly',
-        setTimeout: 'readonly',
-        clearTimeout: 'readonly',
-        setInterval: 'readonly',
-        clearInterval: 'readonly',
-        setImmediate: 'readonly',
-        clearImmediate: 'readonly',
-        URL: 'readonly',
-        AbortController: 'readonly',
-        fetch: 'readonly',
-        // ES2021 globals
-        Promise: 'readonly',
-        Symbol: 'readonly',
-        WeakMap: 'readonly',
-        WeakSet: 'readonly',
-        Map: 'readonly',
-        Set: 'readonly',
-        Proxy: 'readonly',
-        Reflect: 'readonly',
-        BigInt: 'readonly',
+        ...globals.node,
+        ...globals.es2021,
       },
     },
-    plugins: {
-      '@typescript-eslint': tseslint,
-    },
     rules: {
-      ...tseslint.configs.recommended.rules,
+      // Disable explicit any rule as per project preference
       '@typescript-eslint/no-explicit-any': 'off',
     },
   },
+  
+  // Allow require() in JS files (scripts)
   {
-    // Allow require() in JS files (scripts)
     files: ['**/*.js'],
     rules: {
       '@typescript-eslint/no-require-imports': 'off',
