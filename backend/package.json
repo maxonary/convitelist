@@ -62,7 +62,7 @@
     "@types/passport": "^1.0.17",
     "@types/passport-local": "^1.0.38",
     "@types/supertest": "^6.0.3",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
     "@typescript-eslint/parser": "^7.18.0",
     "@vitest/ui": "^4.0.17",
     "concurrently": "^9.1.2",
