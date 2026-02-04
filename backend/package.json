@@ -34,7 +34,7 @@
     "bcrypt": "^6.0.0",
     "body-parser": "^1.20.4",
     "cookie-parser": "^1.4.7",
-    "cors": "^2.8.5",
+    "cors": "^2.8.6",
     "csurf": "^1.11.0",
     "dotenv": "^16.4.7",
     "express": "^5.2.1",
