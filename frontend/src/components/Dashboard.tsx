@@ -36,6 +36,7 @@ function Dashboard() {
   const [invitationCode, setInvitationCode] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [rconConnected, setRconConnected] = useState<boolean>(true);
 
   const invitationCodeRef = useRef<HTMLInputElement>(null);
 
@@ -69,14 +70,53 @@ function Dashboard() {
     navigate("/admin/login");
   }
 
+  // Function to fetch RCON status
+  const fetchRconStatus = async () => {
+    try {
+      const response = await apiJwt.get('/api/status/rcon');
+      setRconConnected(response.data.connected);
+    } catch (error) {
+      console.error('[Dashboard] Error fetching RCON status:', error);
+      setRconConnected(false);
+    }
+  };
+
   useEffect(() => {
     const url = window.location.host;
     document.title = `Admin Dashboard - ${url}`;
+    
+    // Fetch RCON status immediately
+    fetchRconStatus();
+    
+    // Set up polling to fetch status every 5 seconds
+    const statusInterval = setInterval(() => {
+      fetchRconStatus();
+    }, 5000); // Poll every 5 seconds
+    
+    // Cleanup interval on unmount
+    return () => {
+      clearInterval(statusInterval);
+    };
   }, []);  
 
   return (
     <div className="container">
       <TitleImage src="/dashboard.png" alt="Dashboard"/>
+      
+      {/* Server Status Indicator */}
+      <div className="menu-dashboard">
+        <div className="item full" style={{ 
+          backgroundColor: rconConnected ? '#2d882d' : '#aa0000',
+          padding: '10px',
+          marginBottom: '10px'
+        }}>
+          <div className="title" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ fontSize: '20px' }}>{rconConnected ? '🟩' : '🟥'}</span>
+            <span>{rconConnected ? 'Server is running' : 'Server is offline - Entries cannot be approved'}</span>
+          </div>
+        </div>
+      </div>
+
       <UserTable />
       <br />
       <div className="menu-dashboard">
