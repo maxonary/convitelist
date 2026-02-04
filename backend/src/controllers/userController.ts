@@ -132,7 +132,7 @@ export async function approveUser(req: AuthenticatedRequest, res: Response) {
       // Always disconnect, even if there was an error
       try {
         disconnectRcon();
-      } catch (disconnectError) {
+      } catch {
         // Ignore disconnect errors - connection might not have been established
       }
     }
@@ -189,7 +189,7 @@ export async function rejectUser(req: AuthenticatedRequest, res: Response) {
       // Always disconnect, even if there was an error
       try {
         disconnectRcon();
-      } catch (disconnectError) {
+      } catch {
         // Ignore disconnect errors - connection might not have been established
       }
     }
