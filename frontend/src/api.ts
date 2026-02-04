@@ -48,7 +48,7 @@ apiJwt.interceptors.request.use(
           return config;
         }
       }
-    } catch (e) {
+    } catch {
       // If parsing fails, try reading as plain string
       const token = localStorage.getItem('__auth__');
       if (token) {
