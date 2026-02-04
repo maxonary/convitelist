@@ -28,7 +28,7 @@ const UserTable: React.FC = () => {
         try {
           const authData = JSON.parse(stored);
           console.log('[UserTable] Token type:', authData.type, 'Token exists:', !!authData.token);
-        } catch (e) {
+        } catch {
           console.log('[UserTable] Token stored as plain string');
         }
       }

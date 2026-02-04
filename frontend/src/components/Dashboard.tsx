@@ -23,7 +23,7 @@ function Dashboard() {
           console.log('[Dashboard] Token loaded from localStorage');
         }
       }
-    } catch (e) {
+    } catch {
       // If parsing fails, try reading as plain string
       const token = localStorage.getItem('__auth__');
       if (token) {
