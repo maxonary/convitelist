@@ -40,6 +40,8 @@ export default [
       ...tseslint.configs.recommended.rules,
       ...react.configs.recommended.rules,
       '@typescript-eslint/no-explicit-any': 'off',
+      // Workaround for ESLint 9: rule must receive explicit options (see typescript-eslint#10342)
+      '@typescript-eslint/no-unused-expressions': ['error', { allowShortCircuit: true, allowTernary: true }],
     },
     settings: {
       react: {
