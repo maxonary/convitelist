@@ -32,7 +32,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "test": "vitest",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
@@ -61,11 +61,14 @@
     ]
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "@types/node": "^24.10.1",
     "@types/styled-components": "^5.1.34",
     "@typescript-eslint/eslint-plugin": "^8.54.0",
     "@typescript-eslint/parser": "^8.54.0",
     "eslint": "^9.26.0",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^17.3.0",
     "svgo": "^3.3.2",
     "vitest": "^4.0.14",
     "webpack-dev-server": "^5.2.3",
