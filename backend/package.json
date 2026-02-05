@@ -18,8 +18,8 @@
     "test:unit:coverage": "vitest -c ./vitest.config.unit.ts --coverage",
     "test:int": "./scripts/run-integration.sh",
     "test:int:ui": "./scripts/run-integration.sh",
-    "lint": "eslint . --ext .ts",
-    "lint:fix": "eslint . --ext .ts --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "prisma:generate": "prisma generate"
   },
   "prisma": {
