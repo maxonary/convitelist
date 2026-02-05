@@ -53,7 +53,7 @@ export async function connectRcon(): Promise<void> {
   if (rcon) {
     try {
       rcon.end();
-    } catch (error) {
+    } catch {
       // Ignore errors when cleaning up - connection might already be closed
       // This prevents "Not connected" errors from crashing the server
     }

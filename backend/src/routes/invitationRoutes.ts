@@ -7,7 +7,7 @@ router.post('/generate-invitation-code', async (req, res) => {
   try {
     const newCode = await generateInvitationCode();
     res.status(200).json({ code: newCode });
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: 'Error generating invitation code' });
   }
 });
