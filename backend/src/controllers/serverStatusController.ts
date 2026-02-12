@@ -72,3 +72,76 @@ export const wakeUpServer = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Put the Minecraft server to sleep (stop it and return to sleep mode)
+ * This calls the wakeup endpoint which toggles - if server is running, it stops it
+ */
+export const sleepServer = async (req: Request, res: Response) => {
+  try {
+    // First check the current status
+    const statusController = new AbortController();
+    const statusTimeoutId = setTimeout(() => statusController.abort(), 5000);
+    
+    let currentStatus = 'Unknown';
+    try {
+      const statusResponse = await fetch(`${SLEEPING_SERVER_URL}/status`, {
+        method: 'GET',
+        signal: statusController.signal,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      clearTimeout(statusTimeoutId);
+      
+      if (statusResponse.ok) {
+        const statusData = await statusResponse.json();
+        currentStatus = statusData.status || 'Unknown';
+      }
+    } catch (statusError) {
+      clearTimeout(statusTimeoutId);
+      console.warn('[ServerStatus] Could not fetch current status, proceeding anyway');
+    }
+    
+    // If server is not running, return early
+    if (currentStatus !== 'Running') {
+      return res.status(200).json({ 
+        message: `Server is already ${currentStatus}. No action needed.`,
+        status: currentStatus
+      });
+    }
+    
+    // Server is running, call wakeup to stop it (wakeup toggles - stops if running)
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    
+    const response = await fetch(`${SLEEPING_SERVER_URL}/wakeup`, {
+      method: 'POST',
+      signal: controller.signal,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({}),
+    });
+    
+    clearTimeout(timeoutId);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.text();
+    res.status(200).json({ 
+      message: 'Server sleep command sent successfully',
+      response: data,
+      previousStatus: currentStatus
+    });
+  } catch (error) {
+    console.error('[ServerStatus] Error putting server to sleep:', error instanceof Error ? error.message : error);
+    res.status(503).json({ 
+      error: 'Unable to put server to sleep',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+};
+
