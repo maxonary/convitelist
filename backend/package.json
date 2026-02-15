@@ -42,7 +42,7 @@
     "express-session": "^1.19.0",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
-    "minecraft-protocol": "^1.26.5",
+    "minecraft-protocol": "^1.63.0",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "pg": "^8.17.2",
