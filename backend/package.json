@@ -47,7 +47,7 @@
     "passport-local": "^1.0.0",
     "pg": "^8.17.2",
     "rcon-client": "^4.2.4",
-    "semver": "^7.7.2",
+    "semver": "^7.7.4",
     "supertest": "^7.1.0"
   },
   "devDependencies": {
