@@ -36,6 +36,8 @@ function Dashboard() {
   const [invitationCode, setInvitationCode] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isSleeping, setIsSleeping] = useState(false);
+  const [sleepMessage, setSleepMessage] = useState<string | null>(null);
 
   const invitationCodeRef = useRef<HTMLInputElement>(null);
 
@@ -69,6 +71,28 @@ function Dashboard() {
     navigate("/admin/login");
   }
 
+  const sleepServer = async () => {
+    try {
+      setIsSleeping(true);
+      setSleepMessage(null);
+      setError(null);
+      
+      const response = await apiJwt.post("/api/status/sleep");
+      setSleepMessage(response.data.message || "Server sleep command sent successfully");
+      
+      // Clear message after 3 seconds
+      setTimeout(() => {
+        setSleepMessage(null);
+      }, 3000);
+    } catch (err: any) {
+      console.error(err);
+      setError(err.response?.data?.message || err.response?.data?.error || "Failed to put server to sleep. Please try again.");
+      setSleepMessage(null);
+    } finally {
+      setIsSleeping(false);
+    }
+  };
+
   useEffect(() => {
     const url = window.location.host;
     document.title = `Admin Dashboard - ${url}`;
@@ -81,6 +105,7 @@ function Dashboard() {
       <br />
       <div className="menu-dashboard">
         {error && <div className="error">{error}</div>}
+        {sleepMessage && <div className="standard-text" style={{ color: '#4CAF50' }}>{sleepMessage}</div>}
         {invitationCode && (
           <div className="standard-text">
             Generated Invitation Code - Click to Copy:{" "}
@@ -100,6 +125,13 @@ function Dashboard() {
               {isCopied ? "Code Copied" : "Get Invitation Code"}
             </div>
           </Button>
+          <Button className="item" onClick={isSleeping ? undefined : sleepServer} type="button">
+            <div className="title">
+              {isSleeping ? "Putting to Sleep..." : "Put Server to Sleep"}
+            </div>
+          </Button>
+        </div>
+        <div className="double">
           <Button className="item" onClick={logout} type="button">
             <div className="title">
               Logout
