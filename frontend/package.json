@@ -68,7 +68,7 @@
     "@typescript-eslint/parser": "^8.54.0",
     "eslint": "^9.39.2",
     "eslint-plugin-react": "^7.37.5",
-    "globals": "^17.3.0",
+    "globals": "^17.4.0",
     "svgo": "^3.3.2",
     "vitest": "^4.0.14",
     "webpack-dev-server": "^5.2.3",
